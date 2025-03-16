@@ -1,0 +1,17 @@
+spring:
+  graphql:
+    graphiql:
+      enabled: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:13306/memos
+    username: memos
+    password: memos
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+      file: ./compose.yaml
+
+app:
+  mode: dev
+  secret: aaaa
+  refresh: bbbb

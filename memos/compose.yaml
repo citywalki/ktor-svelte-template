@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'mjquinlan2000/postgis:16-3.4-alpine'
+    environment:
+      - 'POSTGRES_DB=memos'
+      - 'POSTGRES_PASSWORD=memos'
+      - 'POSTGRES_USER=memos'
+    ports:
+      - '13306:5432'
