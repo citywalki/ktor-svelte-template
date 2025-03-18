@@ -1,10 +1,7 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
-import com.github.walkin.memos.domain.CreateUser
-import com.github.walkin.memos.domain.CreateUserAccessTokenRequest
-import com.github.walkin.memos.domain.UpdateUser
-import com.github.walkin.memos.domain.User
+import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.http.ResponseEntity
@@ -65,6 +62,11 @@ class UserResource(private val commandPublish: CommandPublish, private val userQ
     @PathVariable("name") name: String,
     @PathVariable("accessToken") accessToken: String,
   ) {
+    TODO()
+  }
+
+  @GetMapping("/users/{name}/setting")
+  suspend fun getUserSetting(@PathVariable name: String): ResponseEntity<UserSetting> {
     TODO()
   }
 }

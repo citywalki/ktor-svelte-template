@@ -1,8 +1,6 @@
 import { RowStatus } from "@/api/services/common.ts";
 import apiClient from "../apiClient";
 
-export type ListUsersRequest = object;
-
 export interface ListUsersResponse {
   users: User[];
 }
@@ -35,26 +33,23 @@ export interface User {
   updateTime?: Date | undefined;
 }
 
-export enum UserApi {
-  ListUsers = "/api/v1/user/listUsers",
-  SearchUsers = "/api/v1/user/searchUsers",
-  GetUser = "/api/v1/user/getUser",
-  GetUserAvatarBinary = "/api/v1/user/getUserAvatarBinary",
-  CreateUser = "/api/v1/user/createUser",
-  UpdateUser = "/api/v1/user/updateUser",
-  DeleteUser = "/api/v1/user/deleteUser",
-  GetUserSetting = "/api/v1/user/getUserSetting",
-  UpdateUserSetting = "/api/v1/user/updateUserSetting",
-  ListUserAccessTokens = "/api/v1/user/listUserAccessTokens",
-  CreateUserAccessToken = "/api/v1/user/createUserAccessToken",
-  DeleteUserAccessToken = "/api/v1/user/deleteUserAccessToken",
+export interface UserSetting {
+  name: string;
+  locale: Locale;
+  appearance: string;
+  memoVisibility: string;
 }
 
 const userService = {
-  listUsers(request: ListUsersRequest) {
+  listUsers() {
     return apiClient.get<ListUsersResponse>({
-      url: UserApi.ListUsers,
-      params: request,
+      url: "/users",
+    });
+  },
+
+  getUserSetting(name: string = "") {
+    return apiClient.get<UserSetting>({
+      url: `/users/${name}/setting`,
     });
   },
 };

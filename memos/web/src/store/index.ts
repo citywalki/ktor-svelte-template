@@ -1,3 +1,4 @@
-import userStore from "./user";
+import userStore from "./mobx/user";
+import workspace from "./mobx/workspace";
 
-export { userStore };
+export { userStore, workspace };

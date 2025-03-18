@@ -28,6 +28,13 @@ data class User(
   var avatarUrl: String? = null,
 )
 
+data class UserSetting(
+  val name: String,
+  val locale: String,
+  val appearance: String,
+  val memoVisibility: MemosVisibility
+)
+
 @Serializable
 data class CreateUser(
   val name: String,
