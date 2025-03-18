@@ -1,16 +1,7 @@
-import { useState } from 'react'
-import {Button} from "@/components/ui/button.tsx";
+import { Outlet } from "react-router";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-        <Button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-        </Button>
-    </>
-  )
+  return <Outlet />;
 }
 
-export default App
+export default App;

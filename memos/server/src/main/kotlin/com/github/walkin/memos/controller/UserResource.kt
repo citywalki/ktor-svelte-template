@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.*
 @Validated
 class UserResource(private val commandPublish: CommandPublish, private val userQuery: UserQuery) {
 
-  @GetMapping
+  @GetMapping("/users")
   suspend fun listUsers(): ResponseEntity<Map<String, List<User>>> =
     userQuery.listUser().let { ResponseEntity.ok(mapOf("users" to it)) }
 
-  @PostMapping
+  @PostMapping("/users")
   suspend fun createUser(@RequestBody createUser: CreateUser): ResponseEntity<User> =
     commandPublish.command(createUser).let { ResponseEntity.ok(it) }
 
