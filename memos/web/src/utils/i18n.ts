@@ -1,7 +1,7 @@
 import { FallbackLngObjList } from "i18next";
 import { useTranslation } from "react-i18next";
 import i18n, { locales, TLocale } from "@/i18n";
-import enTranslation from "@/locales/en.json";
+import cnTranslation from "@/locales/zh-Hans.json";
 
 export const findNearestMatchedLanguage = (language: string): Locale => {
   if (locales.includes(language as TLocale)) {
@@ -40,7 +40,7 @@ type NestedKeyOf<T, K = keyof T> = K extends keyof T & (string | number)
   : never;
 
 // Represents the keys of nested translation objects.
-export type Translations = NestedKeyOf<typeof enTranslation>;
+export type Translations = NestedKeyOf<typeof cnTranslation>;
 
 // Represents a typed translation function.
 type TypedT = (key: Translations, params?: Record<string, any>) => string;

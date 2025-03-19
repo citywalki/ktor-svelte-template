@@ -3,7 +3,7 @@ import { orderBy } from "lodash-es";
 import { initReactI18next } from "react-i18next";
 import { findNearestMatchedLanguage } from "./utils/i18n";
 
-export const locales = orderBy(["en", "zh-Hans"]);
+export const locales = orderBy(["zh-Hans", "en"]);
 
 const fallbacks = {
   zh: ["zh-Hans", "en"],
@@ -33,7 +33,7 @@ i18n
     },
     fallbackLng: {
       ...fallbacks,
-      ...{ default: ["en"] },
+      ...{ default: ["zh-Hans"] },
     } as FallbackLng,
   });
 

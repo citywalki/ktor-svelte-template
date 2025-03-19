@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router";
 import App from "@/App.tsx";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import Loading from "@/pages/Loading.tsx";
-import SignIn from "@/pages/SignIn.tsx";
+
+const SignIn = lazy(() => import("@/pages/SignIn"));
+const SignUp = lazy(() => import("@/pages/SignUp"));
 
 export enum Routes {
   ROOT = "/",
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loading />}>
                 <SignIn />
+              </Suspense>
+            ),
+          },
+          {
+            path: "signup",
+            element: (
+              <Suspense fallback={<Loading />}>
+                <SignUp />
               </Suspense>
             ),
           },

@@ -42,6 +42,6 @@ class AuthResource(private val commandPublish: CommandPublish, private val userQ
   suspend fun signup(
     @RequestParam username: String,
     @RequestParam password: String,
-  ): ResponseEntity<String> =
+  ): ResponseEntity<User> =
     commandPublish.command(SignupRequest(username, password)).let { ResponseEntity.ok(it) }
 }

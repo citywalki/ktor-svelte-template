@@ -10,7 +10,7 @@ import { makeAutoObservable } from "mobx";
 import { uniqBy } from "lodash-es";
 
 class LocalState {
-  locale: string = "en";
+  locale: string = "zh-Hans";
   appearance: string = "system";
   profile: WorkspaceProfile = {
     owner: "",

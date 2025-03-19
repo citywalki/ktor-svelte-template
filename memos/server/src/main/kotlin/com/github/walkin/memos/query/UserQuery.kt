@@ -2,6 +2,7 @@ package com.github.walkin.memos.query
 
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.User
+import com.github.walkin.memos.domain.UserRole
 import com.github.walkin.memos.domain.UserStats
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.core.dsl.query.single
@@ -20,12 +21,13 @@ class UserQuery(private val database: R2dbcDatabase) {
     return null
   }
 
-  suspend fun getUser(id: Long? = null, username: String? = null): User? =
+  suspend fun getUser(id: Long? = null, username: String? = null, role: UserRole? = null): User? =
     database.runQuery {
       QueryDsl.from(Entity.user)
         .where {
           id?.run { Entity.user.id eq this }
           username?.run { Entity.user.username eq this }
+          role?.run { Entity.user.role eq this }
         }
         .singleOrNull()
     }

@@ -13,6 +13,8 @@ dependencies {
     ksp(libs.komapper.processor)
     api(libs.komapper.r2dbc.starter)
 
+    implementation(libs.cryptography.jdk)
+    implementation(libs.cryptography.core)
 
     implementation(libs.spring.boot.webflux)
     implementation(libs.kotlin.reflect)

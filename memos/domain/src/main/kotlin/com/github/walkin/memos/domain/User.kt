@@ -32,7 +32,7 @@ data class UserSetting(
   val name: String,
   val locale: String,
   val appearance: String,
-  val memoVisibility: MemosVisibility
+  val memoVisibility: MemosVisibility,
 )
 
 @Serializable
