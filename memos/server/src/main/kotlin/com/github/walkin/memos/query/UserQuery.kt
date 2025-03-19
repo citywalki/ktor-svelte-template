@@ -17,9 +17,7 @@ class UserQuery(private val database: R2dbcDatabase) {
     TODO()
   }
 
-  fun getInstanceOwner(): User? {
-    return null
-  }
+  suspend fun getInstanceOwner() = getUser(role = UserRole.HOST)
 
   suspend fun getUser(id: Long? = null, username: String? = null, role: UserRole? = null): User? =
     database.runQuery {

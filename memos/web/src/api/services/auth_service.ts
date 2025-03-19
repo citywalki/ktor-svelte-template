@@ -8,7 +8,7 @@ interface SignUpRequest {
 
 const authService = (() => {
   function getAuthStatus() {
-    return apiClient.get<User>({
+    return apiClient.post<User>({
       url: "/auth/status",
     });
   }
