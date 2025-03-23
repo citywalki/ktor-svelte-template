@@ -2,11 +2,11 @@ package com.github.walkin.memos.usecase.system
 
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
-import com.github.walkin.memos.domain.SetWorkspaceSetting
+import com.github.walkin.memos.domain.GlobalSetting
+import com.github.walkin.memos.domain.SetGlobalSetting
 import com.github.walkin.memos.domain.UserRole
-import com.github.walkin.memos.entity.WorkspaceSetting
+import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
-import com.github.walkin.memos.query.WorkspaceSettingQuery
 import com.github.walkin.usecase.UseCase
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToByteArray
@@ -21,12 +21,12 @@ import org.springframework.stereotype.Service
 class WorkspaceSettingSetUsecase(
   private val userQuery: UserQuery,
   private val database: R2dbcDatabase,
-  private val workspaceSettingQuery: WorkspaceSettingQuery,
-) : UseCase<SetWorkspaceSetting, WorkspaceSetting>() {
+  private val globalSettingQuery: GlobalSettingQuery,
+) : UseCase<SetGlobalSetting, GlobalSetting>() {
 
   @OptIn(ExperimentalSerializationApi::class)
-  override suspend fun handle(command: SetWorkspaceSetting): WorkspaceSetting {
-    val setting = command.workspaceSetting
+  override suspend fun handle(command: SetGlobalSetting): GlobalSetting {
+    val setting = command.globalSetting
 
     if (userQuery.getCurrentRequestOwner().role != UserRole.HOST) {
       throw MemosExceptionFactory.permissionDenied()
@@ -44,6 +44,6 @@ class WorkspaceSettingSetUsecase(
         }
     }
 
-    return workspaceSettingQuery.getWorkspaceSetting(setting.key.name)
+    return globalSettingQuery.getWorkspaceSetting(setting.key)
   }
 }

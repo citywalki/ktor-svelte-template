@@ -3,6 +3,7 @@ package com.github.walkin.memos.controller
 import com.github.walkin.memos.DefaultPageSize
 import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.query.FindInbox
 import com.github.walkin.memos.query.InboxQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
@@ -45,7 +46,9 @@ class InboxResource(
     val limitPlusOne = limit + 1
 
     val inboxes =
-      inboxQuery.listInBoxes(receiverId = requestUser.id, limit = limitPlusOne, offset = offset)
+      inboxQuery.listInBoxes(
+        FindInbox(receiverId = requestUser.id, limit = limitPlusOne, offset = offset)
+      )
 
     return ResponseEntity.ok(
       ListInboxesResponse(inboxes, PageTokenPayload(limit, limit + offset).encode())

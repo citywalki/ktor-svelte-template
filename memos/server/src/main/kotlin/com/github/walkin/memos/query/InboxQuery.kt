@@ -7,30 +7,31 @@ import org.komapper.core.dsl.QueryDsl
 import org.komapper.r2dbc.R2dbcDatabase
 import org.springframework.stereotype.Service
 
+data class FindInbox(
+  val id: Long? = null,
+  val senderId: Long? = null,
+  val receiverId: Long? = null,
+  val status: InboxStatus? = null,
+  val limit: Int? = null,
+  val offset: Int? = null,
+)
+
 @Service
 class InboxQuery(private val database: R2dbcDatabase) {
 
-  suspend fun listInBoxes(
-    id: Long? = null,
-    senderId: Long? = null,
-    receiverId: Long? = null,
-    status: InboxStatus? = null,
-    limit: Int? = null,
-    offset: Int? = 0,
-  ): List<Inbox> {
-
+  suspend fun listInBoxes(find: FindInbox): List<Inbox> {
     return database.runQuery {
       QueryDsl.from(Entity.inbox)
         .where {
-          id?.let { Entity.inbox.id eq it }
-          senderId?.let { Entity.inbox.senderId eq senderId }
-          receiverId?.let { Entity.inbox.receiverId eq receiverId }
-          status?.let { Entity.inbox.status eq status }
+          find.id?.let { Entity.inbox.id eq it }
+          find.senderId?.let { Entity.inbox.senderId eq it }
+          find.receiverId?.let { Entity.inbox.receiverId eq it }
+          find.status?.let { Entity.inbox.status eq it }
         }
         .apply {
-          limit?.let { limit ->
+          find.limit?.let { limit ->
             limit(limit)
-            offset?.let { offset -> offset(offset) }
+            find.offset?.let { offset -> offset(offset) }
           }
         }
     }

@@ -47,9 +47,9 @@ const userService = {
     });
   },
 
-  getUserSetting(name: string = "") {
+  getUserSetting() {
     return apiClient.get<UserSetting>({
-      url: `/users/${name}/setting`,
+      url: `/users/setting`,
     });
   },
 };

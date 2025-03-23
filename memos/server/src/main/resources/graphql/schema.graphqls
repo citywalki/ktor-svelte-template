@@ -1,0 +1,84 @@
+type Query {
+    users(find: FindUser): [User]
+    user(find: FindUser): User
+    profile: GlobalProfile
+    globalSettings: GlobalSettings
+}
+
+type GlobalSettings {
+    generalSetting: GlobalGeneralSetting
+    storageSetting: GlobalStorageSetting
+    memoRelatedSetting: GlobalMemoRelatedSetting
+}
+
+type GlobalStorageSetting{
+    id: ID
+}
+
+type GlobalMemoRelatedSetting{
+    disallowPublicVisibility: Boolean
+    displayWithUpdateTime: Boolean
+    contentLengthLimit: Int
+    enableAutoCompact: Boolean
+    enableDoubleClickEdit: Boolean
+    enableLinkPreview: Boolean
+    enableComment: Boolean
+    enableLocation: Boolean
+    defaultVisibility: String
+    reactions: [String]
+    disableMarkdownShortcuts: Boolean
+}
+
+type GlobalGeneralSetting {
+    disallowUserRegistration: Boolean
+    disallowPasswordAuth: Boolean
+    additionalScript: String
+    additionalStyle: String
+    customProfile: GlobalCustomProfile
+    weekStartDayOffset: Int
+    disallowChangeUsername: Boolean
+    disallowChangeNickname: Boolean
+}
+
+type GlobalCustomProfile{
+    title: String
+    description: String
+    logoUrl: String
+    locale: String
+    appearance: String
+}
+
+type GlobalProfile {
+    owner: String
+    version: String
+    mode: String
+    instanceUrl: String
+}
+
+input FindUser {
+    id: ID
+    username: String
+    role: UserRole
+}
+
+enum RowStatus {
+    NORMAL, ARCHIVED
+}
+
+enum UserRole {
+    ROLE_UNSPECIFIED,
+    HOST,
+    ADMIN,
+    USER
+}
+
+type User{
+    id: ID!
+    version: Int!
+    username: String
+    status: RowStatus!
+    role: UserRole
+    email: String
+    nickname: String
+    avatarUrl: String
+}

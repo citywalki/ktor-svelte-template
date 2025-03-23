@@ -9,6 +9,7 @@ cryptography-version = "0.4.0"
 satoken-version = "1.40.0"
 jackson-version = "2.18.2"
 spotless-version = "7.0.2"
+koin-version = "4.0.2"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
@@ -19,7 +20,7 @@ spring-dependencymanagement = { id = "io.spring.dependency-management", version 
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
 graalvm-buildtools = { id = "org.graalvm.buildtools.native", version = "0.10.2" }
 netflix-dgs-codegen = { id = "com.netflix.dgs.codegen", version = "6.2.1" }
-
+ktor = { id = "io.ktor.plugin", version = "3.1.1" }
 
 [libraries]
 ################ gradle 插件
@@ -33,7 +34,11 @@ cryptography-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jd
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.1" }
 kotlinx-markdown = { module = "org.jetbrains:markdown", version = "0.7.3" }
+log4j2 = { module = "org.apache.logging.log4j:log4j-core", version = "2.24.3" }
+log4j2-slf4j = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version = "2.24.3" }
 
+testcontainers = { module = "org.testcontainers:testcontainers", version = "1.20.3" }
+testcontainers-postgres = { module = "org.testcontainers:postgresql", version = "1.19.8" }
 
 ###########################  接口:
 spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-boot-version" }
@@ -49,6 +54,7 @@ jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
 
+
 ###########################  数据库:
 jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.2.0" }
 spring-boot-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot-version" }
@@ -60,12 +66,19 @@ komapper-annotation = { module = "org.komapper:komapper-annotation", version.ref
 komapper-dialect-h2 = { module = "org.komapper:komapper-dialect-h2-r2dbc", version.ref = "komapper-version" }
 komapper-dialect-postgresql = { module = "org.komapper:komapper-dialect-postgresql-r2dbc", version.ref = "komapper-version" }
 komapper-r2dbc-starter = { module = "org.komapper:komapper-spring-boot-starter-r2dbc", version.ref = "komapper-version" }
+komapper-starter-r2dbc = { module = "org.komapper:komapper-starter-r2dbc", version.ref = "komapper-version" }
+komapper-spring-boot-starter-r2dbc = { module = "org.komapper:komapper-spring-boot-starter-r2dbc", version.ref = "komapper-version" }
 
 ###########################  测试:
 spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot-version" }
 kotlin-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
+###########################  ktor:
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin-version" }
+koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin-version" }
+kgraphql = { module = "com.apurebase:kgraphql", version = "0.19.0" }
+kgraphql-ktor = { module = "com.apurebase:kgraphql-ktor", version = "0.19.0" }
 
 ###########################  spring:
 spring-boot = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot-version" }

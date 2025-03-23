@@ -48,6 +48,22 @@ const getStorage = getBrowserLocalStorage;
 // You can create you own storage, it has to comply with type StorageType
 applyAuthTokenInterceptor(axiosInstance, { requestRefresh, getStorage });
 
+axiosInstance.interceptors.response.use(
+  (response: AxiosResponse<Result | any>) => {
+    return Promise.resolve(response.data);
+  },
+  (error: AxiosError<Result | any>) => {
+    const { rawResponse, hideMsg } = error.config ?? {};
+    const { status, message } = error.response?.data || {};
+    const response: Result = {
+      status: status,
+      message: message,
+    };
+
+    return rawResponse ? Promise.reject(error) : Promise.reject(response);
+  },
+);
+
 class APIClient {
   get<T = any>(config: AxiosRequestConfig): Promise<T> {
     return this.request({ ...config, method: "GET" });

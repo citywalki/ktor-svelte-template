@@ -4,6 +4,7 @@ import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.CreateUser
 import com.github.walkin.memos.domain.User
+import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.UseCase
 import org.komapper.core.dsl.QueryDsl
@@ -17,7 +18,7 @@ open class CreateUserUsecase(val database: R2dbcDatabase, val userQuery: UserQue
   UseCase<CreateUser, User>() {
   override suspend fun handle(command: CreateUser): User {
 
-    userQuery.getUser(username = command.username)?.let {
+    userQuery.getUser(FindUser(username = command.username))?.let {
       throw MemosExceptionFactory.User.userSameExist()
     }
     return database.runQuery {

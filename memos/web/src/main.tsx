@@ -5,8 +5,15 @@ import router from "@/router";
 import { observer } from "mobx-react-lite";
 import { initialWorkspaceStore } from "./store/mobx/workspace";
 import { initialUserStore } from "./store/mobx/user";
+import { HelmetProvider } from "react-helmet-async";
 
-const Main = observer(() => <RouterProvider router={router} />);
+const Main = observer(() => {
+  return (
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
+  );
+});
 
 (async () => {
   await initialWorkspaceStore();

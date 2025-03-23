@@ -4,8 +4,9 @@ import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.SignupRequest
 import com.github.walkin.memos.domain.User
 import com.github.walkin.memos.domain.UserRole
+import com.github.walkin.memos.query.FindUser
+import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
-import com.github.walkin.memos.query.WorkspaceSettingQuery
 import com.github.walkin.usecase.UseCase
 import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.SHA512
@@ -19,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SignupUsecase(
-  private val workspaceSettingQuery: WorkspaceSettingQuery,
+  private val globalSettingQuery: GlobalSettingQuery,
   private val userQuery: UserQuery,
   private val database: R2dbcDatabase,
 ) : UseCase<SignupRequest, User>() {
   @OptIn(ExperimentalStdlibApi::class)
   override suspend fun handle(command: SignupRequest): User {
-    workspaceSettingQuery.getWorkspaceGeneralSetting().apply {
+    globalSettingQuery.getWorkspaceGeneralSetting().apply {
       if (disallowUserRegistration) {
         throw IllegalStateException("SignUpNotAllowed")
       }
@@ -36,7 +37,8 @@ class SignupUsecase(
         .hash(command.password.encodeToByteString())
 
     val user = User(username = command.username, password = passwordHash.toHexString())
-    user.role = userQuery.getUser(role = UserRole.HOST)?.let { UserRole.USER } ?: UserRole.HOST
+    user.role =
+      userQuery.getUser(FindUser(role = UserRole.HOST))?.let { UserRole.USER } ?: UserRole.HOST
 
     return database.runQuery { QueryDsl.insert(Entity.user).single(user) }
   }

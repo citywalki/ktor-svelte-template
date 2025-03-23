@@ -1,10 +1,7 @@
 package com.github.walkin.memos
 
 import com.github.walkin.memos.domain.Memo
-import com.github.walkin.memos.store.inbox
-import com.github.walkin.memos.store.memo
-import com.github.walkin.memos.store.user
-import com.github.walkin.memos.store.workspaceSettingEntity
+import com.github.walkin.memos.store.*
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
 import org.komapper.core.dsl.Meta
@@ -16,7 +13,8 @@ const val DefaultPageSize: Int = 10
 
 object Entity {
   val user = Meta.user
-  val workspaceSetting = Meta.workspaceSettingEntity
+  val userSetting = Meta.userSetting
+  val workspaceSetting = Meta.globalSettingEntity
   val inbox = Meta.inbox
   val memo = Meta.memo
 }

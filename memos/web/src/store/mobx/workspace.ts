@@ -1,5 +1,6 @@
 import {
   WorkspaceGeneralSetting,
+  WorkspaceMemoRelatedSetting,
   WorkspaceProfile,
   WorkspaceSetting,
   WorkspaceSettingKey,
@@ -19,6 +20,26 @@ class LocalState {
     instanceUrl: "",
   };
   settings: WorkspaceSetting[] = [];
+
+  get memoRelatedSetting(): WorkspaceMemoRelatedSetting {
+    return (
+      this.settings.find(
+        (setting) => setting.name === WorkspaceSettingKey.MEMO_RELATED,
+      )?.memoRelatedSetting || {
+        disallowPublicVisibility: true,
+        displayWithUpdateTime: true,
+        contentLengthLimit: 120,
+        enableAutoCompact: true,
+        enableDoubleClickEdit: true,
+        enableLinkPreview: true,
+        enableComment: true,
+        enableLocation: true,
+        defaultVisibility: "",
+        reactions: [],
+        disableMarkdownShortcuts: false,
+      }
+    );
+  }
 
   get generalSetting(): WorkspaceGeneralSetting {
     return (

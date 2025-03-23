@@ -3,8 +3,8 @@ package com.github.walkin.memos.usecase.memo
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
-import com.github.walkin.memos.query.WorkspaceSettingQuery
 import com.github.walkin.memos.rebuildMemoPayload
 import com.github.walkin.usecase.CommandPublish
 import com.github.walkin.usecase.UseCase
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 class CreateMemoUsecase(
   private val commandPublish: CommandPublish,
   private val userQuery: UserQuery,
-  private val workspaceSettingQuery: WorkspaceSettingQuery,
+  private val globalSettingQuery: GlobalSettingQuery,
   private val database: R2dbcDatabase,
 ) : UseCase<CreateMemo, Memo>() {
   @OptIn(ExperimentalUuidApi::class)
@@ -31,7 +31,7 @@ class CreateMemoUsecase(
       Memo(content = command.content, creator = requestUser.id, uid = Uuid.random().toString())
         .apply { command.visibility?.let { visibility = it } }
 
-    val workspaceMemoRelatedSetting = workspaceSettingQuery.getWorkspaceMemoRelatedSetting()
+    val workspaceMemoRelatedSetting = globalSettingQuery.getWorkspaceMemoRelatedSetting()
 
     if (
       workspaceMemoRelatedSetting.disallowPublicVisibility &&

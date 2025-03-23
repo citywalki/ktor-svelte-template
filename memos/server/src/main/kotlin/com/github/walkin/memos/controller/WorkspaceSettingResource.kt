@@ -1,13 +1,9 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
-import com.github.walkin.memos.domain.SetWorkspaceSetting
-import com.github.walkin.memos.domain.UpdateWorkspaceSettingRequest
-import com.github.walkin.memos.domain.WorkspaceProfile
-import com.github.walkin.memos.domain.WorkspaceSettingResponse
-import com.github.walkin.memos.entity.*
+import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
-import com.github.walkin.memos.query.WorkspaceSettingQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
@@ -23,16 +19,16 @@ class WorkspaceSettingResource(
   private val userQuery: UserQuery,
   private val buildProperties: BuildProperties,
   private val commandPublish: CommandPublish,
-  private val workspaceSettingQuery: WorkspaceSettingQuery,
+  private val globalSettingQuery: GlobalSettingQuery,
 ) {
 
   @GetMapping("/workspace/profile")
-  suspend fun getWorkspaceProfile(): ResponseEntity<WorkspaceProfile> {
+  suspend fun getWorkspaceProfile(): ResponseEntity<GlobalProfile> {
 
     val owner = userQuery.getInstanceOwner()?.id.toString()
 
     val profile =
-      WorkspaceProfile(
+      GlobalProfile(
         version = buildProperties.version,
         owner = owner,
         mode = appMode,
@@ -42,38 +38,38 @@ class WorkspaceSettingResource(
     return ResponseEntity.ok(profile)
   }
 
-  @GetMapping("/workspace/{name}")
-  suspend fun getWorkspaceSettings(
-    @PathVariable("name") name: String
-  ): ResponseEntity<WorkspaceSettingResponse> {
-    return workspaceSettingQuery
-      .getWorkspaceSetting(name)
-      .let {
-        WorkspaceSettingResponse(name).apply {
-          when (it) {
-            is WorkspaceBasicSetting -> TODO()
-            is WorkspaceGeneralSetting -> generalSetting = it
-            is WorkspaceMemoRelatedSetting -> memoRelatedSetting = it
-            is WorkspaceStorageSetting -> storageSetting = it
-          }
-        }
-      }
-      .let { ResponseEntity.ok(it) }
-  }
+  //  @GetMapping("/workspace/{name}")
+  //  suspend fun getWorkspaceSettings(
+  //    @PathVariable("name") name: String
+  //  ): ResponseEntity<WorkspaceSettingResponse> {
+  //    return globalSettingQuery
+  //      .getWorkspaceSetting(name)
+  //      .let {
+  //        WorkspaceSettingResponse(name).apply {
+  //          when (it) {
+  //            is GlobalBasicSetting -> TODO()
+  //            is GlobalGeneralSetting -> generalSetting = it
+  //            is GlobalMemoRelatedSetting -> memoRelatedSetting = it
+  //            is GlobalStorageSetting -> storageSetting = it
+  //          }
+  //        }
+  //      }
+  //      .let { ResponseEntity.ok(it) }
+  //  }
 
   @PatchMapping("/workspace/{name}")
   suspend fun updateWorkspaceSettings(
-    @PathVariable("name") settingName: WorkspaceSettingKey,
+    @PathVariable("name") settingName: GlobalSettingKey,
     @RequestBody updateWorkspaceSettingRequest: UpdateWorkspaceSettingRequest,
   ) {
 
     val setting =
       when (settingName) {
-        WorkspaceSettingKey.GENERAL -> updateWorkspaceSettingRequest.generalSetting
-        WorkspaceSettingKey.STORAGE -> updateWorkspaceSettingRequest.storageSetting
-        WorkspaceSettingKey.MEMO_RELATED -> updateWorkspaceSettingRequest.memoRelatedSetting
+        GlobalSettingKey.GENERAL -> updateWorkspaceSettingRequest.generalSetting
+        GlobalSettingKey.STORAGE -> updateWorkspaceSettingRequest.storageSetting
+        GlobalSettingKey.MEMO_RELATED -> updateWorkspaceSettingRequest.memoRelatedSetting
         else -> throw NotImplementedError()
       }
-    setting?.let { commandPublish.command(SetWorkspaceSetting(it)) }
+    setting?.let { commandPublish.command(SetGlobalSetting(it)) }
   }
 }

@@ -29,10 +29,10 @@ data class User(
 )
 
 data class UserSetting(
-  val name: String,
-  val locale: String,
-  val appearance: String,
-  val memoVisibility: MemosVisibility,
+  val name: Long,
+  var locale: String = "en",
+  var appearance: String = "system",
+  var memoVisibility: MemosVisibility = MemosVisibility.PRIVATE,
 )
 
 @Serializable

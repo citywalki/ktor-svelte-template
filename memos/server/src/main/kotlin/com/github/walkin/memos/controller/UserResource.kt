@@ -2,6 +2,7 @@ package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.http.ResponseEntity
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 class UserResource(private val commandPublish: CommandPublish, private val userQuery: UserQuery) {
 
   @GetMapping("/users")
+  @ResponseBody
   suspend fun listUsers(): ResponseEntity<Map<String, List<User>>> =
     userQuery.listUser().let { ResponseEntity.ok(mapOf("users" to it)) }
 
@@ -36,7 +38,7 @@ class UserResource(private val commandPublish: CommandPublish, private val userQ
 
   @GetMapping("/users:username")
   suspend fun getUserByName(@RequestParam("username") name: String): ResponseEntity<User> {
-    return userQuery.getUser(username = name).let { ResponseEntity.ok(it) }
+    return userQuery.getUser(FindUser(username = name)).let { ResponseEntity.ok(it) }
   }
 
   @DeleteMapping("/users/{name}")
@@ -64,6 +66,12 @@ class UserResource(private val commandPublish: CommandPublish, private val userQ
   ) {
     TODO()
   }
+
+  @GetMapping("/users/setting")
+  suspend fun getUserSetting(): ResponseEntity<UserSetting> =
+    ResponseEntity.ok(
+      userQuery.getCurrentRequestOwner()?.let { user -> userQuery.getUserSetting(user.id) }
+    )
 
   @GetMapping("/users/{name}/setting")
   suspend fun getUserSetting(@PathVariable name: String): ResponseEntity<UserSetting> {
