@@ -1,5 +1,6 @@
 {
   "auth": {
+    "sign-in": "登录",
     "sign-up": "注册",
     "create-your-account": "创建您的账户",
     "host-tip": "您正在注册为站点管理员。",

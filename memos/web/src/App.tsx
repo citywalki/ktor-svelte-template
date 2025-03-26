@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import { userStore, workspaceStore } from "./store";
 import { useEffect } from "react";
 import useNavigateTo from "./hooks/useNavigateTo";
-import { Helmet } from "react-helmet-async";
 
 const App = observer(() => {
   const navigateTo = useNavigateTo();

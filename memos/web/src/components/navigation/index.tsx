@@ -13,22 +13,48 @@ import {
 import {
   Home,
   Inbox,
+  LogIn,
   MessageCircleQuestion,
   Settings2,
   Trash2,
 } from "lucide-react";
 import * as React from "react";
+import useCurrentUser from "@/hooks/useCurrentUser.ts";
 
 const Navigation = observer(() => {
+  const currentUser = useCurrentUser();
+
+  return currentUser ? <LoggedSidebar /> : <UnLoginSidebar />;
+});
+
+const LoggedSidebar = () => {
   return (
     <Sidebar className="border-r-0">
       <SidebarHeader>
-        {/*<TeamSwitcher teams={data.teams} />*/}
         <NavMain />
       </SidebarHeader>
       <SidebarContent>
         <NavSecondary className="mt-auto" />
       </SidebarContent>
+    </Sidebar>
+  );
+};
+
+const UnLoginSidebar = observer(() => {
+  return (
+    <Sidebar className="border-r-0">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem key={"home"}>
+            <SidebarMenuButton asChild>
+              <a href={"/auth"}>
+                <LogIn />
+                <span>Login</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
     </Sidebar>
   );
 });

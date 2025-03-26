@@ -38,24 +38,24 @@ class WorkspaceSettingResource(
     return ResponseEntity.ok(profile)
   }
 
-  //  @GetMapping("/workspace/{name}")
-  //  suspend fun getWorkspaceSettings(
-  //    @PathVariable("name") name: String
-  //  ): ResponseEntity<WorkspaceSettingResponse> {
-  //    return globalSettingQuery
-  //      .getWorkspaceSetting(name)
-  //      .let {
-  //        WorkspaceSettingResponse(name).apply {
-  //          when (it) {
-  //            is GlobalBasicSetting -> TODO()
-  //            is GlobalGeneralSetting -> generalSetting = it
-  //            is GlobalMemoRelatedSetting -> memoRelatedSetting = it
-  //            is GlobalStorageSetting -> storageSetting = it
-  //          }
-  //        }
-  //      }
-  //      .let { ResponseEntity.ok(it) }
-  //  }
+  @GetMapping("/workspace/{name}")
+  suspend fun getWorkspaceSettings(
+    @PathVariable("name") name: String
+  ): ResponseEntity<WorkspaceSettingResponse> {
+    return globalSettingQuery
+      .getWorkspaceSetting(GlobalSettingKey.valueOf(name))
+      .let {
+        WorkspaceSettingResponse(name).apply {
+          when (it) {
+            is GlobalBasicSetting -> TODO()
+            is GlobalGeneralSetting -> generalSetting = it
+            is GlobalMemoRelatedSetting -> memoRelatedSetting = it
+            is GlobalStorageSetting -> storageSetting = it
+          }
+        }
+      }
+      .let { ResponseEntity.ok(it) }
+  }
 
   @PatchMapping("/workspace/{name}")
   suspend fun updateWorkspaceSettings(

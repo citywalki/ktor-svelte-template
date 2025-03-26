@@ -12,6 +12,9 @@ export default defineConfig({
       "^/api": {
         target: devProxyServer,
       },
+      "/graphql": {
+        target: devProxyServer,
+      },
     },
   },
   resolve: {

@@ -4,8 +4,9 @@ import Loading from "@/pages/Loading.tsx";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { workspaceStore } from "@/store";
 import { Routes } from "@/router";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarContent, SidebarProvider } from "@/components/ui/sidebar";
 import Navigation from "@/components/navigation";
+import { Outlet } from "react-router";
 
 const RootLayout = observer(() => {
   const [initialized, setInitialized] = useState(false);
@@ -13,7 +14,7 @@ const RootLayout = observer(() => {
 
   useEffect(() => {
     if (!currentUser) {
-      // If disallowPublicVisibility is enabled, redirect to the login page if the user is not logged in.
+      // 如果启用了不允许公开的可视性，请重定向到登录页面，如果用户未登录。
       if (workspaceStore.state.memoRelatedSetting.disallowPublicVisibility) {
         window.location.href = Routes.AUTH;
         return;
@@ -33,7 +34,7 @@ const RootLayout = observer(() => {
       }
     }
     setInitialized(true);
-  }, []);
+  }, [currentUser]);
 
   return !initialized ? (
     <Loading />
@@ -41,6 +42,9 @@ const RootLayout = observer(() => {
     <div className="w-full min-h-full">
       <SidebarProvider>
         <Navigation></Navigation>
+        <SidebarContent>
+          <Outlet />
+        </SidebarContent>
       </SidebarProvider>
     </div>
   );

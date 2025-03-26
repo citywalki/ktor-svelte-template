@@ -33,7 +33,7 @@ export const initialUserStore = async () => {
       currentUser: currentUser.name,
       userSetting: userSetting,
       userMapByName: {
-        [currentUser.name]: currentUser,
+        [currentUser.name!]: currentUser,
       },
     });
     workspaceStore.state.setPartial({

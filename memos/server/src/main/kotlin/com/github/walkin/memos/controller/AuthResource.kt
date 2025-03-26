@@ -25,15 +25,9 @@ class AuthResource(private val commandPublish: CommandPublish, private val userQ
 
   @PostMapping("/signin/sso") suspend fun signInWithSSO() {}
 
-  @PostMapping("/signin")
-  suspend fun signin(
-    @RequestParam username: String,
-    @RequestParam password: String,
-    @RequestParam neverExpire: Boolean,
-  ) {
-    return commandPublish.command(SignInRequest(username, password, neverExpire)).let {
-      ResponseEntity.ok(it)
-    }
+  @PostMapping("/signIn")
+  suspend fun signIn(request: SignInRequest) {
+    return commandPublish.command(request).let { ResponseEntity.ok(it) }
   }
 
   @PostMapping("/signout") suspend fun signout() = ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)

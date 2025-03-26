@@ -18,9 +18,9 @@ export interface User {
    * The name of the user.
    * Format: users/{id}
    */
-  name: string;
+  name?: string;
   /** The system generated uid of the user. */
-  id: number;
+  id?: string;
   role: User_Role;
   username: string;
   email: string;
@@ -34,9 +34,9 @@ export interface User {
 }
 
 export interface UserSetting {
-  name: string;
+  name?: string;
   locale: Locale;
-  appearance: string;
+  appearance?: string;
   memoVisibility: string;
 }
 

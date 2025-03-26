@@ -6,7 +6,6 @@ komapper-version = "5.0.0"
 kotlinx-serialization = "1.7.3"
 springdoc-version = "2.7.0"
 cryptography-version = "0.4.0"
-satoken-version = "1.40.0"
 jackson-version = "2.18.2"
 spotless-version = "7.0.2"
 koin-version = "4.0.2"
@@ -45,15 +44,15 @@ spring-data-commons = { module = "org.springframework.data:spring-data-commons",
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.1.0" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.0" }
 spring-boot-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "spring-boot-version" }
-satoken-starter = { module = "cn.dev33:sa-token-reactor-spring-boot3-starter", version.ref = "satoken-version" }
-satoken-jwt = { module = "cn.dev33:sa-token-jwt", version.ref = "satoken-version" }
 springdoc-openapi-webflux = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-version" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson-version" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson-version" }
 
+###########################  kotlin:
+kotlin-reactor-extensions = {module="io.projectreactor.kotlin:reactor-kotlin-extensions", version="1.2.3"}
+kotlinx-coroutines-reactor = {module="org.jetbrains.kotlinx:kotlinx-coroutines-reactor",version="1.10.1"}
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
-
 
 ###########################  数据库:
 jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.2.0" }
@@ -82,6 +81,7 @@ kgraphql-ktor = { module = "com.apurebase:kgraphql-ktor", version = "0.19.0" }
 
 ###########################  spring:
 spring-boot = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot-version" }
+spring-boot-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-version" }
 spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot-version" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot-version" }
 spring-boot-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }

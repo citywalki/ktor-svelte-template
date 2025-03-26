@@ -3,10 +3,12 @@ package com.github.walkin.memos.query
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.store.UserSettingKey
+import kotlinx.coroutines.reactive.awaitFirst
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.core.dsl.query.single
 import org.komapper.core.dsl.query.singleOrNull
 import org.komapper.r2dbc.R2dbcDatabase
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.stereotype.Service
 
 data class FindUser(val username: String? = null, val id: Long? = null, val role: UserRole? = null)
@@ -33,13 +35,12 @@ class UserQuery(private val database: R2dbcDatabase) {
     }
 
   suspend fun getCurrentRequestOwner(): User {
+    val securityContext = ReactiveSecurityContextHolder.getContext().awaitFirst()
+
+    val username = securityContext.authentication.principal as String
+
     return database.runQuery {
-      QueryDsl.from(Entity.user)
-        .where {
-          // todo get current user id
-          Entity.user.id eq 1
-        }
-        .single()
+      QueryDsl.from(Entity.user).where { Entity.user.username eq username }.single()
     }
   }
 
@@ -49,7 +50,7 @@ class UserQuery(private val database: R2dbcDatabase) {
         QueryDsl.from(Entity.userSetting).where { Entity.userSetting.unique.userId eq userId }
       }
 
-    val userSetting = UserSetting(name = userId)
+    val userSetting = UserSetting(id = userId)
 
     userSettings.forEach {
       when (it.unique.key) {

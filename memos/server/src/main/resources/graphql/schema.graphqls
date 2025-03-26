@@ -1,8 +1,23 @@
 type Query {
+    currentUser: User
+    userSetting: UserSetting
     users(find: FindUser): [User]
     user(find: FindUser): User
     profile: GlobalProfile
     globalSettings: GlobalSettings
+}
+
+enum MemosVisibility{
+    VISIBILITY_UNSPECIFIED,
+    PRIVATE,
+    PROTECTED,
+    PUBLIC
+}
+type UserSetting {
+    id: String!
+    locale: String!
+    appearance: String
+    memoVisibility:MemosVisibility!
 }
 
 type GlobalSettings {
@@ -75,10 +90,11 @@ enum UserRole {
 type User{
     id: ID!
     version: Int!
-    username: String
+    username: String!
     status: RowStatus!
-    role: UserRole
+    role: UserRole!
     email: String
-    nickname: String
+    nickname: String!
     avatarUrl: String
+    userSetting: UserSetting!
 }

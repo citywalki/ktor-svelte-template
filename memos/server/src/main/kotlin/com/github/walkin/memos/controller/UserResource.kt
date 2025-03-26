@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.*
 @Validated
 class UserResource(private val commandPublish: CommandPublish, private val userQuery: UserQuery) {
 
-  @GetMapping("/users")
+  @GetMapping("/me")
   @ResponseBody
+  suspend fun me(): ResponseEntity<User?> {
+    return ResponseEntity.ok(User(username = "1", password = ""))
+  }
+
+  @GetMapping("/users")
   suspend fun listUsers(): ResponseEntity<Map<String, List<User>>> =
     userQuery.listUser().let { ResponseEntity.ok(mapOf("users" to it)) }
 

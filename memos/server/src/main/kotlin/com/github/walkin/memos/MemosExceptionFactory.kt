@@ -5,6 +5,8 @@ object MemosExceptionFactory {
 
   object User {
     fun userSameExist(): IllegalStateException = IllegalStateException("已经存在相同用户")
+
+    fun userNotExist(): IllegalStateException = IllegalStateException("用户不存在")
   }
 
   object Memo {

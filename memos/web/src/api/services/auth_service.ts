@@ -6,6 +6,11 @@ interface SignUpRequest {
   password: string;
 }
 
+interface SignInRequest {
+  username: string;
+  password: string;
+}
+
 const authService = (() => {
   function getAuthStatus() {
     return apiClient.post<User>({
@@ -19,9 +24,17 @@ const authService = (() => {
     });
   }
 
+  function signIn(request: SignInRequest) {
+    return apiClient.post<User>({
+      url: "/auth/signIn",
+      params: request,
+    });
+  }
+
   return {
     getAuthStatus,
     signUp,
+    signIn,
   };
 })();
 

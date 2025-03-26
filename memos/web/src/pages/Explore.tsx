@@ -1,5 +1,5 @@
 const Explore = () => {
-  return <div className="h-full min-w-full"></div>;
+  return <div className="h-full min-w-full">explore</div>;
 };
 
 export default Explore;

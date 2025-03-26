@@ -29,7 +29,7 @@ data class User(
 )
 
 data class UserSetting(
-  val name: Long,
+  val id: Long,
   var locale: String = "en",
   var appearance: String = "system",
   var memoVisibility: MemosVisibility = MemosVisibility.PRIVATE,

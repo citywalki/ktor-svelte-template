@@ -9,6 +9,7 @@ spring:
     compose:
       lifecycle-management: start_and_stop
       file: ./compose.yaml
-
 app:
+  secret: 111
+  refresh: 111
   mode: dev
