@@ -89,7 +89,7 @@ const isTokenExpired = (token: Token): boolean => {
   return !expiresIn || expiresIn <= expireFudge;
 };
 
-const refreshTokenIfNeeded = async (): Promise<Token | undefined> => {
+export const refreshTokenIfNeeded = async (): Promise<Token | undefined> => {
   // use access token (if we have it)
   let accessToken = await getAccessToken();
 

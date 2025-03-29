@@ -1,8 +1,14 @@
 import { Result } from "@/types/api";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { cacheExchange, Client, fetchExchange } from "urql";
-import { authExchange } from "@urql/exchange-auth";
-import getCurrentAccessToken from "@/api/jwt.ts";
+import {
+  cacheExchange,
+  Client,
+  CombinedError,
+  fetchExchange,
+  Operation,
+} from "urql";
+import { AuthConfig, authExchange, AuthUtilities } from "@urql/exchange-auth";
+import getCurrentAccessToken, { refreshTokenIfNeeded } from "@/api/jwt.ts";
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_API;
 
@@ -17,12 +23,19 @@ export const graphqlClient = new Client({
   url: "/graphql",
   exchanges: [
     cacheExchange,
-    authExchange(async (utils) => {
+    authExchange(async (utilities: AuthUtilities): Promise<AuthConfig> => {
       const token = await getCurrentAccessToken();
       return {
-        addAuthToOperation(operation) {
+        didAuthError(error: CombinedError): boolean {
+          console.error(error);
+          return false;
+        },
+        async refreshAuth(): Promise<void> {
+          await refreshTokenIfNeeded();
+        },
+        addAuthToOperation(operation: Operation): Operation {
           if (!token) return operation;
-          return utils.appendHeaders(operation, {
+          return utilities.appendHeaders(operation, {
             Authorization: token,
           });
         },
@@ -37,7 +50,9 @@ axiosInstance.interceptors.response.use(
     return Promise.resolve(response.data);
   },
   (error: AxiosError<Result | any>) => {
-    const { rawResponse, hideMsg } = error.config ?? {};
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const { rawResponse } = error.config ?? {};
     const { status, message } = error.response?.data || {};
     const response: Result = {
       status: status,
