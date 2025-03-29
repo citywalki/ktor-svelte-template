@@ -63,18 +63,19 @@ export const initialUserStoreFromGraphql = async () => {
         }
     `);
 
-    const result = await graphqlClient.query(INIT_USER_STORE, {}).toPromise();
+    const result = await graphqlClient.request(INIT_USER_STORE);
     if (result) {
-      const ownerUser = result.data?.currentUser;
+      const ownerUser = result.currentUser;
+      const userSetting = ownerUser?.userSetting && {
+        id: ownerUser.userSetting?.id,
+        locale: ownerUser.userSetting.locale,
+        appearance: ownerUser.userSetting?.appearance,
+        memoVisibility: ownerUser.userSetting?.memoVisibility,
+      };
       if (ownerUser) {
         userStore.state.setPartial({
           currentUser: ownerUser.id,
-          userSetting: {
-            id: ownerUser.userSetting.id,
-            locale: ownerUser.userSetting.locale,
-            appearance: ownerUser.userSetting.appearance!,
-            memoVisibility: ownerUser.userSetting.memoVisibility,
-          },
+          userSetting: userSetting,
           userMapByName: {
             [ownerUser.id!]: {
               id: ownerUser.id,

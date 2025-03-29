@@ -149,9 +149,9 @@ export const initialWorkspaceStoreFromGraphql = async () => {
   }
   `);
 
-  const result = await graphqlClient.query(INIT_GLOBAL_SETTING, {}).toPromise();
-  if (result.data) {
-    const { profile, globalSettings } = result.data;
+  const result = await graphqlClient.request(INIT_GLOBAL_SETTING);
+  if (result) {
+    const { profile, globalSettings } = result;
     const generalSetting = globalSettings.generalSetting;
     const memoRelatedSetting = globalSettings.memoRelatedSetting;
     workspaceStore.state.setPartial({

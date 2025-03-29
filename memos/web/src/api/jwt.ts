@@ -12,13 +12,16 @@ const STORAGE_KEY = "jwt-token";
 const BASE_URL = import.meta.env.VITE_APP_BASE_API;
 const expireFudge = 10;
 
+/**
+ * 要后台刷新accessToken
+ * @param refreshToken
+ */
 const requestRefresh = async (
   refreshToken: string,
 ): Promise<IAuthTokens | string> => {
   const response = await axios.post(`${BASE_URL}/auth/refresh_token`, {
     refreshToken: refreshToken,
   });
-
   return response.data.accessToken;
 };
 
@@ -26,8 +29,7 @@ const requestRefresh = async (
  * Refreshes the access token using the provided function
  * Note: NOT to be called externally.  Only accessible through an interceptor
  *
- * @param {requestRefresh} requestRefresh - Function that is used to get a new access token
- * @returns {string} - Fresh access token
+ * @returns {string} - 新的访问令牌
  */
 const refreshToken = async (): Promise<Token> => {
   const refreshToken = await getRefreshToken();
@@ -75,6 +77,10 @@ const getTimestampFromToken = (token: Token): number | undefined => {
   return decoded.exp;
 };
 
+/**
+ * 获得token里面的到期时间
+ * @param token
+ */
 const getExpiresIn = (token: Token): number => {
   const expiration = getTimestampFromToken(token);
 
@@ -83,12 +89,19 @@ const getExpiresIn = (token: Token): number => {
   return expiration - Date.now() / 1000;
 };
 
+/**
+ * 检查token是否需要刷新
+ * @param token
+ */
 const isTokenExpired = (token: Token): boolean => {
   if (!token) return true;
   const expiresIn = getExpiresIn(token);
   return !expiresIn || expiresIn <= expireFudge;
 };
 
+/**
+ * 按需更新
+ */
 export const refreshTokenIfNeeded = async (): Promise<Token | undefined> => {
   // use access token (if we have it)
   let accessToken = await getAccessToken();
@@ -101,6 +114,7 @@ export const refreshTokenIfNeeded = async (): Promise<Token | undefined> => {
 
   return accessToken;
 };
+
 let currentlyRequestingPromise: Promise<Token | undefined> | undefined =
   undefined;
 

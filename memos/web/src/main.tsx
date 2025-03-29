@@ -3,15 +3,15 @@ import "./index.css";
 import { RouterProvider } from "react-router/dom";
 import router from "@/router";
 import { HelmetProvider } from "react-helmet-async";
-import { Provider } from "urql";
 import { initialUserStoreFromGraphql } from "./store/mobx/user";
 import { initialWorkspaceStoreFromGraphql } from "@/store/mobx/workspace.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { graphqlClient } from "./api/apiClient";
+import { Toaster } from "./components/ui/sonner";
 
 const Main = () => {
   return (
     <HelmetProvider>
+      <Toaster />
       <RouterProvider router={router} />
     </HelmetProvider>
   );
@@ -26,10 +26,8 @@ const queryClient = new QueryClient();
   const container = document.getElementById("root");
   const root = createRoot(container as HTMLElement);
   root.render(
-    <Provider value={graphqlClient}>
-      <QueryClientProvider client={queryClient}>
-        <Main />
-      </QueryClientProvider>
-    </Provider>,
+    <QueryClientProvider client={queryClient}>
+      <Main />
+    </QueryClientProvider>,
   );
 })();

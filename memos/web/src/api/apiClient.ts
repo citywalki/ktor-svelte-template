@@ -1,16 +1,10 @@
 import { Result } from "@/types/api";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import {
-  cacheExchange,
-  Client,
-  CombinedError,
-  fetchExchange,
-  Operation,
-} from "urql";
-import { AuthConfig, authExchange, AuthUtilities } from "@urql/exchange-auth";
-import getCurrentAccessToken, { refreshTokenIfNeeded } from "@/api/jwt.ts";
+import getCurrentAccessToken from "@/api/jwt.ts";
+import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_API;
+const GRAPHQL_URL = import.meta.env.VITE_APP_GRAPHQL_API;
 
 // 创建 axios 实例
 const axiosInstance = axios.create({
@@ -19,30 +13,20 @@ const axiosInstance = axios.create({
   headers: { "Content-Type": "application/json;charset=utf-8" },
 });
 
-export const graphqlClient = new Client({
-  url: "/graphql",
-  exchanges: [
-    cacheExchange,
-    authExchange(async (utilities: AuthUtilities): Promise<AuthConfig> => {
-      const token = await getCurrentAccessToken();
-      return {
-        didAuthError(error: CombinedError): boolean {
-          console.error(error);
-          return false;
-        },
-        async refreshAuth(): Promise<void> {
-          await refreshTokenIfNeeded();
-        },
-        addAuthToOperation(operation: Operation): Operation {
-          if (!token) return operation;
-          return utilities.appendHeaders(operation, {
-            Authorization: token,
-          });
-        },
-      };
-    }),
-    fetchExchange,
-  ],
+const requestMiddleware: RequestMiddleware = async (request) => {
+  const token = await getCurrentAccessToken();
+  return {
+    ...request,
+    headers: {
+      "Content-Type": "application/graphql",
+      ...request.headers,
+      Authorization: token,
+    },
+  };
+};
+
+export const graphqlClient = new GraphQLClient(GRAPHQL_URL, {
+  requestMiddleware,
 });
 
 axiosInstance.interceptors.response.use(
