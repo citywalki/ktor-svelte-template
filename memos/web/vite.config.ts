@@ -8,6 +8,7 @@ const devProxyServer = "http://localhost:8084";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    port: 5180,
     proxy: {
       "^/api": {
         target: devProxyServer,

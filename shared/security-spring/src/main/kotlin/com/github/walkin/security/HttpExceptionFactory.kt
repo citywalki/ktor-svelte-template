@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.web.server.ResponseStatusException
 
 object HttpExceptionFactory {
-    fun badRequest(): ResponseStatusException = ResponseStatusException(BAD_REQUEST, "Bad Request")
+  fun badRequest(): ResponseStatusException = ResponseStatusException(BAD_REQUEST, "Bad Request")
 
-    fun unauthorized(): ResponseStatusException = ResponseStatusException(UNAUTHORIZED, "Unauthorized")
+  fun unauthorized(): ResponseStatusException =
+    ResponseStatusException(UNAUTHORIZED, "Unauthorized")
 }

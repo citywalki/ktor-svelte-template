@@ -1,18 +1,20 @@
 package com.github.walkin.security.autoconfigure
 
 import com.github.walkin.security.HttpExceptionFactory.badRequest
-import com.github.walkin.security.HttpExceptionFactory.unauthorized
-import com.github.walkin.security.SecurityJwtService
-import com.github.walkin.security.LoginRequest
 import com.github.walkin.security.JwtTokenReactFilter
+import com.github.walkin.security.LoginCheckSuccessHandler
+import com.github.walkin.security.LoginRequest
+import com.github.walkin.security.SecurityJwtService
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.ResolvableType
 import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.codec.json.KotlinSerializationJsonDecoder
+import org.springframework.http.codec.json.KotlinSerializationJsonEncoder
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -22,11 +24,11 @@ import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.config.web.server.invoke
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers
@@ -39,19 +41,25 @@ class SecurityConfig {
   companion object {
     val EXCLUDED_PATHS =
       arrayOf(
-        "/login",
+        "/graphql",
+        "/api/*/login",
         "/webjars/**",
         "/swagger-ui.html",
         "/v3/api-docs/swagger-config",
         "v3/api-docs",
-        "/api/*/auth/signup"
+        "/api/*/auth/signup",
+        "/api/*/workspace/profile",
+        "/api/*/workspace/GENERAL",
+        "/api/*/workspace/MEMO_RELATED",
+        "/api/*/auth/refresh_token"
       )
   }
 
   @Bean
-  fun springSecurityFilterChain(http: ServerHttpSecurity,
-                                jwtTokenReactFilter: JwtTokenReactFilter,
-                                jwtAuthenticationFilter: AuthenticationWebFilter
+  fun springSecurityFilterChain(
+    http: ServerHttpSecurity,
+    jwtTokenReactFilter: JwtTokenReactFilter,
+    jwtAuthenticationFilter: AuthenticationWebFilter,
   ): SecurityWebFilterChain {
     return http {
       authorizeExchange {
@@ -60,48 +68,43 @@ class SecurityConfig {
       }
       cors { disable() }
       csrf { disable() }
-      formLogin { disable() }
-      httpBasic { disable() }
+      httpBasic { authenticationEntryPoint = HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED) }
       addFilterAt(jwtTokenReactFilter, SecurityWebFiltersOrder.AUTHORIZATION)
-      addFilterAt(jwtAuthenticationFilter,SecurityWebFiltersOrder.AUTHENTICATION)
+      addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
     }
+  }
+
+  @Bean
+  fun reactiveAuthenticationManager(
+    userDetailsService: ReactiveUserDetailsService
+  ): ReactiveAuthenticationManager =
+    UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService).apply {
+      setPasswordEncoder(passwordEncoder())
+    }
+
+  @Bean
+  fun loginCheckSuccessHandler(
+    jwtService: SecurityJwtService,
+    kotlinSerializationJsonEncoder: KotlinSerializationJsonEncoder,
+  ): LoginCheckSuccessHandler {
+    return LoginCheckSuccessHandler(jwtService, kotlinSerializationJsonEncoder)
   }
 
   @Bean
   fun authenticationWebFilter(
     manager: ReactiveAuthenticationManager,
     jwtConverter: ServerAuthenticationConverter,
-    securityJwtService: SecurityJwtService
+    securityJwtService: SecurityJwtService,
+    loginCheckSuccessHandler: LoginCheckSuccessHandler,
   ): AuthenticationWebFilter =
     AuthenticationWebFilter(manager).apply {
-      setRequiresAuthenticationMatcher { pathMatchers(POST, "/login").matches(it) }
+      // 匹配登录地址
+      setRequiresAuthenticationMatcher { pathMatchers(POST, "/api/v1/login").matches(it) }
+      // 登录请求的负载转成Authentication对象
       setServerAuthenticationConverter(jwtConverter)
 
-      setAuthenticationSuccessHandler { webFilterExchange, authentication ->
-        mono<Void> {
-          val principal = authentication.principal ?: throw unauthorized()
-
-          when (principal) {
-            is User -> {
-              val roles = principal.authorities.map { it.authority }.toTypedArray()
-
-              val accessToken = securityJwtService.accessToken(principal.username, roles)
-              val refreshToken = securityJwtService.refreshToken(principal.username, roles)
-
-              val exchange = webFilterExchange.exchange ?: throw unauthorized()
-
-              with(exchange.response.headers) {
-                setBearerAuth(accessToken)
-                set("Refresh-Token", refreshToken)
-              }
-            }
-
-            else -> throw RuntimeException("Not User!") // TODO: separate exception
-          }
-
-          return@mono null
-        }
-      }
+      // 登录验证成功后处理
+      setAuthenticationSuccessHandler(loginCheckSuccessHandler)
 
       setSecurityContextRepository(NoOpServerSecurityContextRepository.getInstance())
     }
@@ -111,8 +114,7 @@ class SecurityConfig {
 
     return object : ServerAuthenticationConverter {
       override fun convert(exchange: ServerWebExchange): Mono<Authentication> = mono {
-        val loginRequest: LoginRequest =
-          getUsernameAndPassword(exchange) ?: throw badRequest()
+        val loginRequest: LoginRequest = getUsernameAndPassword(exchange) ?: throw badRequest()
 
         UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
       }
@@ -129,17 +131,7 @@ class SecurityConfig {
     }
   }
 
-  @Bean
-  fun securityFilter(jwtService: SecurityJwtService) =
-    JwtTokenReactFilter(jwtService)
+  @Bean fun securityFilter(jwtService: SecurityJwtService) = JwtTokenReactFilter(jwtService)
 
   @Bean fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
-
-  @Bean
-  fun reactiveAuthenticationManager(
-    userDetailsService: ReactiveUserDetailsService
-  ): ReactiveAuthenticationManager =
-    UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService).apply {
-      setPasswordEncoder(passwordEncoder())
-    }
 }

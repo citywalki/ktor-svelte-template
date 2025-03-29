@@ -20,7 +20,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import authService from "@/api/services/auth_service.ts";
-import { initialUserStore } from "@/store/mobx/user";
+import { initialUserStoreFromGraphql } from "@/store/mobx/user";
 import useNavigateTo from "@/hooks/useNavigateTo";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,7 @@ const SignUp = () => {
   const t = useTranslate();
   const navigateTo = useNavigateTo();
   const actionBtnLoadingState = useLoading(false);
-  const workspaceGeneralSetting = workspaceStore.state.generalSetting;
+  const workspaceGeneralSetting = workspaceStore.state.generalSettings;
 
   const formSchema = z.object({
     username: z.string().min(2, {
@@ -59,7 +59,7 @@ const SignUp = () => {
         username: data.username,
         password: data.password,
       });
-      await initialUserStore();
+      await initialUserStoreFromGraphql();
       navigateTo("/");
     } catch (error: any) {
       console.error(error);
@@ -72,7 +72,7 @@ const SignUp = () => {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="flex flex-col w-full max-w-sm">
         <p className="w-full text-center text-5xl text-black opacity-80">
-          {workspaceGeneralSetting.customProfile?.title || "Memos"}
+          {workspaceGeneralSetting?.customProfile?.title || "Memos"}
         </p>
         <Card className="w-full mt-6 border-none shadow-none">
           <CardHeader>

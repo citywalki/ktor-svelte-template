@@ -3,98 +3,27 @@ type Query {
     userSetting: UserSetting
     users(find: FindUser): [User]
     user(find: FindUser): User
-    profile: GlobalProfile
-    globalSettings: GlobalSettings
+    profile: GlobalProfile!
+    globalSettings: GlobalSettings!
+
+    inboxes: [Inbox]
 }
 
-enum MemosVisibility{
-    VISIBILITY_UNSPECIFIED,
-    PRIVATE,
-    PROTECTED,
-    PUBLIC
-}
-type UserSetting {
-    id: String!
-    locale: String!
-    appearance: String
-    memoVisibility:MemosVisibility!
-}
+scalar Date
+@specifiedBy(url:
+"https://tools.ietf.org/html/rfc3339"
+)
 
-type GlobalSettings {
-    generalSetting: GlobalGeneralSetting
-    storageSetting: GlobalStorageSetting
-    memoRelatedSetting: GlobalMemoRelatedSetting
-}
-
-type GlobalStorageSetting{
-    id: ID
-}
-
-type GlobalMemoRelatedSetting{
-    disallowPublicVisibility: Boolean
-    displayWithUpdateTime: Boolean
-    contentLengthLimit: Int
-    enableAutoCompact: Boolean
-    enableDoubleClickEdit: Boolean
-    enableLinkPreview: Boolean
-    enableComment: Boolean
-    enableLocation: Boolean
-    defaultVisibility: String
-    reactions: [String]
-    disableMarkdownShortcuts: Boolean
-}
-
-type GlobalGeneralSetting {
-    disallowUserRegistration: Boolean
-    disallowPasswordAuth: Boolean
-    additionalScript: String
-    additionalStyle: String
-    customProfile: GlobalCustomProfile
-    weekStartDayOffset: Int
-    disallowChangeUsername: Boolean
-    disallowChangeNickname: Boolean
-}
-
-type GlobalCustomProfile{
-    title: String
-    description: String
-    logoUrl: String
-    locale: String
-    appearance: String
-}
-
-type GlobalProfile {
-    owner: String
-    version: String
-    mode: String
-    instanceUrl: String
-}
-
-input FindUser {
-    id: ID
-    username: String
-    role: UserRole
-}
+scalar Long
+scalar LocalDateTime
+scalar DateTime
+@specifiedBy(url:
+"https://scalars.graphql.org/andimarek/date-time.html"
+)
 
 enum RowStatus {
     NORMAL, ARCHIVED
 }
 
-enum UserRole {
-    ROLE_UNSPECIFIED,
-    HOST,
-    ADMIN,
-    USER
-}
 
-type User{
-    id: ID!
-    version: Int!
-    username: String!
-    status: RowStatus!
-    role: UserRole!
-    email: String
-    nickname: String!
-    avatarUrl: String
-    userSetting: UserSetting!
-}
+

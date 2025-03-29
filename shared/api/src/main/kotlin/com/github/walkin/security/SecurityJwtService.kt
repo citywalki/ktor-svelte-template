@@ -5,7 +5,9 @@ interface SecurityJwtService {
 
   fun getRoles(token: String): List<String>
 
-  fun accessToken(username: String, roles: Array<String>): String
+  fun accessToken(username: String, roles: List<String>): String
 
-  fun refreshToken(username: String, roles: Array<String>): String
+  fun refreshToken(username: String, roles: List<String>): String
+
+  fun decodeRefreshToken(refreshToken: String): JWTPayload
 }

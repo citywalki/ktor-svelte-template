@@ -28,7 +28,7 @@ class WorkspaceSettingSetUsecase(
   override suspend fun handle(command: SetGlobalSetting): GlobalSetting {
     val setting = command.globalSetting
 
-    if (userQuery.getCurrentRequestOwner().role != UserRole.HOST) {
+    if (userQuery.getCurrentRequestOwner()?.role != UserRole.HOST) {
       throw MemosExceptionFactory.permissionDenied()
     }
 

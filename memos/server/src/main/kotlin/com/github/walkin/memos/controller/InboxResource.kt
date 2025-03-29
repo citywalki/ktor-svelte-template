@@ -27,7 +27,7 @@ class InboxResource(
     @RequestParam(required = false, name = "pageSize") pageSize: Int,
     @RequestParam(required = false, name = "pageToken") pageToken: PageToken?,
   ): ResponseEntity<ListInboxesResponse> {
-    val requestUser = userQuery.getCurrentRequestOwner()
+    val requestUser = userQuery.getCurrentRequestOwner() ?: return ResponseEntity.notFound().build()
 
     var limit: Int
     var offset = 0

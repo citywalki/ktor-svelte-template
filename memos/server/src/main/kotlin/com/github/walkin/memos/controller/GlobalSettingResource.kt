@@ -5,6 +5,7 @@ import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
+import jakarta.annotation.security.PermitAll
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
 import org.springframework.http.ResponseEntity
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 
 @MemosController
-class WorkspaceSettingResource(
+class GlobalSettingResource(
   @Value("\${app.mode}") private val appMode: String,
   private val userQuery: UserQuery,
   private val buildProperties: BuildProperties,
@@ -23,6 +24,7 @@ class WorkspaceSettingResource(
 ) {
 
   @GetMapping("/workspace/profile")
+  @PermitAll
   suspend fun getWorkspaceProfile(): ResponseEntity<GlobalProfile> {
 
     val owner = userQuery.getInstanceOwner()?.id.toString()

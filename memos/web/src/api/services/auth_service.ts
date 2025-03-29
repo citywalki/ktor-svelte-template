@@ -1,5 +1,5 @@
 import apiClient from "@/api/apiClient.ts";
-import { User } from "@/api/services/user_service.ts";
+import { setAuthTokens } from "../tokensUtils";
 
 interface SignUpRequest {
   username: string;
@@ -11,28 +11,31 @@ interface SignInRequest {
   password: string;
 }
 
+interface SignInResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
 const authService = (() => {
-  function getAuthStatus() {
-    return apiClient.post<User>({
-      url: "/auth/status",
-    });
-  }
   function signUp(request: SignUpRequest) {
-    return apiClient.post<User>({
+    return apiClient.post<string>({
       url: "/auth/signup",
       params: request,
     });
   }
 
-  function signIn(request: SignInRequest) {
-    return apiClient.post<User>({
-      url: "/auth/signIn",
-      params: request,
+  async function signIn(request: SignInRequest) {
+    const result = await apiClient.post<SignInResponse>({
+      url: "/login",
+      data: request,
+    });
+    return setAuthTokens({
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
     });
   }
 
   return {
-    getAuthStatus,
     signUp,
     signIn,
   };

@@ -4,6 +4,7 @@ import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.store.UserSettingKey
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.core.dsl.query.single
 import org.komapper.core.dsl.query.singleOrNull
@@ -34,13 +35,15 @@ class UserQuery(private val database: R2dbcDatabase) {
       QueryDsl.from(Entity.user).where { find.username?.run { Entity.user.username eq this } }
     }
 
-  suspend fun getCurrentRequestOwner(): User {
-    val securityContext = ReactiveSecurityContextHolder.getContext().awaitFirst()
+  suspend fun getCurrentRequestOwner(): User? {
+    val securityContext = ReactiveSecurityContextHolder.getContext().awaitFirstOrNull()
 
-    val username = securityContext.authentication.principal as String
+    val username = securityContext?.authentication?.principal as String?
 
-    return database.runQuery {
-      QueryDsl.from(Entity.user).where { Entity.user.username eq username }.single()
+    return username?.let {
+      database.runQuery {
+        QueryDsl.from(Entity.user).where { Entity.user.username eq username }.single()
+      }
     }
   }
 

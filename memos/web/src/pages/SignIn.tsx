@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useLoading from "@/hooks/useLoading.ts";
 import useNavigateTo from "@/hooks/useNavigateTo.ts";
 import authService from "@/api/services/auth_service.ts";
+import { initialUserStoreFromGraphql } from "@/store/mobx/user.ts";
 
 const SignIn = () => {
   const t = useTranslate();
@@ -56,6 +57,8 @@ const SignIn = () => {
         username: data.username,
         password: data.password,
       });
+      await initialUserStoreFromGraphql();
+      navigateTo("/");
     } catch (error: any) {
       console.error(error);
     }

@@ -24,15 +24,17 @@ dependencies {
     implementation("com.github.walkin.shared:security-spring")
 
     implementation(libs.liquibase.core)
+
     implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("org.springframework.data:spring-data-commons")
 
-    implementation(libs.komapper.dialect.postgresql)
+    runtimeOnly(libs.komapper.dialect.postgresql)
     ksp(libs.komapper.processor)
     api(libs.komapper.r2dbc.starter)
 
     api("com.auth0:java-jwt:4.5.0")
 
+    implementation("com.graphql-java:graphql-java-extended-scalars:22.0")
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlinx.markdown)
     implementation(libs.shared.api)

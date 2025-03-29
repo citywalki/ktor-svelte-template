@@ -47,7 +47,7 @@ class GlobalSettingQuery(private val database: R2dbcDatabase, private val userQu
 
       val user = userQuery.getCurrentRequestOwner()
 
-      if (user.role != UserRole.HOST) {
+      if (user?.role != UserRole.HOST) {
         throw MemosExceptionFactory.permissionDenied()
       }
     }

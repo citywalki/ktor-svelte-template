@@ -25,7 +25,7 @@ class CreateMemoUsecase(
 ) : UseCase<CreateMemo, Memo>() {
   @OptIn(ExperimentalUuidApi::class)
   override suspend fun handle(command: CreateMemo): Memo {
-    val requestUser = userQuery.getCurrentRequestOwner()
+    val requestUser = userQuery.getCurrentRequestOwner() ?: throw MemosExceptionFactory.permissionDenied()
 
     var create =
       Memo(content = command.content, creator = requestUser.id, uid = Uuid.random().toString())

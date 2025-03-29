@@ -1,8 +1,9 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
-import com.github.walkin.memos.domain.*
-import com.github.walkin.memos.query.FindUser
+import com.github.walkin.memos.domain.CreateUser
+import com.github.walkin.memos.domain.UpdateUser
+import com.github.walkin.memos.domain.User
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.http.ResponseEntity
@@ -13,37 +14,16 @@ import org.springframework.web.bind.annotation.*
 @Validated
 class UserResource(private val commandPublish: CommandPublish, private val userQuery: UserQuery) {
 
-  @GetMapping("/me")
-  @ResponseBody
-  suspend fun me(): ResponseEntity<User?> {
-    return ResponseEntity.ok(User(username = "1", password = ""))
-  }
-
-  @GetMapping("/users")
-  suspend fun listUsers(): ResponseEntity<Map<String, List<User>>> =
-    userQuery.listUser().let { ResponseEntity.ok(mapOf("users" to it)) }
-
   @PostMapping("/users")
   suspend fun createUser(@RequestBody createUser: CreateUser): ResponseEntity<User> =
     commandPublish.command(createUser).let { ResponseEntity.ok(it) }
 
-  @PatchMapping("/users/{id}")
+  @PatchMapping("/users")
   suspend fun updateUser(
-    @PathVariable id: String,
-    @RequestBody user: User?,
-  ): ResponseEntity<Unit?> {
-    user?.let {
-      commandPublish.command(UpdateUser(id, name = user.username, password = it.password))
-    }
+    @RequestBody updateUser: UpdateUser,
+  ): ResponseEntity<Unit> {
+    commandPublish.command(updateUser)
     return ResponseEntity.ok().build<Unit>()
-  }
-
-  @GetMapping("/users:search")
-  suspend fun searchUsers(@RequestParam filter: String): ResponseEntity<List<User>> = TODO()
-
-  @GetMapping("/users:username")
-  suspend fun getUserByName(@RequestParam("username") name: String): ResponseEntity<User> {
-    return userQuery.getUser(FindUser(username = name)).let { ResponseEntity.ok(it) }
   }
 
   @DeleteMapping("/users/{name}")
@@ -51,35 +31,4 @@ class UserResource(private val commandPublish: CommandPublish, private val userQ
     TODO()
   }
 
-  @GetMapping("/users/{name}/access_token")
-  suspend fun listUserAccessTokens(@PathVariable("name") name: String) {
-    TODO()
-  }
-
-  @PostMapping("/users/{name}/access_token")
-  suspend fun createUserAccessToken(
-    @PathVariable("name") name: String,
-    @RequestBody request: CreateUserAccessTokenRequest,
-  ) {
-    TODO()
-  }
-
-  @DeleteMapping("/users/{name}/access_token/{accessToken}")
-  suspend fun deleteUserAccessToken(
-    @PathVariable("name") name: String,
-    @PathVariable("accessToken") accessToken: String,
-  ) {
-    TODO()
-  }
-
-  @GetMapping("/users/setting")
-  suspend fun getUserSetting(): ResponseEntity<UserSetting> =
-    ResponseEntity.ok(
-      userQuery.getCurrentRequestOwner()?.let { user -> userQuery.getUserSetting(user.id) }
-    )
-
-  @GetMapping("/users/{name}/setting")
-  suspend fun getUserSetting(@PathVariable name: String): ResponseEntity<UserSetting> {
-    TODO()
-  }
 }

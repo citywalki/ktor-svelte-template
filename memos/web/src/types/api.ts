@@ -3,3 +3,9 @@ export interface Result<T = any> {
   message: string;
   data?: T;
 }
+
+export type Token = string;
+export interface IAuthTokens {
+  accessToken: Token;
+  refreshToken: Token;
+}

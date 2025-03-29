@@ -1,0 +1,25 @@
+type Inbox {
+    id: ID!
+    createdTs: Date!
+    senderId: Long!
+    receiverId: Long!
+    status: InboxStatus!
+    message: InboxMessage!
+}
+
+
+enum InboxStatus {
+    UNREAD,
+    ARCHIVED
+}
+
+enum InboxMessageType{
+    TYPE_UNSPECIFIED,
+    MEMO_COMMENT,
+    VERSION_UPDATE
+}
+
+type InboxMessage{
+    type:InboxMessageType
+    activityId: Long
+}

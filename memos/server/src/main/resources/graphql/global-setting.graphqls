@@ -1,0 +1,50 @@
+
+type GlobalSettings {
+    generalSetting: GlobalGeneralSetting!
+    storageSetting: GlobalStorageSetting!
+    memoRelatedSetting: GlobalMemoRelatedSetting!
+}
+
+type GlobalStorageSetting{
+    id: ID
+}
+
+type GlobalMemoRelatedSetting{
+    disallowPublicVisibility: Boolean
+    displayWithUpdateTime: Boolean
+    contentLengthLimit: Int
+    enableAutoCompact: Boolean
+    enableDoubleClickEdit: Boolean
+    enableLinkPreview: Boolean
+    enableComment: Boolean
+    enableLocation: Boolean
+    defaultVisibility: String
+    reactions: [String]
+    disableMarkdownShortcuts: Boolean
+}
+
+type GlobalGeneralSetting {
+    disallowUserRegistration: Boolean!
+    disallowPasswordAuth: Boolean!
+    additionalScript: String!
+    additionalStyle: String!
+    customProfile: GlobalCustomProfile!
+    weekStartDayOffset: Int!
+    disallowChangeUsername: Boolean!
+    disallowChangeNickname: Boolean!
+}
+
+type GlobalCustomProfile{
+    title: String
+    description: String
+    logoUrl: String
+    locale: String
+    appearance: String
+}
+
+type GlobalProfile {
+    owner: String!
+    version: String!
+    mode: String!
+    instanceUrl: String!
+}

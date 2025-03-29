@@ -1,0 +1,41 @@
+
+input FindUser {
+    id: ID
+    username: String
+    role: UserRole
+}
+
+enum MemosVisibility{
+    VISIBILITY_UNSPECIFIED,
+    PRIVATE,
+    PROTECTED,
+    PUBLIC
+}
+
+enum UserRole {
+    ROLE_UNSPECIFIED,
+    HOST,
+    ADMIN,
+    USER
+}
+
+type UserSetting {
+    id: ID!
+    locale: String!
+    appearance: String
+    memoVisibility:MemosVisibility!
+}
+
+type User{
+    id: ID!
+    createdAt: LocalDateTime!
+    updatedAt: LocalDateTime!
+    version: Int!
+    username: String!
+    status: RowStatus!
+    role: UserRole!
+    email: String
+    nickname: String
+    avatarUrl: String
+    userSetting: UserSetting
+}

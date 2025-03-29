@@ -40,7 +40,7 @@ data class GlobalGeneralSetting(
   val additionalStyle: String? = "",
 
   // custom_profile is the custom profile.
-  val customProfile: GlobalCustomProfile? = null,
+  val customProfile: GlobalCustomProfile = GlobalCustomProfile(),
 
   // week_start_day_offset is the week start day offset from Sunday.
   // 0: Sunday, 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday
@@ -58,11 +58,11 @@ data class GlobalGeneralSetting(
 
   @Serializable
   data class GlobalCustomProfile(
-    val title: String,
-    val description: String,
-    val logoUrl: String,
-    val locale: String,
-    val appearance: String,
+    val title: String? = null,
+    val description: String? = null,
+    val logoUrl: String? = null,
+    val locale: String? = null,
+    val appearance: String? = null,
   )
 }
 

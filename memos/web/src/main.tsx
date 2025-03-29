@@ -3,9 +3,11 @@ import "./index.css";
 import { RouterProvider } from "react-router/dom";
 import router from "@/router";
 import { HelmetProvider } from "react-helmet-async";
-import { Client, Provider, cacheExchange, fetchExchange } from "urql";
-import { initialUserStore } from "./store/mobx/user";
-import { initialWorkspaceStore } from "@/store/mobx/workspace.ts";
+import { Provider } from "urql";
+import { initialUserStoreFromGraphql } from "./store/mobx/user";
+import { initialWorkspaceStoreFromGraphql } from "@/store/mobx/workspace.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { graphqlClient } from "./api/apiClient";
 
 const Main = () => {
   return (
@@ -15,20 +17,19 @@ const Main = () => {
   );
 };
 
-const client = new Client({
-  url: "/graphql",
-  exchanges: [cacheExchange, fetchExchange],
-});
+// Create a client
+const queryClient = new QueryClient();
 
 (async () => {
-  await initialUserStore();
-  await initialWorkspaceStore();
-
+  await initialUserStoreFromGraphql();
+  await initialWorkspaceStoreFromGraphql();
   const container = document.getElementById("root");
   const root = createRoot(container as HTMLElement);
   root.render(
-    <Provider value={client}>
-      <Main />
+    <Provider value={graphqlClient}>
+      <QueryClientProvider client={queryClient}>
+        <Main />
+      </QueryClientProvider>
     </Provider>,
   );
 })();

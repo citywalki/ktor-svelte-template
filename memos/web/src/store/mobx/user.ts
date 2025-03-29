@@ -1,7 +1,21 @@
-import { User, userService, UserSetting } from "@/api/services/user_service";
+import { UserSetting } from "@/api/services/user_service";
 import { makeAutoObservable } from "mobx";
-import workspaceStore from "./workspace";
-import authService from "@/api/services/auth_service.ts";
+import { gql } from "@/gql";
+import { RowStatus, UserRole } from "@/gql/graphql";
+import { graphqlClient } from "@/api/apiClient.ts";
+
+export interface User {
+  /** The system generated uid of the user. */
+  id?: string;
+  role: UserRole;
+  username: string;
+  email: string;
+  nickname: string;
+  avatarUrl: string;
+  rowStatus: RowStatus;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
+}
 
 class LocalState {
   currentUser?: string;
@@ -25,22 +39,60 @@ const userStore = (() => {
   };
 })();
 
-export const initialUserStore = async () => {
+export const initialUserStoreFromGraphql = async () => {
   try {
-    const currentUser = await authService.getAuthStatus();
-    const userSetting = await userService.getUserSetting();
-    userStore.state.setPartial({
-      currentUser: currentUser.name,
-      userSetting: userSetting,
-      userMapByName: {
-        [currentUser.name!]: currentUser,
-      },
-    });
-    workspaceStore.state.setPartial({
-      locale: userSetting.locale,
-      appearance: userSetting.appearance,
-    });
-  } catch {
+    const INIT_USER_STORE = gql(`
+        query INIT_USER_STORE {
+          currentUser {
+            id
+            username
+            role
+            email
+            nickname
+            avatarUrl
+            status
+            createdAt
+            updatedAt
+            userSetting {
+              id
+              locale
+              memoVisibility
+              appearance
+            }
+          }
+        }
+    `);
+
+    const result = await graphqlClient.query(INIT_USER_STORE, {}).toPromise();
+    if (result) {
+      const ownerUser = result.data?.currentUser;
+      if (ownerUser) {
+        userStore.state.setPartial({
+          currentUser: ownerUser.id,
+          userSetting: {
+            id: ownerUser.userSetting.id,
+            locale: ownerUser.userSetting.locale,
+            appearance: ownerUser.userSetting.appearance!,
+            memoVisibility: ownerUser.userSetting.memoVisibility,
+          },
+          userMapByName: {
+            [ownerUser.id!]: {
+              id: ownerUser.id,
+              role: ownerUser.role,
+              username: ownerUser.username,
+              email: ownerUser.email!,
+              nickname: ownerUser.nickname,
+              avatarUrl: ownerUser.avatarUrl!,
+              rowStatus: ownerUser.status,
+              createdAt: ownerUser.createdAt,
+              updatedAt: ownerUser.updatedAt,
+            },
+          },
+        });
+      }
+    }
+  } catch (error) {
+    console.error(error);
     // Do nothing.
   }
 };
