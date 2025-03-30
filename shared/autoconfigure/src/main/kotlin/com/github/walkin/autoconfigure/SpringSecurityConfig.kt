@@ -1,5 +1,6 @@
-package com.github.walkin.security.autoconfigure
+package com.github.walkin.autoconfigure
 
+import com.github.walkin.autoconfigure.SecurityConfig.Companion.EXCLUDED_PATHS
 import com.github.walkin.security.HttpExceptionFactory.badRequest
 import com.github.walkin.security.JwtTokenReactFilter
 import com.github.walkin.security.LoginCheckSuccessHandler
@@ -7,6 +8,8 @@ import com.github.walkin.security.LoginRequest
 import com.github.walkin.security.SecurityJwtService
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.ResolvableType
@@ -37,24 +40,9 @@ import reactor.core.publisher.Mono
 
 @Configuration
 @EnableWebFluxSecurity
-class SecurityConfig {
-  companion object {
-    val EXCLUDED_PATHS =
-      arrayOf(
-        "/graphql",
-        "/api/*/login",
-        "/webjars/**",
-        "/swagger-ui.html",
-        "/v3/api-docs/swagger-config",
-        "v3/api-docs",
-        "/api/*/auth/signup",
-        "/api/*/workspace/profile",
-        "/api/*/workspace/GENERAL",
-        "/api/*/workspace/MEMO_RELATED",
-        "/api/*/auth/refresh_token",
-      )
-  }
-
+@ConditionalOnBean(ReactiveUserDetailsService::class)
+@ConditionalOnClass(name = ["com.github.walkin.security.JwtTokenReactFilter"])
+class SpringSecurityConfig {
   @Bean
   fun springSecurityFilterChain(
     http: ServerHttpSecurity,

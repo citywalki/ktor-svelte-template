@@ -47,7 +47,7 @@ spring-boot-webflux = { module = "org.springframework.boot:spring-boot-starter-w
 springdoc-openapi-webflux = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-version" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson-version" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson-version" }
-
+satoken-spring = {module="cn.dev33:sa-token-reactor-spring-boot3-starter",version="1.39.0"}
 ###########################  kotlin:
 kotlin-reactor-extensions = {module="io.projectreactor.kotlin:reactor-kotlin-extensions", version="1.2.3"}
 kotlinx-coroutines-reactor = {module="org.jetbrains.kotlinx:kotlinx-coroutines-reactor",version="1.10.1"}

@@ -22,6 +22,8 @@ dependencies {
 
     implementation("com.github.walkin.shared:usecase-spring")
     implementation("com.github.walkin.shared:security-spring")
+    implementation("com.github.walkin.shared:autoconfigure")
+
 
     implementation(libs.liquibase.core)
 

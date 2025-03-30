@@ -40,11 +40,11 @@ class CreateMemoUsecase(
       workspaceMemoRelatedSetting.disallowPublicVisibility &&
         create.visibility == MemosVisibility.PUBLIC
     ) {
-      throw MemosExceptionFactory.Memo.publicVisibilityDenied()
+      throw MemosExceptionFactory.MemoExceptions.publicVisibilityDenied()
     }
 
     if (create.content.length > workspaceMemoRelatedSetting.contentLengthLimit) {
-      throw MemosExceptionFactory.Memo.contentMaxLimitDenied(
+      throw MemosExceptionFactory.MemoExceptions.contentMaxLimitDenied(
         workspaceMemoRelatedSetting.contentLengthLimit
       )
     }

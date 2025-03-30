@@ -8,10 +8,10 @@ import com.github.walkin.memos.entity.UserSpace
 import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
+import com.github.walkin.security.PasswordEncoder
 import com.github.walkin.usecase.UseCase
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.r2dbc.R2dbcDatabase
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
