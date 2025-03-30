@@ -10,6 +10,7 @@ dependencies{
     implementation(libs.spring.boot)
     compileOnly(project(":security-spring"))
     compileOnly(project(":satoken-spring"))
+    compileOnly(project(":usecase-spring"))
 
     compileOnly(libs.satoken.spring)
     compileOnly(libs.spring.boot.webflux)

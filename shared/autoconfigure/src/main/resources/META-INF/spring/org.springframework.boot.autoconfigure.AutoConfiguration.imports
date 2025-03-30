@@ -1,3 +1,4 @@
 com.github.walkin.autoconfigure.SpringSecurityConfig
 com.github.walkin.autoconfigure.SaTokenConfig
 com.github.walkin.autoconfigure.SecurityConfig
+com.github.walkin.autoconfigure.UseCaseConfiguration
