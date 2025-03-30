@@ -1,5 +1,7 @@
+import PagedMemoList from "@/components/PagedMemoList";
+
 const Space = () => {
-  return <div>space</div>;
+  return <PagedMemoList />;
 };
 
 export default Space;

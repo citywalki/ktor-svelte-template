@@ -2,8 +2,8 @@ package com.github.walkin.memos.usecase.system
 
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
+import com.github.walkin.memos.domain.GlobalSetting
 import com.github.walkin.memos.domain.SetGlobalSetting
-import com.github.walkin.memos.entity.GlobalSetting
 import com.github.walkin.memos.entity.UserRole
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery

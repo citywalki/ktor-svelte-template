@@ -1,16 +1,24 @@
 package com.github.walkin.memos.graphql
 
+import com.github.walkin.memos.domain.GeneralGlobalSetting
 import com.github.walkin.memos.domain.GlobalProfile
-import com.github.walkin.memos.entity.GeneralGlobalSetting
-import com.github.walkin.memos.entity.MemoRelatedGlobalSetting
-import com.github.walkin.memos.entity.StorageGlobalSetting
+import com.github.walkin.memos.domain.MemoRelatedGlobalSetting
+import com.github.walkin.memos.domain.StorageGlobalSetting
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
+import kotlinx.serialization.Serializable
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
+
+@Serializable
+data class GlobalSettings(
+  val generalSetting: GeneralGlobalSetting? = null,
+  val storageSetting: StorageGlobalSetting? = null,
+  val memoRelatedSetting: MemoRelatedGlobalSetting? = null,
+)
 
 @Controller
 class GlobalSettingGraphql(

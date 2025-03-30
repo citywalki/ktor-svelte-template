@@ -4,7 +4,7 @@ import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.entity.*
-import com.github.walkin.memos.store.WorkspaceSetting
+import com.github.walkin.memos.store.SystemSetting
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.core.dsl.query.map
 import org.komapper.core.dsl.query.singleOrNull
@@ -58,18 +58,16 @@ class GlobalSettingQuery(private val database: R2dbcDatabase, private val userQu
   }
 
   private fun convertRelatedSettingFromRaw(
-    workspaceSetting: WorkspaceSetting?
+    systemSetting: SystemSetting?
   ): MemoRelatedGlobalSetting {
-    return workspaceSetting?.let { MemoRelatedGlobalSetting() } ?: MemoRelatedGlobalSetting()
+    return systemSetting?.let { MemoRelatedGlobalSetting() } ?: MemoRelatedGlobalSetting()
   }
 
-  private fun convertGeneralSettingFromRaw(
-    workspaceSetting: WorkspaceSetting?
-  ): GeneralGlobalSetting {
-    return workspaceSetting?.let { GeneralGlobalSetting() } ?: GeneralGlobalSetting()
+  private fun convertGeneralSettingFromRaw(systemSetting: SystemSetting?): GeneralGlobalSetting {
+    return systemSetting?.let { GeneralGlobalSetting() } ?: GeneralGlobalSetting()
   }
 
-  private fun convertBasicSettingFromRaw(workspaceSetting: WorkspaceSetting?): BasicGlobalSetting {
-    return workspaceSetting?.let { BasicGlobalSetting() } ?: BasicGlobalSetting(secretKey = "ddd")
+  private fun convertBasicSettingFromRaw(systemSetting: SystemSetting?): BasicGlobalSetting {
+    return systemSetting?.let { BasicGlobalSetting() } ?: BasicGlobalSetting(secretKey = "ddd")
   }
 }

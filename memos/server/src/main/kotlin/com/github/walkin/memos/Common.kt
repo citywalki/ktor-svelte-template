@@ -1,6 +1,6 @@
 package com.github.walkin.memos
 
-import com.github.walkin.memos.entity.Memo
+import com.github.walkin.memos.entity.*
 import com.github.walkin.memos.store.*
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
@@ -14,8 +14,8 @@ const val DefaultPageSize: Int = 10
 object Entity {
   val user = Meta.user
   val userSpace = Meta.userSpace
-  val userSetting = Meta.userSetting
-  val workspaceSetting = Meta.workspaceSetting
+  val userSetting = Meta.userSettingEntity
+  val workspaceSetting = Meta.systemSetting
   val inbox = Meta.inbox
   val memo = Meta.memo
 }

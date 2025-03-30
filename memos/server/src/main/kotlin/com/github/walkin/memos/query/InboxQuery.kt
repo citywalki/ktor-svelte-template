@@ -1,16 +1,17 @@
 package com.github.walkin.memos.query
 
 import com.github.walkin.memos.Entity
+import com.github.walkin.memos.domain.InboxStatus
+import com.github.walkin.memos.entity.EntityID
 import com.github.walkin.memos.entity.Inbox
-import com.github.walkin.memos.entity.InboxStatus
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.r2dbc.R2dbcDatabase
 import org.springframework.stereotype.Service
 
 data class FindInbox(
-  val id: Long? = null,
-  val senderId: Long? = null,
-  val receiverId: Long? = null,
+  val id: EntityID? = null,
+  val senderId: EntityID? = null,
+  val receiverId: EntityID? = null,
   val status: InboxStatus? = null,
   val limit: Int? = null,
   val offset: Int? = null,

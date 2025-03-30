@@ -5,8 +5,8 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { workspaceStore } from "@/store";
 import { Routes } from "@/router";
 import { SidebarContent, SidebarProvider } from "@/components/ui/sidebar";
-import Navigation from "@/components/navigation";
 import { Outlet } from "react-router";
+import Navigation from "@/components/Navigation";
 
 const RootLayout = observer(() => {
   const [initialized, setInitialized] = useState(false);

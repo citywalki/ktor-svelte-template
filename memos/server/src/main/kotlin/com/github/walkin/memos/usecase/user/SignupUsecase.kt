@@ -2,6 +2,7 @@ package com.github.walkin.memos.usecase.user
 
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.SignUp
+import com.github.walkin.memos.entity.EntityID
 import com.github.walkin.memos.entity.User
 import com.github.walkin.memos.entity.UserRole
 import com.github.walkin.memos.entity.UserSpace
@@ -22,9 +23,9 @@ class SignupUsecase(
   private val userQuery: UserQuery,
   private val database: R2dbcDatabase,
   val passwordEncoder: PasswordEncoder,
-) : UseCase<SignUp, User>() {
+) : UseCase<SignUp, EntityID>() {
 
-  override suspend fun handle(command: SignUp): User {
+  override suspend fun handle(command: SignUp): EntityID {
     globalSettingQuery.getWorkspaceGeneralSetting().apply {
       if (disallowUserRegistration) {
         throw IllegalStateException("SignUpNotAllowed")
@@ -44,6 +45,6 @@ class SignupUsecase(
         .single(UserSpace(name = "${command.username}'s default space", userId = user.id))
     }
 
-    return user
+    return user.id
   }
 }

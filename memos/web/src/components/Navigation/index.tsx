@@ -38,6 +38,9 @@ import userStore from "../../store/mobx/user.ts";
 import { gql } from "@/gql";
 import { useQuery } from "@tanstack/react-query";
 import { graphqlClient } from "@/api/apiClient.ts";
+import { useCallback } from "react";
+import { useLocation } from "react-router";
+import useNavigateTo from "@/hooks/useNavigateTo.ts";
 
 const Navigation = observer(() => {
   const currentUser = useCurrentUser();
@@ -46,21 +49,10 @@ const Navigation = observer(() => {
 });
 
 const LoggedSidebar = () => {
-  return (
-    <Sidebar className="border-r-0">
-      <SidebarHeader>
-        <NavMain />
-      </SidebarHeader>
-      <SidebarContent>
-        <UserWorkspacesGroup />
-        <UserFollowGroup />
-      </SidebarContent>
-      <NavSecondary className="mt-auto" />
-    </Sidebar>
-  );
-};
+  const currentUser = useCurrentUser();
+  const location = useLocation();
+  const nav = useNavigateTo();
 
-const UserWorkspacesGroup = () => {
   const currentUserSpaces = gql(`
     query CurrentUserSpaces {
       currentUser {
@@ -74,53 +66,93 @@ const UserWorkspacesGroup = () => {
 
   const { data } = useQuery({
     queryKey: ["currentUserSpaces"],
-    queryFn: async () => graphqlClient.request(currentUserSpaces),
+    queryFn: async () => {
+      const result = await graphqlClient.request(currentUserSpaces);
+      return result.currentUser?.userSpaces?.map((userSpace) => {
+        return {
+          ...userSpace,
+          url: `/${currentUser.username}/${userSpace?.name}`,
+        };
+      });
+    },
   });
 
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>空间</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {data?.currentUser?.userSpaces?.map((item) => (
-            <SidebarMenuItem key={item?.id}>
-              <SidebarMenuButton asChild>
-                <a>{item?.name}</a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+  const isActive = useCallback(
+    (url: string) => {
+      const currentLocation = decodeURI(location.pathname);
+      return currentLocation == url;
+    },
+    [location],
   );
-};
 
-const UserFollowGroup = () => {
   const items = [
     {
-      title: "User Workspaces",
-      url: "/users/workspaces",
-    },
-    {
-      title: "User Workspaces",
+      name: "User Workspaces",
       url: "/users/workspaces",
     },
   ];
+
+  const renderMenuButton = (item: { name: string; url: string }) => {
+    return (
+      <SidebarMenuButton
+        asChild
+        isActive={isActive(item?.url)}
+        onClick={() => nav(item.url)}
+      >
+        <a>
+          <span>{item?.name}</span>
+        </a>
+      </SidebarMenuButton>
+    );
+  };
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>关注</SidebarGroupLabel>
-      <SidebarGroupContent>
+    <Sidebar className="border-r-0">
+      <SidebarHeader>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <a href={item.url}>{item.title}</a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <NavUser />
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => nav("/explore")}
+              asChild
+              isActive={isActive("/explore")}
+            >
+              <a>
+                <Inbox />
+                <span>Explore</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>空间</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data?.map((item) => (
+                <SidebarMenuItem key={item?.id}>
+                  {renderMenuButton({ url: item.url, name: item.name })}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>关注</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  {renderMenuButton({ url: item.url, name: item.name })}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <NavSecondary className="mt-auto" />
+    </Sidebar>
   );
 };
 
@@ -142,23 +174,6 @@ const UnLoginSidebar = observer(() => {
     </Sidebar>
   );
 });
-
-const NavMain = () => {
-  return (
-    <SidebarMenu>
-      <NavUser />
-      <SidebarMenuItem key={"Inbox"}>
-        <SidebarMenuButton asChild>
-          <a href={"/inbox"}>
-            <Inbox />
-            <span>Inbox</span>
-          </a>
-        </SidebarMenuButton>
-        <SidebarMenuBadge>20</SidebarMenuBadge>
-      </SidebarMenuItem>
-    </SidebarMenu>
-  );
-};
 
 const NavUser = observer(() => {
   const user = useCurrentUser();

@@ -1,4 +1,4 @@
-package com.github.walkin.memos.security
+package com.github.walkin.memos.service
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

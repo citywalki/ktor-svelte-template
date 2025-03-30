@@ -3,6 +3,7 @@ package com.github.walkin.memos.controller
 import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.SignUp
+import com.github.walkin.memos.entity.EntityID
 import com.github.walkin.memos.entity.User
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.JwtTokens
@@ -50,8 +51,8 @@ class AuthResource(
   suspend fun signup(
     @RequestParam username: String,
     @RequestParam password: String,
-  ): ResponseEntity<Long> =
-    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it.id) }
+  ): ResponseEntity<EntityID> =
+    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it) }
 
   @PostMapping("/signip")
   suspend fun signIn(@RequestBody command: SignIn): ResponseEntity<JwtTokens> {

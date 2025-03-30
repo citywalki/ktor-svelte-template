@@ -8,8 +8,6 @@ import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -39,25 +37,6 @@ class GlobalSettingResource(
   //
   //    return ResponseEntity.ok(profile)
   //  }
-
-  @GetMapping("/workspace/{name}")
-  suspend fun getWorkspaceSettings(
-    @PathVariable("name") name: String
-  ): ResponseEntity<WorkspaceSettingResponse> {
-    return globalSettingQuery
-      .getWorkspaceSetting(GlobalSettingKey.valueOf(name))
-      .let {
-        WorkspaceSettingResponse(name).apply {
-          when (it) {
-            is BasicGlobalSetting -> TODO()
-            is GeneralGlobalSetting -> generalSetting = it
-            is MemoRelatedGlobalSetting -> memoRelatedSetting = it
-            is StorageGlobalSetting -> storageSetting = it
-          }
-        }
-      }
-      .let { ResponseEntity.ok(it) }
-  }
 
   @PatchMapping("/workspace/{name}")
   suspend fun updateWorkspaceSettings(
