@@ -1,16 +1,15 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
+import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.SignUp
 import com.github.walkin.memos.entity.User
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.JwtTokens
 import com.github.walkin.security.SecurityJwtService
 import com.github.walkin.usecase.CommandPublish
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -28,7 +27,6 @@ class AuthResource(
 
   @PostMapping("/refresh_token")
   suspend fun refreshToken(@RequestBody jwtTokens: JwtTokens): ResponseEntity<JwtTokens> {
-    val securityContext = ReactiveSecurityContextHolder.getContext().awaitFirstOrNull()
 
     val accessToken =
       jwtTokens.refreshToken?.let { refreshToken ->
@@ -54,4 +52,9 @@ class AuthResource(
     @RequestParam password: String,
   ): ResponseEntity<Long> =
     commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it.id) }
+
+  @PostMapping("/signip")
+  suspend fun signIn(@RequestBody command: SignIn): ResponseEntity<JwtTokens> {
+    return ResponseEntity.ok(commandPublish.command(command))
+  }
 }
