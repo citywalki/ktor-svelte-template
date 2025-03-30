@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { gql } from "@/gql";
 import { RowStatus, UserRole } from "@/gql/graphql";
 import { graphqlClient } from "@/api/apiClient.ts";
+import { clearAuthTokens } from "@/api/tokensUtils.ts";
 
 export interface User {
   /** The system generated uid of the user. */
@@ -34,8 +35,14 @@ class LocalState {
 const userStore = (() => {
   const state = new LocalState();
 
+  const signOut = () => {
+    clearAuthTokens();
+    state.currentUser = undefined;
+  };
+
   return {
-    state: state,
+    state,
+    signOut,
   };
 })();
 

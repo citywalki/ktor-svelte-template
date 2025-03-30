@@ -1,8 +1,8 @@
 package com.github.walkin.memos.query
 
 import com.github.walkin.memos.Entity
-import com.github.walkin.memos.domain.Inbox
-import com.github.walkin.memos.domain.InboxStatus
+import com.github.walkin.memos.entity.Inbox
+import com.github.walkin.memos.entity.InboxStatus
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.r2dbc.R2dbcDatabase
 import org.springframework.stereotype.Service

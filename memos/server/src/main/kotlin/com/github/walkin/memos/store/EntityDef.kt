@@ -1,6 +1,6 @@
 package com.github.walkin.memos.store
 
-import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.*
 import com.github.walkin.shared.entity.RowStatus
 import kotlinx.datetime.LocalDateTime
 import org.komapper.annotation.*
@@ -8,7 +8,7 @@ import org.komapper.core.type.ClobString
 
 @KomapperEntityDef(Inbox::class)
 @KomapperTable(name = "inbox")
-data class InboxDef(
+private data class InboxDef(
   @KomapperId val id: Long? = null,
   @KomapperCreatedAt val createdTs: LocalDateTime,
   val senderId: Long? = null,
@@ -18,7 +18,7 @@ data class InboxDef(
 )
 
 @KomapperEntityDef(Memo::class)
-data class MemoDef(
+private data class MemoDef(
   @KomapperId val uid: Nothing,
   var rowStatus: Nothing,
   var creator: Nothing,
@@ -28,19 +28,9 @@ data class MemoDef(
   @KomapperCreatedAt val createdAt: Nothing?,
 )
 
-@KomapperEntityDef(GlobalSettingEntity::class)
-@KomapperTable("system_setting")
-data class WorkspaceSettingDef(
-  @KomapperVersion val version: Int = 0,
-  @KomapperCreatedAt val createdAt: LocalDateTime,
-  @KomapperUpdatedAt val updatedAt: LocalDateTime,
-  @KomapperId val name: GlobalSettingKey = GlobalSettingKey.WORKSPACE_SETTING_KEY_UNSPECIFIED,
-  var value: String,
-)
-
 @KomapperEntityDef(User::class)
 @KomapperTable(name = "memos_users")
-data class UserDef(
+private data class UserDef(
   @KomapperId @KomapperAutoIncrement val id: Long = 0,
   @KomapperVersion val version: Int = 0,
   @KomapperCreatedAt val createdAt: LocalDateTime? = null,
@@ -52,6 +42,16 @@ data class UserDef(
   var email: String? = null,
   var nickname: String? = null,
   var avatarUrl: String? = null,
+)
+
+@KomapperEntityDef(UserSpace::class)
+@KomapperTable(name = "user_space")
+private data class UserSpaceDef(
+  @KomapperId @KomapperAutoIncrement val id: Long,
+  @KomapperVersion val version: Int = 0,
+  @KomapperCreatedAt val createdAt: LocalDateTime,
+  @KomapperUpdatedAt val updatedAt: LocalDateTime,
+  val name: String,
 )
 
 enum class UserSettingKey {
@@ -76,3 +76,13 @@ data class UserSettingUnique(
 @KomapperEntity
 @KomapperTable(name = "user_setting")
 data class UserSetting(@KomapperEmbeddedId val unique: UserSettingUnique, val value: String)
+
+@KomapperEntity
+@KomapperTable("system_setting")
+data class WorkspaceSetting(
+  @KomapperVersion val version: Int = 0,
+  @KomapperCreatedAt val createdAt: LocalDateTime,
+  @KomapperUpdatedAt val updatedAt: LocalDateTime,
+  @KomapperId val name: GlobalSettingKey = GlobalSettingKey.WORKSPACE_SETTING_KEY_UNSPECIFIED,
+  var value: String,
+)

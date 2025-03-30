@@ -1,9 +1,10 @@
 package com.github.walkin.memos.usecase.user
 
 import com.github.walkin.memos.Entity
-import com.github.walkin.memos.domain.SignupRequest
-import com.github.walkin.memos.domain.User
-import com.github.walkin.memos.domain.UserRole
+import com.github.walkin.memos.domain.SignUp
+import com.github.walkin.memos.entity.User
+import com.github.walkin.memos.entity.UserRole
+import com.github.walkin.memos.entity.UserSpace
 import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
@@ -21,9 +22,9 @@ class SignupUsecase(
   private val userQuery: UserQuery,
   private val database: R2dbcDatabase,
   val passwordEncoder: PasswordEncoder,
-) : UseCase<SignupRequest, User>() {
+) : UseCase<SignUp, User>() {
 
-  override suspend fun handle(command: SignupRequest): User {
+  override suspend fun handle(command: SignUp): User {
     globalSettingQuery.getWorkspaceGeneralSetting().apply {
       if (disallowUserRegistration) {
         throw IllegalStateException("SignUpNotAllowed")
@@ -32,10 +33,17 @@ class SignupUsecase(
 
     val passwordHash = passwordEncoder.encode(command.password)
 
-    val user = User(username = command.username, password = passwordHash)
+    var user = User(username = command.username, password = passwordHash)
     user.role =
       userQuery.getUser(FindUser(role = UserRole.HOST))?.let { UserRole.USER } ?: UserRole.HOST
 
-    return database.runQuery { QueryDsl.insert(Entity.user).single(user) }
+    user = database.runQuery { QueryDsl.insert(Entity.user).single(user) }
+
+    database.runQuery {
+      QueryDsl.insert(Entity.userSpace)
+        .single(UserSpace(name = "${command.username}'s default space", userId = user.id))
+    }
+
+    return user
   }
 }

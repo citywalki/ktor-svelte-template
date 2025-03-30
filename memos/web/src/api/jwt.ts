@@ -144,7 +144,7 @@ const getCurrentAccessToken = async (
       currentlyRequestingPromise = undefined;
 
       if (error instanceof Error) {
-        throw new Error(
+        console.error(
           `Unable to refresh access token for request due to token refresh error: ${error.message}`,
         );
       }

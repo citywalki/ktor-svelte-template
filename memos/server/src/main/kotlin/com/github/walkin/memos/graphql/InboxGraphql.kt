@@ -1,6 +1,6 @@
 package com.github.walkin.memos.graphql
 
-import com.github.walkin.memos.domain.Inbox
+import com.github.walkin.memos.entity.Inbox
 import com.github.walkin.memos.query.FindInbox
 import com.github.walkin.memos.query.InboxQuery
 import com.github.walkin.memos.query.UserQuery

@@ -5,6 +5,9 @@ const STORAGE_KEY = "jwt-token";
 export const setAuthTokens = (tokens: IAuthTokens) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
 };
+export const clearAuthTokens = () => {
+  localStorage.removeItem(STORAGE_KEY);
+};
 export const setAccessToken = (token: Token): void => {
   const tokens = getAuthTokens();
   if (!tokens) {

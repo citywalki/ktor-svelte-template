@@ -3,6 +3,8 @@ package com.github.walkin.memos.usecase.memo
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.Memo
+import com.github.walkin.memos.entity.MemosVisibility
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.memos.rebuildMemoPayload
@@ -25,7 +27,8 @@ class CreateMemoUsecase(
 ) : UseCase<CreateMemo, Memo>() {
   @OptIn(ExperimentalUuidApi::class)
   override suspend fun handle(command: CreateMemo): Memo {
-    val requestUser = userQuery.getCurrentRequestOwner() ?: throw MemosExceptionFactory.permissionDenied()
+    val requestUser =
+      userQuery.getCurrentRequestOwner() ?: throw MemosExceptionFactory.permissionDenied()
 
     var create =
       Memo(content = command.content, creator = requestUser.id, uid = Uuid.random().toString())

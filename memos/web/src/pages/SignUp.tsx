@@ -138,7 +138,7 @@ const SignUp = () => {
                       className="cursor-pointer ml-2 text-blue-600 hover:underline"
                       viewTransition
                     >
-                      {t("common.sign-up")}
+                      {t("common.sign-in")}
                     </Link>
                   </p>
                 )}

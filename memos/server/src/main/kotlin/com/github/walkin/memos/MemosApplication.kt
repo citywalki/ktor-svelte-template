@@ -19,7 +19,13 @@ class MemosApplication {
     return CommandLineRunner {
       CoroutineScope(Dispatchers.IO).launch {
         datasource.runQuery {
-          QueryDsl.create(Entity.user, Entity.workspaceSetting, Entity.inbox, Entity.userSetting)
+          QueryDsl.create(
+            Entity.user,
+            Entity.workspaceSetting,
+            Entity.inbox,
+            Entity.userSetting,
+            Entity.userSpace,
+          )
         }
       }
     }

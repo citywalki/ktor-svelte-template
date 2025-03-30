@@ -1,9 +1,9 @@
 package com.github.walkin.memos.graphql
 
-import com.github.walkin.memos.domain.GlobalGeneralSetting
-import com.github.walkin.memos.domain.GlobalMemoRelatedSetting
 import com.github.walkin.memos.domain.GlobalProfile
-import com.github.walkin.memos.domain.GlobalStorageSetting
+import com.github.walkin.memos.entity.GeneralGlobalSetting
+import com.github.walkin.memos.entity.MemoRelatedGlobalSetting
+import com.github.walkin.memos.entity.StorageGlobalSetting
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import org.springframework.beans.factory.annotation.Value
@@ -22,7 +22,7 @@ class GlobalSettingGraphql(
 
   @QueryMapping
   suspend fun profile(): GlobalProfile {
-    val owner = userQuery.getInstanceOwner()?.id.toString()
+    val owner = userQuery.getInstanceOwner()?.id
 
     return GlobalProfile(
       version = buildProperties.version,
@@ -39,17 +39,17 @@ class GlobalSettingGraphql(
   }
 
   @SchemaMapping(typeName = "GlobalSettings")
-  suspend fun generalSetting(): GlobalGeneralSetting {
+  suspend fun generalSetting(): GeneralGlobalSetting {
     return globalSettingQuery.getWorkspaceGeneralSetting()
   }
 
   @SchemaMapping(typeName = "GlobalSettings")
-  suspend fun memoRelatedSetting(): GlobalMemoRelatedSetting {
-    return GlobalMemoRelatedSetting()
+  suspend fun memoRelatedSetting(): MemoRelatedGlobalSetting {
+    return MemoRelatedGlobalSetting()
   }
 
   @SchemaMapping(typeName = "GlobalSettings")
-  suspend fun storageSetting(): GlobalStorageSetting {
-    return GlobalStorageSetting()
+  suspend fun storageSetting(): StorageGlobalSetting {
+    return StorageGlobalSetting()
   }
 }

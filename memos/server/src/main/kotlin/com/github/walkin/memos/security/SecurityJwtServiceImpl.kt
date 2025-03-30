@@ -16,11 +16,11 @@ class SecurityJwtServiceImpl(
 ) : SecurityJwtService {
   fun decodeAccessToken(accessToken: String): DecodedJWT = decode(secret, accessToken)
 
-  override fun decodeRefreshToken(refreshToken: String): JWTPayload{
-    val  decodedJWT = decode(refresh, refreshToken)
+  override fun decodeRefreshToken(refreshToken: String): JWTPayload {
+    val decodedJWT = decode(refresh, refreshToken)
     return JWTPayload(
-        username = decodedJWT.subject,
-        role = decodedJWT.getClaim("role").asList(String::class.java)
+      username = decodedJWT.subject,
+      role = decodedJWT.getClaim("role").asList(String::class.java),
     )
   }
 

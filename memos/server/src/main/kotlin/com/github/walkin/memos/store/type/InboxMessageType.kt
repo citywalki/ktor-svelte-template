@@ -1,6 +1,6 @@
 package com.github.walkin.memos.store.type
 
-import com.github.walkin.memos.domain.InboxMessage
+import com.github.walkin.memos.entity.InboxMessage
 import io.r2dbc.spi.Row
 import io.r2dbc.spi.Statement
 import kotlin.reflect.KType

@@ -1,8 +1,8 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
-import com.github.walkin.memos.domain.SignupRequest
-import com.github.walkin.memos.domain.User
+import com.github.walkin.memos.domain.SignUp
+import com.github.walkin.memos.entity.User
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.JwtTokens
 import com.github.walkin.security.SecurityJwtService
@@ -20,26 +20,26 @@ import org.springframework.web.bind.annotation.RequestParam
 @MemosController
 @Validated
 @RequestMapping("/auth")
-class AuthResource(private val commandPublish: CommandPublish,
-                   private val userQuery: UserQuery,
-                   private val jwtService: SecurityJwtService) {
+class AuthResource(
+  private val commandPublish: CommandPublish,
+  private val userQuery: UserQuery,
+  private val jwtService: SecurityJwtService,
+) {
 
   @PostMapping("/refresh_token")
-  suspend fun refreshToken(
-    @RequestBody jwtTokens: JwtTokens
-  ): ResponseEntity<JwtTokens> {
+  suspend fun refreshToken(@RequestBody jwtTokens: JwtTokens): ResponseEntity<JwtTokens> {
     val securityContext = ReactiveSecurityContextHolder.getContext().awaitFirstOrNull()
 
-      val  accessToken = jwtTokens.refreshToken?.let { refreshToken ->
-          val jwtPayload = jwtService.decodeRefreshToken(refreshToken)
+    val accessToken =
+      jwtTokens.refreshToken?.let { refreshToken ->
+        val jwtPayload = jwtService.decodeRefreshToken(refreshToken)
 
-           jwtService.accessToken(jwtPayload.username, jwtPayload.role)
+        jwtService.accessToken(jwtPayload.username, jwtPayload.role)
       }
 
-    return ResponseEntity.ok(JwtTokens(
-        accessToken = accessToken,
-        refreshToken = jwtTokens.refreshToken,
-    ))
+    return ResponseEntity.ok(
+      JwtTokens(accessToken = accessToken, refreshToken = jwtTokens.refreshToken)
+    )
   }
 
   @PostMapping("/status")
@@ -53,5 +53,5 @@ class AuthResource(private val commandPublish: CommandPublish,
     @RequestParam username: String,
     @RequestParam password: String,
   ): ResponseEntity<Long> =
-    commandPublish.command(SignupRequest(username, password)).let { ResponseEntity.ok(it.id) }
+    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it.id) }
 }

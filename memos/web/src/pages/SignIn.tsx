@@ -25,6 +25,7 @@ import useLoading from "@/hooks/useLoading.ts";
 import useNavigateTo from "@/hooks/useNavigateTo.ts";
 import authService from "@/api/services/auth_service.ts";
 import { initialUserStoreFromGraphql } from "@/store/mobx/user.ts";
+import { Link } from "react-router";
 
 const SignIn = () => {
   const t = useTranslate();
@@ -127,6 +128,16 @@ const SignIn = () => {
                   )}
                   {t("common.sign-in")}
                 </Button>
+                <p className="w-full text-sm text-center">
+                  <span>{t("auth.sign-up-tip")}</span>
+                  <Link
+                    to="/auth/signup"
+                    className="cursor-pointer ml-2 text-blue-600 hover:underline"
+                    viewTransition
+                  >
+                    {t("common.sign-up")}
+                  </Link>
+                </p>
               </form>
             </Form>
           </CardContent>

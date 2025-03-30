@@ -2,8 +2,8 @@ package com.github.walkin.memos.query
 
 import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.*
 import com.github.walkin.memos.store.UserSettingKey
-import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.komapper.core.dsl.QueryDsl
 import org.komapper.core.dsl.query.single
@@ -13,6 +13,8 @@ import org.springframework.security.core.context.ReactiveSecurityContextHolder
 import org.springframework.stereotype.Service
 
 data class FindUser(val username: String? = null, val id: Long? = null, val role: UserRole? = null)
+
+data class FindUserSpace(val user: EntityID)
 
 @Service
 class UserQuery(private val database: R2dbcDatabase) {
@@ -68,5 +70,10 @@ class UserQuery(private val database: R2dbcDatabase) {
     return userSetting
   }
 
-  suspend fun listUser() = database.runQuery { QueryDsl.from(Entity.user) }
+  suspend fun listUserSpaces(find: FindUserSpace): List<UserSpace> {
+
+    return database.runQuery {
+      QueryDsl.from(Entity.userSpace).where { Entity.userSpace.userId eq find.user }
+    }
+  }
 }

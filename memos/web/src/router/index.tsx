@@ -8,6 +8,7 @@ const SignIn = lazy(() => import("@/pages/SignIn"));
 const SignUp = lazy(() => import("@/pages/SignUp"));
 const Explore = lazy(() => import("@/pages/Explore"));
 const Home = lazy(() => import("@/pages/Home"));
+const Space = lazy(() => import("@/pages/Space"));
 
 export enum Routes {
   ROOT = "/",
@@ -64,6 +65,19 @@ const router = createBrowserRouter([
                 <Explore />
               </Suspense>
             ),
+          },
+          {
+            path: ":user",
+            children: [
+              {
+                path: ":space",
+                element: (
+                  <Suspense fallback={<Loading />}>
+                    <Space />
+                  </Suspense>
+                ),
+              },
+            ],
           },
         ],
       },

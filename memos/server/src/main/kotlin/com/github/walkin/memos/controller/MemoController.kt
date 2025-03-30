@@ -13,7 +13,8 @@ class MemoController(private val userQuery: UserQuery, private val commandPublis
 
   @PostMapping("/memo")
   suspend fun createMemo(@RequestParam("name") name: String): ResponseEntity<Nothing> {
-    val requestOwner = userQuery.getCurrentRequestOwner() ?: return ResponseEntity.badRequest().build()
+    val requestOwner =
+      userQuery.getCurrentRequestOwner() ?: return ResponseEntity.badRequest().build()
 
     val command = CreateMemo(requestOwner.id, "")
     commandPublish.command(command)

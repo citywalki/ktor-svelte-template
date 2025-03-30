@@ -26,6 +26,12 @@ type UserSetting {
     memoVisibility:MemosVisibility!
 }
 
+type UserSpace{
+    id: ID
+    name: String
+    userId: ID
+}
+
 type User{
     id: ID!
     createdAt: LocalDateTime!
@@ -38,4 +44,5 @@ type User{
     nickname: String
     avatarUrl: String
     userSetting: UserSetting
+    userSpaces: [UserSpace]
 }

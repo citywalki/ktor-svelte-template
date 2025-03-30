@@ -51,7 +51,7 @@ class SecurityConfig {
         "/api/*/workspace/profile",
         "/api/*/workspace/GENERAL",
         "/api/*/workspace/MEMO_RELATED",
-        "/api/*/auth/refresh_token"
+        "/api/*/auth/refresh_token",
       )
   }
 

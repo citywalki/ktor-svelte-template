@@ -43,7 +43,7 @@ type GlobalCustomProfile{
 }
 
 type GlobalProfile {
-    owner: String!
+    owner: String
     version: String!
     mode: String!
     instanceUrl: String!

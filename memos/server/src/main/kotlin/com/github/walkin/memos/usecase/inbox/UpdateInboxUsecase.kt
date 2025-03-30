@@ -1,8 +1,8 @@
 package com.github.walkin.memos.usecase.inbox
 
 import com.github.walkin.memos.Entity
-import com.github.walkin.memos.domain.Inbox
 import com.github.walkin.memos.domain.UpdateInbox
+import com.github.walkin.memos.entity.Inbox
 import com.github.walkin.memos.query.InboxQuery
 import com.github.walkin.usecase.UseCase
 import org.komapper.core.dsl.QueryDsl

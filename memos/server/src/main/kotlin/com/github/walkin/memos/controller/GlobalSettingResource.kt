@@ -2,10 +2,10 @@ package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.*
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
-import jakarta.annotation.security.PermitAll
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
 import org.springframework.http.ResponseEntity
@@ -23,22 +23,22 @@ class GlobalSettingResource(
   private val globalSettingQuery: GlobalSettingQuery,
 ) {
 
-  @GetMapping("/workspace/profile")
-  @PermitAll
-  suspend fun getWorkspaceProfile(): ResponseEntity<GlobalProfile> {
-
-    val owner = userQuery.getInstanceOwner()?.id.toString()
-
-    val profile =
-      GlobalProfile(
-        version = buildProperties.version,
-        owner = owner,
-        mode = appMode,
-        instanceUrl = "",
-      )
-
-    return ResponseEntity.ok(profile)
-  }
+  //  @GetMapping("/workspace/profile")
+  //  @PermitAll
+  //  suspend fun getWorkspaceProfile(): ResponseEntity<GlobalProfile> {
+  //
+  //    val owner = userQuery.getInstanceOwner()?.id
+  //
+  //    val profile =
+  //      GlobalProfile(
+  //        version = buildProperties.version,
+  //        owner = owner,
+  //        mode = appMode,
+  //        instanceUrl = "",
+  //      )
+  //
+  //    return ResponseEntity.ok(profile)
+  //  }
 
   @GetMapping("/workspace/{name}")
   suspend fun getWorkspaceSettings(
@@ -49,10 +49,10 @@ class GlobalSettingResource(
       .let {
         WorkspaceSettingResponse(name).apply {
           when (it) {
-            is GlobalBasicSetting -> TODO()
-            is GlobalGeneralSetting -> generalSetting = it
-            is GlobalMemoRelatedSetting -> memoRelatedSetting = it
-            is GlobalStorageSetting -> storageSetting = it
+            is BasicGlobalSetting -> TODO()
+            is GeneralGlobalSetting -> generalSetting = it
+            is MemoRelatedGlobalSetting -> memoRelatedSetting = it
+            is StorageGlobalSetting -> storageSetting = it
           }
         }
       }

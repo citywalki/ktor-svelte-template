@@ -1,10 +1,10 @@
 package com.github.walkin.memos.usecase.user
 
 import com.github.walkin.memos.MemosExceptionFactory
-import com.github.walkin.memos.domain.SignInRequest
-import com.github.walkin.memos.domain.User
-import com.github.walkin.memos.domain.UserRole
+import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.accessTokenDuration
+import com.github.walkin.memos.entity.User
+import com.github.walkin.memos.entity.UserRole
 import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class SignInRequestUsecase(val userQuery: UserQuery, val globalSettingQuery: GlobalSettingQuery) :
-  UseCase<SignInRequest, String>() {
-  override suspend fun handle(command: SignInRequest): String {
+  UseCase<SignIn, String>() {
+  override suspend fun handle(command: SignIn): String {
     val user =
       userQuery.getUser(FindUser(username = command.username))
         ?: throw MemosExceptionFactory.User.userNotExist()

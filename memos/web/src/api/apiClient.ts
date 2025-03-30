@@ -15,6 +15,9 @@ const axiosInstance = axios.create({
 
 const requestMiddleware: RequestMiddleware = async (request) => {
   const token = await getCurrentAccessToken();
+  if (!token) {
+    return request;
+  }
   return {
     ...request,
     headers: {

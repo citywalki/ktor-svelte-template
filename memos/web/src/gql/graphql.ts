@@ -66,7 +66,7 @@ export type GlobalProfile = {
   __typename?: 'GlobalProfile';
   instanceUrl: Scalars['String']['output'];
   mode: Scalars['String']['output'];
-  owner: Scalars['String']['output'];
+  owner?: Maybe<Scalars['String']['output']>;
   version: Scalars['String']['output'];
 };
 
@@ -153,6 +153,7 @@ export type User = {
   status: RowStatus;
   updatedAt: Scalars['LocalDateTime']['output'];
   userSetting?: Maybe<UserSetting>;
+  userSpaces?: Maybe<Array<Maybe<UserSpace>>>;
   username: Scalars['String']['output'];
   version: Scalars['Int']['output'];
 };
@@ -172,6 +173,18 @@ export type UserSetting = {
   memoVisibility: MemosVisibility;
 };
 
+export type UserSpace = {
+  __typename?: 'UserSpace';
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<Scalars['ID']['output']>;
+};
+
+export type CurrentUserSpacesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserSpacesQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', userSpaces?: Array<{ __typename?: 'UserSpace', id?: string | null, name?: string | null } | null> | null } | null };
+
 export type Init_User_StoreQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -180,9 +193,10 @@ export type Init_User_StoreQuery = { __typename?: 'Query', currentUser?: { __typ
 export type Init_Global_SettingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Init_Global_SettingQuery = { __typename?: 'Query', profile: { __typename?: 'GlobalProfile', owner: string, version: string, mode: string }, globalSettings: { __typename?: 'GlobalSettings', generalSetting: { __typename?: 'GlobalGeneralSetting', disallowUserRegistration: boolean, disallowPasswordAuth: boolean, additionalScript: string, additionalStyle: string, weekStartDayOffset: number, disallowChangeNickname: boolean, disallowChangeUsername: boolean, customProfile: { __typename?: 'GlobalCustomProfile', title?: string | null, description?: string | null, locale?: string | null, logoUrl?: string | null, appearance?: string | null } }, memoRelatedSetting: { __typename?: 'GlobalMemoRelatedSetting', disallowPublicVisibility?: boolean | null, displayWithUpdateTime?: boolean | null, contentLengthLimit?: number | null, enableAutoCompact?: boolean | null, enableDoubleClickEdit?: boolean | null, enableLinkPreview?: boolean | null, enableComment?: boolean | null, enableLocation?: boolean | null, defaultVisibility?: string | null, reactions?: Array<string | null> | null, disableMarkdownShortcuts?: boolean | null } } };
+export type Init_Global_SettingQuery = { __typename?: 'Query', profile: { __typename?: 'GlobalProfile', owner?: string | null, version: string, mode: string }, globalSettings: { __typename?: 'GlobalSettings', generalSetting: { __typename?: 'GlobalGeneralSetting', disallowUserRegistration: boolean, disallowPasswordAuth: boolean, additionalScript: string, additionalStyle: string, weekStartDayOffset: number, disallowChangeNickname: boolean, disallowChangeUsername: boolean, customProfile: { __typename?: 'GlobalCustomProfile', title?: string | null, description?: string | null, locale?: string | null, logoUrl?: string | null, appearance?: string | null } }, memoRelatedSetting: { __typename?: 'GlobalMemoRelatedSetting', disallowPublicVisibility?: boolean | null, displayWithUpdateTime?: boolean | null, contentLengthLimit?: number | null, enableAutoCompact?: boolean | null, enableDoubleClickEdit?: boolean | null, enableLinkPreview?: boolean | null, enableComment?: boolean | null, enableLocation?: boolean | null, defaultVisibility?: string | null, reactions?: Array<string | null> | null, disableMarkdownShortcuts?: boolean | null } } };
 
 
+export const CurrentUserSpacesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUserSpaces"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userSpaces"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentUserSpacesQuery, CurrentUserSpacesQueryVariables>;
 export const Init_User_StoreDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"INIT_USER_STORE"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"userSetting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"locale"}},{"kind":"Field","name":{"kind":"Name","value":"memoVisibility"}},{"kind":"Field","name":{"kind":"Name","value":"appearance"}}]}}]}}]}}]} as unknown as DocumentNode<Init_User_StoreQuery, Init_User_StoreQueryVariables>;
 export const Init_Global_SettingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"INIT_GLOBAL_SETTING"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"owner"}},{"kind":"Field","name":{"kind":"Name","value":"version"}},{"kind":"Field","name":{"kind":"Name","value":"mode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"globalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generalSetting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"disallowUserRegistration"}},{"kind":"Field","name":{"kind":"Name","value":"disallowPasswordAuth"}},{"kind":"Field","name":{"kind":"Name","value":"additionalScript"}},{"kind":"Field","name":{"kind":"Name","value":"additionalStyle"}},{"kind":"Field","name":{"kind":"Name","value":"customProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"locale"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}},{"kind":"Field","name":{"kind":"Name","value":"appearance"}}]}},{"kind":"Field","name":{"kind":"Name","value":"weekStartDayOffset"}},{"kind":"Field","name":{"kind":"Name","value":"disallowChangeNickname"}},{"kind":"Field","name":{"kind":"Name","value":"disallowChangeUsername"}}]}},{"kind":"Field","name":{"kind":"Name","value":"memoRelatedSetting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"disallowPublicVisibility"}},{"kind":"Field","name":{"kind":"Name","value":"displayWithUpdateTime"}},{"kind":"Field","name":{"kind":"Name","value":"contentLengthLimit"}},{"kind":"Field","name":{"kind":"Name","value":"enableAutoCompact"}},{"kind":"Field","name":{"kind":"Name","value":"enableDoubleClickEdit"}},{"kind":"Field","name":{"kind":"Name","value":"enableLinkPreview"}},{"kind":"Field","name":{"kind":"Name","value":"enableComment"}},{"kind":"Field","name":{"kind":"Name","value":"enableLocation"}},{"kind":"Field","name":{"kind":"Name","value":"defaultVisibility"}},{"kind":"Field","name":{"kind":"Name","value":"reactions"}},{"kind":"Field","name":{"kind":"Name","value":"disableMarkdownShortcuts"}}]}}]}}]}}]} as unknown as DocumentNode<Init_Global_SettingQuery, Init_Global_SettingQueryVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -244,7 +258,7 @@ export type GlobalProfile = {
   __typename?: 'GlobalProfile';
   instanceUrl: Scalars['String']['output'];
   mode: Scalars['String']['output'];
-  owner: Scalars['String']['output'];
+  owner?: Maybe<Scalars['String']['output']>;
   version: Scalars['String']['output'];
 };
 
@@ -331,6 +345,7 @@ export type User = {
   status: RowStatus;
   updatedAt: Scalars['LocalDateTime']['output'];
   userSetting?: Maybe<UserSetting>;
+  userSpaces?: Maybe<Array<Maybe<UserSpace>>>;
   username: Scalars['String']['output'];
   version: Scalars['Int']['output'];
 };
@@ -348,4 +363,11 @@ export type UserSetting = {
   id: Scalars['ID']['output'];
   locale: Scalars['String']['output'];
   memoVisibility: MemosVisibility;
+};
+
+export type UserSpace = {
+  __typename?: 'UserSpace';
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<Scalars['ID']['output']>;
 };
