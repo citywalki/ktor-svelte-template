@@ -1,24 +1,21 @@
 package com.github.walkin.memos.entity
 
 import com.github.walkin.memos.domain.MemosVisibility
+import com.github.walkin.memos.domain.TableId
 import com.github.walkin.shared.entity.RowStatus
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import org.komapper.annotation.*
-import org.komapper.core.type.ClobString
 
-@KomapperEntity
-@KomapperTable(name = "memo")
 @Serializable
 data class Memo(
-  @KomapperId @KomapperAutoIncrement val uid: EntityID = 0,
+  val uid: TableId = 0,
   var rowStatus: RowStatus? = RowStatus.NORMAL,
-  var creator: EntityID,
-  @KomapperColumn(alternateType = ClobString::class) var content: String,
+  var creator: TableId,
+  var content: String,
   var payload: MemoPayload = MemoPayload(),
   var visibility: MemosVisibility = MemosVisibility.PRIVATE,
-  @KomapperCreatedAt val createdAt: LocalDateTime? = null,
-  @KomapperUpdatedAt val updatedAt: LocalDateTime? = null,
+  val createdAt: LocalDateTime? = null,
+  val updatedAt: LocalDateTime? = null,
 )
 
 @Serializable

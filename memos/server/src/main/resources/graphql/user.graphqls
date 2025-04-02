@@ -5,13 +5,6 @@ input FindUser {
     role: UserRole
 }
 
-enum MemosVisibility{
-    VISIBILITY_UNSPECIFIED,
-    PRIVATE,
-    PROTECTED,
-    PUBLIC
-}
-
 enum UserRole {
     ROLE_UNSPECIFIED,
     HOST,

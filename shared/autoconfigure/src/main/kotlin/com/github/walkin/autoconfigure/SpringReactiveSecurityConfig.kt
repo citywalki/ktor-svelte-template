@@ -1,11 +1,8 @@
 package com.github.walkin.autoconfigure
 
 import com.github.walkin.autoconfigure.SecurityConfig.Companion.EXCLUDED_PATHS
+import com.github.walkin.security.*
 import com.github.walkin.security.HttpExceptionFactory.badRequest
-import com.github.walkin.security.JwtTokenReactFilter
-import com.github.walkin.security.LoginCheckSuccessHandler
-import com.github.walkin.security.LoginRequest
-import com.github.walkin.security.SecurityJwtService
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactor.mono
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -42,7 +39,7 @@ import reactor.core.publisher.Mono
 @EnableWebFluxSecurity
 @ConditionalOnBean(ReactiveUserDetailsService::class)
 @ConditionalOnClass(name = ["com.github.walkin.security.JwtTokenReactFilter"])
-class SpringSecurityConfig {
+class SpringReactiveSecurityConfig {
   @Bean
   fun springSecurityFilterChain(
     http: ServerHttpSecurity,
@@ -93,6 +90,8 @@ class SpringSecurityConfig {
 
       // 登录验证成功后处理
       setAuthenticationSuccessHandler(loginCheckSuccessHandler)
+
+      setAuthenticationFailureHandler(JwtAuthFailureHandler())
 
       setSecurityContextRepository(NoOpServerSecurityContextRepository.getInstance())
     }

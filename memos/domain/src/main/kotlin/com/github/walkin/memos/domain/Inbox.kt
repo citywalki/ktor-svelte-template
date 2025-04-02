@@ -1,6 +1,5 @@
 package com.github.walkin.memos.domain
 
-import com.github.walkin.memos.entity.EntityID
 import com.github.walkin.usecase.Command
 import kotlinx.serialization.Serializable
 
@@ -19,6 +18,6 @@ enum class InboxMessageType {
 
 @Serializable data class InboxMessage(val type: InboxMessageType, val activityId: Long? = null)
 
-@Serializable data class UpdateInbox(val id: EntityID, val status: InboxStatus) : Command<Unit>()
+@Serializable data class UpdateInbox(val id: Long, val status: InboxStatus) : Command<Unit>()
 
-@Serializable data class DeleteInbox(val id: EntityID) : Command<Unit>()
+@Serializable data class DeleteInbox(val id: Long) : Command<Unit>()

@@ -7,6 +7,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+typealias TableId = Long
+
 typealias PageToken = String
 
 @OptIn(ExperimentalEncodingApi::class)

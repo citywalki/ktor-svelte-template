@@ -1,31 +1,29 @@
 package com.github.walkin.memos.usecase.user
 
-import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.SignUp
-import com.github.walkin.memos.entity.EntityID
-import com.github.walkin.memos.entity.User
+import com.github.walkin.memos.domain.UserId
+import com.github.walkin.memos.entity.UserEntity
 import com.github.walkin.memos.entity.UserRole
-import com.github.walkin.memos.entity.UserSpace
-import com.github.walkin.memos.query.FindUser
+import com.github.walkin.memos.entity.UserSpaceEntity
+import com.github.walkin.memos.entity.UserTable
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.PasswordEncoder
 import com.github.walkin.usecase.UseCase
-import org.komapper.core.dsl.QueryDsl
-import org.komapper.r2dbc.R2dbcDatabase
+import kotlin.reflect.KClass
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class SignupUsecase(
   private val globalSettingQuery: GlobalSettingQuery,
   private val userQuery: UserQuery,
-  private val database: R2dbcDatabase,
   val passwordEncoder: PasswordEncoder,
-) : UseCase<SignUp, EntityID>() {
+) : UseCase<SignUp, UserId>() {
 
-  override suspend fun handle(command: SignUp): EntityID {
+  override fun handle(command: SignUp): UserId = transaction {
     globalSettingQuery.getWorkspaceGeneralSetting().apply {
       if (disallowUserRegistration) {
         throw IllegalStateException("SignUpNotAllowed")
@@ -34,17 +32,29 @@ class SignupUsecase(
 
     val passwordHash = passwordEncoder.encode(command.password)
 
-    var user = User(username = command.username, password = passwordHash)
-    user.role =
-      userQuery.getUser(FindUser(role = UserRole.HOST))?.let { UserRole.USER } ?: UserRole.HOST
+    val role =
+      if (UserTable.selectAll().where { UserTable.role eq UserRole.HOST }.count() > 0) {
+        UserRole.USER
+      } else {
+        UserRole.HOST
+      }
 
-    user = database.runQuery { QueryDsl.insert(Entity.user).single(user) }
+    val user =
+      UserEntity.new {
+        username = command.username
+        password = passwordHash
+        this.role = role
+      }
 
-    database.runQuery {
-      QueryDsl.insert(Entity.userSpace)
-        .single(UserSpace(name = "${command.username}'s default space", userId = user.id))
+    UserSpaceEntity.new {
+      name = "${command.username}'s default space"
+      this.user = user
     }
 
-    return user.id
+     user.id.value
+  }
+
+  override fun getCommandType(): KClass<SignUp> {
+    return SignUp::class
   }
 }

@@ -8,12 +8,14 @@ dependencies{
 
  implementation(project(":api"))
     implementation(libs.spring.boot)
-    compileOnly(project(":security-spring"))
+    compileOnly(project(":webflux-security-spring"))
     compileOnly(project(":satoken-spring"))
     compileOnly(project(":usecase-spring"))
 
     compileOnly(libs.satoken.spring)
     compileOnly(libs.spring.boot.webflux)
+    compileOnly(libs.spring.boot.webmvc)
+
     implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.kotlin.reactor.extensions)
 

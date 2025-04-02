@@ -1,4 +1,4 @@
-package com.github.walkin.autoconfigure
+package com.github.walkin.autoconfigure.usecase
 
 import com.github.walkin.usecase.CommandPublish
 import com.github.walkin.usecase.CommandPublishImpl

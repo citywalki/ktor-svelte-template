@@ -21,25 +21,8 @@ class GlobalSettingResource(
   private val globalSettingQuery: GlobalSettingQuery,
 ) {
 
-  //  @GetMapping("/workspace/profile")
-  //  @PermitAll
-  //  suspend fun getWorkspaceProfile(): ResponseEntity<GlobalProfile> {
-  //
-  //    val owner = userQuery.getInstanceOwner()?.id
-  //
-  //    val profile =
-  //      GlobalProfile(
-  //        version = buildProperties.version,
-  //        owner = owner,
-  //        mode = appMode,
-  //        instanceUrl = "",
-  //      )
-  //
-  //    return ResponseEntity.ok(profile)
-  //  }
-
   @PatchMapping("/workspace/{name}")
-  suspend fun updateWorkspaceSettings(
+  fun updateWorkspaceSettings(
     @PathVariable("name") settingName: GlobalSettingKey,
     @RequestBody updateWorkspaceSettingRequest: UpdateWorkspaceSettingRequest,
   ) {

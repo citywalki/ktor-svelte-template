@@ -1,0 +1,38 @@
+
+
+type Memo{
+    id: ID
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+    rowStatus: RowStatus
+    creator: ID
+    content: String
+    visibility: MemosVisibility
+}
+
+type MemoPayload {
+    tags: [String]
+    property:  MemoProperty
+    location: Location
+}
+
+type Location {
+    placeholder: String
+    latitude: Float
+    longitude: Float
+}
+
+type MemoProperty {
+    hasLink: Boolean
+    hasTaskList: Boolean
+    hasCode: Boolean
+    hasIncompleteTasks: Boolean
+    references: [String]
+}
+
+enum MemosVisibility {
+    VISIBILITY_UNSPECIFIED
+    PRIVATE
+    PROTECTED
+    PUBLIC
+}

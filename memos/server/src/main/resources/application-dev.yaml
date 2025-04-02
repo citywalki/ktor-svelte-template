@@ -1,14 +1,16 @@
 server:
   port: 8084
 spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost:13306/memos
+  datasource:
     username: memos
     password: memos
+    url: jdbc:postgresql://localhost:13306/memos
   docker:
     compose:
       lifecycle-management: start_and_stop
       file: ./compose.yaml
+  exposed:
+    show-sql: true
 app:
   secret: 111
   refresh: 111

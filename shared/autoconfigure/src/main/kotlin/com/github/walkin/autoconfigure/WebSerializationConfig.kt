@@ -1,4 +1,4 @@
-package com.github.walkin.memos.config
+package com.github.walkin.autoconfigure
 
 import kotlinx.serialization.json.Json
 import org.springframework.context.annotation.Bean
@@ -7,7 +7,7 @@ import org.springframework.http.codec.json.KotlinSerializationJsonDecoder
 import org.springframework.http.codec.json.KotlinSerializationJsonEncoder
 
 @Configuration
-class MemosConfig {
+class WebSerializationConfig {
   companion object {
     val json = Json { ignoreUnknownKeys = true }
   }

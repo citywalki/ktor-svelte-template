@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SetMemoRelationsUsecase : UseCase<SetMemoRelations, Unit>() {
-  override suspend fun handle(command: SetMemoRelations) {
+  override fun handle(command: SetMemoRelations) {
     TODO("Not yet implemented")
   }
+
+  override fun getCommandType() = SetMemoRelations::class
 }

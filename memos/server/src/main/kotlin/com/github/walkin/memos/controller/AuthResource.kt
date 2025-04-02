@@ -3,8 +3,7 @@ package com.github.walkin.memos.controller
 import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.SignUp
-import com.github.walkin.memos.entity.EntityID
-import com.github.walkin.memos.entity.User
+import com.github.walkin.memos.domain.TableId
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.JwtTokens
 import com.github.walkin.security.SecurityJwtService
@@ -27,7 +26,7 @@ class AuthResource(
 ) {
 
   @PostMapping("/refresh_token")
-  suspend fun refreshToken(@RequestBody jwtTokens: JwtTokens): ResponseEntity<JwtTokens> {
+  fun refreshToken(@RequestBody jwtTokens: JwtTokens): ResponseEntity<JwtTokens> {
 
     val accessToken =
       jwtTokens.refreshToken?.let { refreshToken ->
@@ -41,21 +40,17 @@ class AuthResource(
     )
   }
 
-  @PostMapping("/status")
-  suspend fun getAuthStatus(): ResponseEntity<User> =
-    userQuery.getCurrentRequestOwner().let { ResponseEntity.ok(it) }
-
-  @PostMapping("/signout") suspend fun signout() = ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+  @PostMapping("/signout") fun signout() = ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
 
   @PostMapping("/signup")
-  suspend fun signup(
+  fun signup(
     @RequestParam username: String,
     @RequestParam password: String,
-  ): ResponseEntity<EntityID> =
-    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it) }
+  ): ResponseEntity<TableId> =
+    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it.value) }
 
   @PostMapping("/signip")
-  suspend fun signIn(@RequestBody command: SignIn): ResponseEntity<JwtTokens> {
+  fun signIn(@RequestBody command: SignIn): ResponseEntity<JwtTokens> {
     return ResponseEntity.ok(commandPublish.command(command))
   }
 }

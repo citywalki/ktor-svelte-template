@@ -1,4 +1,6 @@
-com.github.walkin.autoconfigure.SpringSecurityConfig
+com.github.walkin.autoconfigure.SpringReactiveSecurityConfig
 com.github.walkin.autoconfigure.SaTokenConfig
 com.github.walkin.autoconfigure.SecurityConfig
-com.github.walkin.autoconfigure.UseCaseConfiguration
+com.github.walkin.autoconfigure.usecase.UseCaseConfiguration
+com.github.walkin.autoconfigure.WebSerializationConfig
+com.github.walkin.autoconfigure.WebFluxConfigurer

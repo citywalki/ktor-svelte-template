@@ -18,6 +18,7 @@ class GraphqlConfig {
       wiringBuilder.scalar(ExtendedScalars.DateTime)
       wiringBuilder.scalar(ExtendedScalars.Time)
       wiringBuilder.scalar(LocalDateTimeScalar.Instance)
+      wiringBuilder.scalar(ExtendedScalars.NegativeFloat)
     }
   }
 }

@@ -3,15 +3,16 @@ package com.github.walkin.memos.usecase.user
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.accessTokenDuration
-import com.github.walkin.memos.entity.User
+import com.github.walkin.memos.entity.UserEntity
 import com.github.walkin.memos.entity.UserRole
-import com.github.walkin.memos.query.FindUser
+import com.github.walkin.memos.entity.UserTable
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.security.JwtTokens
 import com.github.walkin.security.PasswordEncoder
 import com.github.walkin.shared.entity.RowStatus
 import com.github.walkin.usecase.UseCase
+import kotlin.reflect.KClass
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import kotlinx.datetime.Clock
@@ -24,9 +25,9 @@ class SignInRequestUsecase(
   val globalSettingQuery: GlobalSettingQuery,
   val passwordEncoder: PasswordEncoder,
 ) : UseCase<SignIn, JwtTokens>() {
-  override suspend fun handle(command: SignIn): JwtTokens {
+  override fun handle(command: SignIn): JwtTokens {
     val user =
-      userQuery.getUser(FindUser(username = command.username))
+      UserEntity.find { UserTable.username eq command.username }.singleOrNull()
         ?: throw MemosExceptionFactory.UserExceptions.userNotExist()
 
     globalSettingQuery.getWorkspaceGeneralSetting().apply {
@@ -34,7 +35,7 @@ class SignInRequestUsecase(
         throw IllegalStateException("password signin is not allowed")
       }
     }
-    if (user.status == RowStatus.ARCHIVED) {
+    if (user.rowStatus == RowStatus.ARCHIVED) {
       throw IllegalStateException("user has been archived with username ${user.username}")
     }
 
@@ -51,5 +52,9 @@ class SignInRequestUsecase(
     return JwtTokens("", "")
   }
 
-  fun doSignIn(user: User, expireTime: Instant) {}
+  fun doSignIn(user: UserEntity, expireTime: Instant) {}
+
+  override fun getCommandType(): KClass<SignIn> {
+    return SignIn::class
+  }
 }

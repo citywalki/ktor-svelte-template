@@ -1,6 +1,5 @@
 package com.github.walkin.memos.domain
 
-import com.github.walkin.memos.entity.EntityID
 import com.github.walkin.usecase.Command
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
@@ -60,17 +59,15 @@ enum class MemoRelationType {
 
 @Serializable
 data class CreateMemo(
-  val creatorId: EntityID,
+  val creatorId: Long,
   val content: String,
   val visibility: MemosVisibility? = null,
   val resources: List<MemoResource> = emptyList(),
   val relations: List<MemoRelationType> = emptyList(),
-) : Command<EntityID>()
+) : Command<Long>()
 
-data class SetMemoResources(val memoId: EntityID, val resources: List<MemoResource> = emptyList()) :
+data class SetMemoResources(val memoId: Long, val resources: List<MemoResource> = emptyList()) :
   Command<Unit>()
 
-data class SetMemoRelations(
-  val memoId: EntityID,
-  val relations: List<MemoRelationType> = emptyList(),
-) : Command<Unit>()
+data class SetMemoRelations(val memoId: Long, val relations: List<MemoRelationType> = emptyList()) :
+  Command<Unit>()

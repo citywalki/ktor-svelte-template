@@ -1,15 +1,19 @@
 package com.github.walkin.memos.usecase.inbox
 
-import com.github.walkin.memos.Entity
 import com.github.walkin.memos.domain.DeleteInbox
+import com.github.walkin.memos.entity.InboxTable
 import com.github.walkin.usecase.UseCase
-import org.komapper.core.dsl.QueryDsl
-import org.komapper.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class DeleteInboxUsecase(private val database: R2dbcDatabase) : UseCase<DeleteInbox, Unit>() {
-  override suspend fun handle(command: DeleteInbox) {
-    database.runQuery { QueryDsl.delete(Entity.inbox).where { Entity.inbox.id eq command.id } }
+@Transactional
+class DeleteInboxUsecase() : UseCase<DeleteInbox, Unit>() {
+  override fun handle(command: DeleteInbox) {
+    InboxTable.deleteWhere { InboxTable.id.eq(command.id) }
   }
+
+  override fun getCommandType() = DeleteInbox::class
 }

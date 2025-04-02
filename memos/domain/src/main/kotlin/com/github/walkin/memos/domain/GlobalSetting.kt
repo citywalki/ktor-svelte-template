@@ -1,6 +1,5 @@
 package com.github.walkin.memos.domain
 
-import com.github.walkin.memos.entity.*
 import com.github.walkin.usecase.Command
 import kotlinx.serialization.Serializable
 
@@ -112,8 +111,7 @@ data class MemoRelatedGlobalSetting(
     get() = GlobalSettingKey.MEMO_RELATED
 }
 
-@Serializable
-data class SetGlobalSetting(val globalSetting: GlobalSetting) : Command<GlobalSetting>()
+@Serializable data class SetGlobalSetting(val globalSetting: GlobalSetting) : Command<Unit>()
 
 @Serializable
 data class UpdateWorkspaceSettingRequest(
@@ -125,8 +123,7 @@ data class UpdateWorkspaceSettingRequest(
 @Serializable
 data class GlobalProfile(
   // The name of instance owner.
-  // Format: users/{user}
-  val owner: EntityID? = null,
+  val owner: UserId? = null,
   // version is the current version of instance
   val version: String,
   // mode is the instance mode (e.g. "prod", "dev" or "demo").

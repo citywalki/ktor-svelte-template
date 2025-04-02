@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SetMemoResourcesUsecase : UseCase<SetMemoResources, Unit>() {
-  override suspend fun handle(command: SetMemoResources) {
+  override fun handle(command: SetMemoResources) {
     TODO("Not yet implemented")
   }
+
+  override fun getCommandType() = SetMemoResources::class
 }

@@ -4,13 +4,11 @@ class CommandPublishImpl : CommandPublish {
   private val usecaseMap: MutableMap<String, MutableCollection<UseCase<out Command<*>, *>>> =
     HashMap()
 
-  override suspend fun <C : Command<CommandResult>, CommandResult> command(
-    command: C
-  ): CommandResult {
-    return command<C, CommandResult, CommandResult>(command) { it }
+  override fun <C : Command<CommandResult>, CommandResult> command(command: C): CommandResult {
+    return command(command) { it }
   }
 
-  suspend fun <T : Command<CommandResult>, CommandResult, Result> command(
+  fun <T : Command<CommandResult>, CommandResult, Result> command(
     command: T,
     block: (CommandResult) -> Result,
   ): Result {
@@ -23,7 +21,7 @@ class CommandPublishImpl : CommandPublish {
 
   private fun <C : Command<R>, R> select(command: C): MutableCollection<UseCase<C, R>> {
     val useCases = usecaseMap[command::class.qualifiedName]
-    if (useCases == null || useCases.isEmpty()) {
+    if (useCases.isNullOrEmpty()) {
       throw IllegalArgumentException("No usecase found for ${command::class}")
     }
     @Suppress("UNCHECKED_CAST")

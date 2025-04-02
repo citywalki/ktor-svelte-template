@@ -13,27 +13,26 @@ dependencies {
     developmentOnly(libs.spring.boot.devtools)
     developmentOnly(libs.spring.boot.actuator)
     developmentOnly(libs.spring.boot.docker.compose)
-    developmentOnly(libs.springdoc.openapi.webflux)
+    developmentOnly(libs.springdoc.openapi.webmvc)
 
     api(project(":domain"))
 
     implementation(libs.spring.boot)
     implementation(libs.spring.boot.log4j2)
-    implementation(libs.spring.boot.webflux)
+    implementation(libs.spring.boot.webmvc)
 
     implementation("com.github.walkin.shared:usecase-spring")
-    implementation("com.github.walkin.shared:security-spring")
+    implementation("com.github.walkin.shared:satoken-spring")
     implementation("com.github.walkin.shared:autoconfigure")
-
 
     implementation(libs.liquibase.core)
 
     implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("org.springframework.data:spring-data-commons")
 
-    runtimeOnly(libs.komapper.dialect.postgresql)
-    ksp(libs.komapper.processor)
-    api(libs.komapper.r2dbc.starter)
+    implementation("org.postgresql:postgresql:42.7.5")
+    api(libs.exposed.starter)
+    api(libs.exposed.kotlin.datetime)
 
     api("com.auth0:java-jwt:4.5.0")
 

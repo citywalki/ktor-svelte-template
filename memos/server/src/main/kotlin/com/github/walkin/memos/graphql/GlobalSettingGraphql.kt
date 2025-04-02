@@ -1,12 +1,13 @@
 package com.github.walkin.memos.graphql
 
-import com.github.walkin.memos.domain.GeneralGlobalSetting
-import com.github.walkin.memos.domain.GlobalProfile
-import com.github.walkin.memos.domain.MemoRelatedGlobalSetting
-import com.github.walkin.memos.domain.StorageGlobalSetting
+import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.UserRole
+import com.github.walkin.memos.entity.UserTable
 import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.info.BuildProperties
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -29,10 +30,14 @@ class GlobalSettingGraphql(
 ) {
 
   @QueryMapping
-  suspend fun profile(): GlobalProfile {
-    val owner = userQuery.getInstanceOwner()?.id
+  suspend fun profile(): GlobalProfile = transaction {
+    val owner =
+      UserTable.select(UserTable.id)
+        .where { UserTable.role eq UserRole.HOST }
+        .singleOrNull()
+        ?.let { it[UserTable.id].value }
 
-    return GlobalProfile(
+    GlobalProfile(
       version = buildProperties.version,
       owner = owner,
       mode = appMode,

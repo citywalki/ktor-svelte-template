@@ -13,7 +13,7 @@ dependencyResolutionManagement {
 include("api")
 include("autoconfigure")
 include("usecase-spring")
-include("security-spring")
+include("webflux-security-spring")
 include("satoken-spring")
 
 
