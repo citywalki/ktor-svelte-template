@@ -2,7 +2,6 @@
 spring-boot-version = "3.4.3"
 dbscheduler-version = "14.0.2"
 kotlin-version = "2.1.0"
-komapper-version = "5.0.0"
 kotlinx-serialization = "1.7.3"
 springdoc-version = "2.7.0"
 cryptography-version = "0.4.0"
@@ -63,15 +62,6 @@ kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-seria
 jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.2.0" }
 spring-boot-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot-version" }
 liquibase-core = { module = "org.liquibase:liquibase-core" }
-komapper-platform = { module = "org.komapper:komapper-platform", version.ref = "komapper-version" }
-komapper-processor = { module = "org.komapper:komapper-processor", version.ref = "komapper-version" }
-komapper-core = { module = "org.komapper:komapper-core", version.ref = "komapper-version" }
-komapper-annotation = { module = "org.komapper:komapper-annotation", version.ref = "komapper-version" }
-komapper-dialect-h2 = { module = "org.komapper:komapper-dialect-h2-r2dbc", version.ref = "komapper-version" }
-komapper-dialect-postgresql = { module = "org.komapper:komapper-dialect-postgresql-r2dbc", version.ref = "komapper-version" }
-komapper-r2dbc-starter = { module = "org.komapper:komapper-spring-boot-starter-r2dbc", version.ref = "komapper-version" }
-komapper-starter-r2dbc = { module = "org.komapper:komapper-starter-r2dbc", version.ref = "komapper-version" }
-komapper-spring-boot-starter-r2dbc = { module = "org.komapper:komapper-spring-boot-starter-r2dbc", version.ref = "komapper-version" }
 
 exposed-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed-version" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed-version" }

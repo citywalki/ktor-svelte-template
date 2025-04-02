@@ -53,9 +53,3 @@ dependencies {
 springBoot {
     buildInfo()
 }
-
-ksp {
-    arg("komapper.enableEntityStoreContext", "true")
-
-}
-
