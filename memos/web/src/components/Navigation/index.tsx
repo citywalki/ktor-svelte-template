@@ -7,15 +7,12 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import {
   BadgeCheck,
   ChevronsUpDown,
-  Home,
   Inbox,
   LogIn,
   LogOut,

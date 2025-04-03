@@ -3,10 +3,9 @@ plugins {
     id("project-conventions")
 }
 
-dependencies{
+dependencies {
     api(libs.kotlinx.datetime)
 
     implementation(project(":api"))
     implementation(libs.spring.boot)
-
 }

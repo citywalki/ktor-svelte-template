@@ -1,9 +1,9 @@
 package com.github.walkin.memos.graphql
 
 import com.github.walkin.memos.domain.*
+import com.github.walkin.memos.entity.SystemSettingEntity
 import com.github.walkin.memos.entity.UserRole
 import com.github.walkin.memos.entity.UserTable
-import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -26,7 +26,6 @@ class GlobalSettingGraphql(
   @Value("\${app.mode}") private val appMode: String,
   private val userQuery: UserQuery,
   private val buildProperties: BuildProperties,
-  private val globalSettingQuery: GlobalSettingQuery,
 ) {
 
   @QueryMapping
@@ -53,7 +52,7 @@ class GlobalSettingGraphql(
 
   @SchemaMapping(typeName = "GlobalSettings")
   suspend fun generalSetting(): GeneralGlobalSetting {
-    return globalSettingQuery.getWorkspaceGeneralSetting()
+    return SystemSettingEntity.findGeneralSetting()
   }
 
   @SchemaMapping(typeName = "GlobalSettings")

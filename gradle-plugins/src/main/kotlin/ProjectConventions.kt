@@ -10,7 +10,6 @@ import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 import java.util.concurrent.TimeUnit
 
 class ProjectConventions : Plugin<Project> {
@@ -31,13 +30,14 @@ class ProjectConventions : Plugin<Project> {
                 }
             }
 
-            plugins.withType<KotlinPlatformJvmPlugin>{
-                extensions.configure<KotlinJvmProjectExtension> {
-                    compilerOptions {
-                        freeCompilerArgs.addAll("-Xjsr305=strict")
-                    }
+            extensions.configure<KotlinJvmProjectExtension> {
+                compilerOptions {
+                    freeCompilerArgs.addAll("-Xjsr305=strict")
                 }
             }
+//            plugins.withType<KotlinBasePlugin>{
+//
+//            }
 
 
 

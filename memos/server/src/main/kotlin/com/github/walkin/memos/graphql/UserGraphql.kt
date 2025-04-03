@@ -2,9 +2,9 @@ package com.github.walkin.memos.graphql
 
 import com.github.walkin.memos.domain.MemosVisibility
 import com.github.walkin.memos.domain.User
+import com.github.walkin.memos.domain.UserId
 import com.github.walkin.memos.domain.UserSetting
 import com.github.walkin.memos.entity.*
-import com.github.walkin.memos.query.FindUser
 import com.github.walkin.memos.query.UserQuery
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Op
@@ -16,6 +16,12 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
 
 data class UserSpaceType(val name: String)
+
+data class FindUser(
+  val username: String? = null,
+  val id: UserId? = null,
+  val role: UserRole? = null,
+)
 
 @Controller
 class UserGraphql(private val userQuery: UserQuery) {

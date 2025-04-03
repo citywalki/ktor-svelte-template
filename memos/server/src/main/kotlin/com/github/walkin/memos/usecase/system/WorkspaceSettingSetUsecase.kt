@@ -3,7 +3,6 @@ package com.github.walkin.memos.usecase.system
 import com.github.walkin.memos.MemosExceptionFactory
 import com.github.walkin.memos.domain.SetGlobalSetting
 import com.github.walkin.memos.entity.UserRole
-import com.github.walkin.memos.query.GlobalSettingQuery
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.UseCase
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -12,10 +11,8 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.springframework.stereotype.Service
 
 @Service
-class WorkspaceSettingSetUsecase(
-  private val userQuery: UserQuery,
-  private val globalSettingQuery: GlobalSettingQuery,
-) : UseCase<SetGlobalSetting, Unit>() {
+class WorkspaceSettingSetUsecase(private val userQuery: UserQuery) :
+  UseCase<SetGlobalSetting, Unit>() {
 
   @OptIn(ExperimentalSerializationApi::class)
   override fun handle(command: SetGlobalSetting) {

@@ -1,4 +1,3 @@
-import com.diffplug.gradle.spotless.SpotlessApply
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.gradle.spotless.SpotlessPlugin
 import org.gradle.api.Plugin
@@ -7,11 +6,8 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
-import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.hasPlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 
 class CodeFormatPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -30,6 +26,10 @@ class CodeFormatPlugin : Plugin<Project> {
             if (target.extensions.findByType(KotlinJvmProjectExtension::class) != null) {
                 kotlin {
                     ktfmt().googleStyle()
+                }
+                kotlinGradle {
+                    target("*.gradle.kts") // default target for kotlinGradle
+                    ktlint() // or ktfmt() or prettier()
                 }
             }
 

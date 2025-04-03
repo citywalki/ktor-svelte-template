@@ -1,9 +1,9 @@
 package com.github.walkin.memos.controller
 
 import com.github.walkin.memos.MemosController
-import com.github.walkin.memos.domain.*
-import com.github.walkin.memos.entity.*
-import com.github.walkin.memos.query.GlobalSettingQuery
+import com.github.walkin.memos.domain.GlobalSettingKey
+import com.github.walkin.memos.domain.SetGlobalSetting
+import com.github.walkin.memos.domain.UpdateWorkspaceSettingRequest
 import com.github.walkin.memos.query.UserQuery
 import com.github.walkin.usecase.CommandPublish
 import org.springframework.beans.factory.annotation.Value
@@ -18,7 +18,6 @@ class GlobalSettingResource(
   private val userQuery: UserQuery,
   private val buildProperties: BuildProperties,
   private val commandPublish: CommandPublish,
-  private val globalSettingQuery: GlobalSettingQuery,
 ) {
 
   @PatchMapping("/workspace/{name}")

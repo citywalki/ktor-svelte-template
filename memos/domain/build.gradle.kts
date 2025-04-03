@@ -4,17 +4,14 @@ plugins {
     id("project-conventions")
 }
 
-dependencies{
+dependencies {
     api(libs.shared.api)
     api(libs.kotlinx.datetime)
     api(libs.kotlinx.serialization.json)
-
 }
 
-kotlin{
-    compilerOptions{
+kotlin {
+    compilerOptions {
         freeCompilerArgs.add("-Xcontext-receivers")
     }
 }
-
-

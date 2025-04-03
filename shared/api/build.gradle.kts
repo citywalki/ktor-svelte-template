@@ -4,8 +4,7 @@ plugins {
     id("project-conventions")
 }
 
-dependencies{
+dependencies {
     api(libs.kotlinx.datetime)
     api(libs.kotlinx.serialization.json)
-
 }

@@ -4,9 +4,9 @@ plugins {
     id("project-conventions")
 }
 
-dependencies{
+dependencies {
 
- implementation(project(":api"))
+    implementation(project(":api"))
     implementation(libs.spring.boot)
     compileOnly(project(":webflux-security-spring"))
     compileOnly(project(":satoken-spring"))
