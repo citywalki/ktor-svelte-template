@@ -7,7 +7,7 @@ import org.springframework.http.codec.json.KotlinSerializationJsonDecoder
 import org.springframework.web.reactive.config.WebFluxConfigurer
 
 @Configuration
-@ConditionalOnClass
+@ConditionalOnClass(name = ["org.springframework.web.reactive.config.WebFluxConfigurer"])
 class WebFluxConfigurer(private val jsonDecoder: KotlinSerializationJsonDecoder) :
   WebFluxConfigurer {
 

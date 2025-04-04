@@ -12,10 +12,13 @@ class SecurityConfig {
       arrayOf(
         "/graphql",
         "/api/*/login",
+        "/auth/signup",
+        "/auth/signip",
         "/webjars/**",
         "/swagger-ui.html",
         "/v3/api-docs/swagger-config",
         "/v3/api-docs",
+        "/swagger-ui/**",
         "/api/*/auth/signup",
         "/api/*/auth/signip",
         "/api/*/workspace/profile",

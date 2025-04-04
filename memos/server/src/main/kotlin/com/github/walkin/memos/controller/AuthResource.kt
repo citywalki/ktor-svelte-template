@@ -1,6 +1,5 @@
 package com.github.walkin.memos.controller
 
-import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.SignIn
 import com.github.walkin.memos.domain.SignUp
 import com.github.walkin.memos.domain.TableId
@@ -14,9 +13,9 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
-@MemosController
+@RestController
 @Validated
 @RequestMapping("/auth")
 class AuthResource(
@@ -43,11 +42,8 @@ class AuthResource(
   @PostMapping("/signout") fun signout() = ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
 
   @PostMapping("/signup")
-  fun signup(
-    @RequestParam username: String,
-    @RequestParam password: String,
-  ): ResponseEntity<TableId> =
-    commandPublish.command(SignUp(username, password)).let { ResponseEntity.ok(it.value) }
+  fun signup(@RequestBody message: SignUp): ResponseEntity<TableId> =
+    commandPublish.command(message).let { ResponseEntity.ok(it.value) }
 
   @PostMapping("/signip")
   fun signIn(@RequestBody command: SignIn): ResponseEntity<JwtTokens> {

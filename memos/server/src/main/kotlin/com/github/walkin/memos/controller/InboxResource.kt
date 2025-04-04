@@ -1,6 +1,5 @@
 package com.github.walkin.memos.controller
 
-import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.*
 import com.github.walkin.memos.domain.TableId
 import com.github.walkin.memos.query.UserQuery
@@ -9,8 +8,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RestController
 
-@MemosController
+@RestController
 class InboxResource(private val commandPublish: CommandPublish, private val userQuery: UserQuery) {
 
   @PatchMapping("/inboxes")

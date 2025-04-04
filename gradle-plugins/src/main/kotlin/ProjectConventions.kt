@@ -16,7 +16,6 @@ class ProjectConventions : Plugin<Project> {
     override fun apply(target: Project) {
         target.plugins.apply(CodeFormatPlugin::class)
         target.plugins.apply(CustomRepositoryPlugin::class)
-        target.plugins.apply(LombokPlugin::class)
 
         target.run {
             plugins.withType<JavaPlugin> {
@@ -35,11 +34,6 @@ class ProjectConventions : Plugin<Project> {
                     freeCompilerArgs.addAll("-Xjsr305=strict")
                 }
             }
-//            plugins.withType<KotlinBasePlugin>{
-//
-//            }
-
-
 
             tasks.withType<Test> {
                 useJUnitPlatform()

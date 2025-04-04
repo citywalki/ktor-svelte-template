@@ -25,11 +25,14 @@ class CodeFormatPlugin : Plugin<Project> {
 
             if (target.extensions.findByType(KotlinJvmProjectExtension::class) != null) {
                 kotlin {
-                    ktfmt().googleStyle()
+                    ktfmt().googleStyle().configure {
+                        it.setMaxWidth(100)
+                        it.setRemoveUnusedImports(true)
+                    }
                 }
                 kotlinGradle {
                     target("*.gradle.kts") // default target for kotlinGradle
-                    ktlint() // or ktfmt() or prettier()
+                    ktlint()
                 }
             }
 

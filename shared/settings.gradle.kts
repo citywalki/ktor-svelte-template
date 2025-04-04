@@ -14,6 +14,5 @@ include("api")
 include("autoconfigure")
 include("usecase-spring")
 include("webflux-security-spring")
-include("satoken-spring")
 
 

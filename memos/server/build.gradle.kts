@@ -18,9 +18,9 @@ dependencies {
     implementation(libs.spring.boot)
     implementation(libs.spring.boot.log4j2)
     implementation(libs.spring.boot.webmvc)
+    implementation(libs.satoken.spring)
 
     implementation("com.github.walkin.shared:usecase-spring")
-    implementation("com.github.walkin.shared:satoken-spring")
     implementation("com.github.walkin.shared:autoconfigure")
 
     implementation(libs.liquibase.core)

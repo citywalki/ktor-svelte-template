@@ -1,6 +1,5 @@
 package com.github.walkin.memos.controller
 
-import com.github.walkin.memos.MemosController
 import com.github.walkin.memos.domain.GlobalSettingKey
 import com.github.walkin.memos.domain.SetGlobalSetting
 import com.github.walkin.memos.domain.UpdateWorkspaceSettingRequest
@@ -11,8 +10,9 @@ import org.springframework.boot.info.BuildProperties
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
-@MemosController
+@RestController
 class GlobalSettingResource(
   @Value("\${app.mode}") private val appMode: String,
   private val userQuery: UserQuery,

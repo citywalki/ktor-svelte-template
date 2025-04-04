@@ -17,12 +17,13 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 
 @Component
 class SignInRequestUsecase(val userQuery: UserQuery, val passwordEncoder: PasswordEncoder) :
   UseCase<SignIn, JwtTokens>() {
-  override fun handle(command: SignIn): JwtTokens {
+  override fun handle(command: SignIn): JwtTokens = transaction {
     val user =
       UserEntity.find { UserTable.username eq command.username }.singleOrNull()
         ?: throw MemosExceptionFactory.UserExceptions.userNotExist()
@@ -46,7 +47,7 @@ class SignInRequestUsecase(val userQuery: UserQuery, val passwordEncoder: Passwo
     }
     doSignIn(user, expireTime)
 
-    return JwtTokens("", "")
+    JwtTokens("", "")
   }
 
   fun doSignIn(user: UserEntity, expireTime: Instant) {}
