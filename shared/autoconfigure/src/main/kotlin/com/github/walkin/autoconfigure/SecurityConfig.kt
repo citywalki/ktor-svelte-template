@@ -11,20 +11,15 @@ class SecurityConfig {
     val EXCLUDED_PATHS =
       arrayOf(
         "/graphql",
-        "/api/*/login",
-        "/auth/signup",
-        "/auth/signip",
+        "/api/login",
+        "/api/auth/signin",
+        "/api/auth/refresh_token",
+        "/api/auth/signup",
         "/webjars/**",
         "/swagger-ui.html",
         "/v3/api-docs/swagger-config",
         "/v3/api-docs",
         "/swagger-ui/**",
-        "/api/*/auth/signup",
-        "/api/*/auth/signip",
-        "/api/*/workspace/profile",
-        "/api/*/workspace/GENERAL",
-        "/api/*/workspace/MEMO_RELATED",
-        "/api/*/auth/refresh_token",
       )
   }
 

@@ -1,7 +1,6 @@
 plugins {
-    kotlin("jvm")
+    id("buildsrc.convention.kotlin-jvm")
     alias { libs.plugins.kotlin.serialization }
-    id("project-conventions")
 }
 
 dependencies {

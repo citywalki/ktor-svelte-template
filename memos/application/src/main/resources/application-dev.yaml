@@ -1,0 +1,11 @@
+server:
+  port: 8084
+spring:
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+      file: ./compose.yaml
+  datasource:
+    username: memos
+    password: memos
+    url: jdbc:postgresql://localhost:13306/memos
