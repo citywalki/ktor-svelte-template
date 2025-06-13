@@ -3,18 +3,17 @@ arrow = "2.1.0"
 cryptography = "0.4.0"
 detekt = "1.23.8"
 jackson = "2.18.2"
-java-compile-toolchain = "17"
-jvm-target = "17"
-kilua = "0.0.22"
+java-compile-toolchain = "21"
+jvm-target = "21"
 koin = "4.0.2"
 komapper = "5.0.0"
-kotlin = "2.1.21"
+kotlin = "2.0.21"
 kotlinx-serialization = "1.8.1"
 quarkus = "3.21.4"
 spotless = "7.0.2"
 spring-boot = "3.5.0"
 springdoc = "2.7.0"
-ksp = "2.1.21-2.0.2"
+ksp = "2.0.21-1.0.28"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -32,6 +31,7 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependencymanagement = { id = "io.spring.dependency-management", version = "1.1.7" }
 
 [libraries]
+detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version = "1.23.8" }
 auth0-jwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
@@ -43,8 +43,6 @@ jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-ap
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.1.0" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.0" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-kilua = { module = "dev.kilua:kilua", version.ref = "kilua" }
-kilua-tailwindcss = { module = "dev.kilua:kilua-tailwindcss", version.ref = "kilua" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 komapper-dialect-h2-jdbc = { module = "org.komapper:komapper-dialect-h2-jdbc" }

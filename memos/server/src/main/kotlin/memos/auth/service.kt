@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional
 import pro.walkin.logging.I18nMessages
 
 interface AuthService {
-     fun signin(userName: UserName, password: HashedPassword, neverExpire: Boolean? = false): User
-     fun signup(
+    fun signin(userName: UserName, password: HashedPassword, neverExpire: Boolean? = false): User
+    fun signup(
         userName: UserName,
         password: HashedPassword
     ): User
 
-     fun getAuthStatus(): User?
+    fun getAuthStatus(): User?
 }
 
 @Service
@@ -68,20 +68,23 @@ class SpringAuthService(
 
         val role = if (database.runQuery {
                 UserDAO.countUser(UserRole.HOST)
-            } > 0) {
+            } > 0
+        ) {
             UserRole.USER
         } else {
             UserRole.HOST
         }
 
         val user = database.runQuery {
-            UserDAO.insertUser(User(
-                id = UserId.create(),
-                username = userName,
-                hashedPassword = password,
-                role = role,
-                nickname = NickName(userName.value),
-            ))
+            UserDAO.insertUser(
+                User(
+                    id = UserId.create(),
+                    username = userName,
+                    hashedPassword = password,
+                    role = role,
+                    nickname = NickName(userName.value),
+                )
+            )
         }
 
         return user
@@ -90,5 +93,4 @@ class SpringAuthService(
     override fun getAuthStatus(): User? {
         TODO("Not yet implemented")
     }
-
 }

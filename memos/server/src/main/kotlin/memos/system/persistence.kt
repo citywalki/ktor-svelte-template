@@ -19,8 +19,8 @@ data class SystemSettingDef(
     val value: SystemSettingDetail,
 )
 
-object SystemSettingDAO{
-   private  fun findSystemSetting(key: SystemSettingKey) = QueryDsl.from(Meta.systemSetting).where {
+object SystemSettingDAO {
+    private fun findSystemSetting(key: SystemSettingKey) = QueryDsl.from(Meta.systemSetting).where {
         Meta.systemSetting.key eq key
     }.singleOrNull()
 
@@ -29,5 +29,4 @@ object SystemSettingDAO{
             it.value as GeneralSystemSettingDetail
         } ?: GeneralSystemSettingDetail()
     }
-
 }

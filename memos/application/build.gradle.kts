@@ -27,6 +27,10 @@ configurations {
     }
 }
 
+tasks.bootRun {
+    systemProperty("spring.docker.compose.file", rootDir.path + "/compose.yaml")
+}
+
 springBoot {
     buildInfo()
 }

@@ -94,5 +94,4 @@ object UserDAO {
         }.select(count()).map { it ?: 0 }
 
     fun insertUser(user: User) = QueryDsl.insert(Meta.user).single(user)
-
 }

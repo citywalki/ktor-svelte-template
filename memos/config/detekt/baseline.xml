@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyDefaultConstructor:service.kt$SpringUserService$()</ID>
+    <ID>Filename:controller.kt$memos.auth.controller.kt</ID>
+    <ID>Filename:graphql.kt$memos.auth.graphql.kt</ID>
+    <ID>Filename:persistence.kt$memos.auth.persistence.kt</ID>
+    <ID>Filename:persistence.kt$memos.inbox.persistence.kt</ID>
+    <ID>Filename:persistence.kt$memos.memo.persistence.kt</ID>
+    <ID>Filename:persistence.kt$memos.system.persistence.kt</ID>
+    <ID>Filename:persistence.kt$memos.user.persistence.kt</ID>
+    <ID>Filename:service.kt$memos.auth.service.kt</ID>
+    <ID>Filename:service.kt$memos.user.service.kt</ID>
+    <ID>MatchingDeclarationName:graphql.kt$AuthGraphqlResources</ID>
+    <ID>MatchingDeclarationName:persistence.kt$Inbox</ID>
+    <ID>NoWildcardImports:persistence.kt$import org.komapper.annotation.*</ID>
+    <ID>NoWildcardImports:service.kt$import domain.*</ID>
+    <ID>UseCheckOrError:service.kt$SpringAuthService$throw IllegalStateException("SignUpNotAllowed")</ID>
+    <ID>WildcardImport:persistence.kt$import org.komapper.annotation.*</ID>
+    <ID>WildcardImport:service.kt$import domain.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

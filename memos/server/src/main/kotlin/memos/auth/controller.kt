@@ -49,7 +49,6 @@ interface AuthController {
     ): ResponseEntity<Map<String, String>>
 }
 
-
 @RestController
 class DefaultAuthController(
     val authService: AuthService,
@@ -79,5 +78,4 @@ class DefaultAuthController(
     override fun signup(signUp: SignUp): ResponseEntity<Map<String, String>> {
         TODO("Not yet implemented")
     }
-
 }

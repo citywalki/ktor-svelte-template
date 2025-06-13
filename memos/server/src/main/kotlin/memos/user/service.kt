@@ -2,12 +2,7 @@ package memos.user
 
 import org.springframework.stereotype.Service
 
-interface UserService{
-
-}
+interface UserService
 
 @Service
-class SpringUserService(
-) : UserService {
-
-}
+class SpringUserService() : UserService
