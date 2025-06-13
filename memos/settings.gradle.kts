@@ -14,7 +14,7 @@ plugins {
 rootProject.name = "memos"
 
 includeBuild("../shared")
-includeBuild("../logging-tool")
+includeBuild("../logging-tools")
 
 include("domain")
 include("server")
