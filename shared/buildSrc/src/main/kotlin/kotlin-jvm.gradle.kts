@@ -9,8 +9,6 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.github.walkin.shared"
-
 kotlin {
     // Use a specific Java version to make it easier to work in different environments.
     jvmToolchain(21)

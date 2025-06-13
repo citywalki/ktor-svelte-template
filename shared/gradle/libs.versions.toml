@@ -31,8 +31,8 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependencymanagement = { id = "io.spring.dependency-management", version = "1.1.7" }
 
 [libraries]
-auth0-jwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
+auth0-jwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
 cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
 cryptography-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 hikaricp = { module = "com.zaxxer:HikariCP", version = "4.0.3" }
@@ -42,10 +42,6 @@ jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-ap
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.1.0" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.0" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-kilua = { module = "dev.kilua:kilua", version.ref = "kilua" }
-kilua-tailwindcss = { module = "dev.kilua:kilua-tailwindcss", version.ref = "kilua" }
-koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
-koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 komapper-dialect-h2-jdbc = { module = "org.komapper:komapper-dialect-h2-jdbc" }
 komapper-dialect-h2-r2dbc = { module = "org.komapper:komapper-dialect-h2-r2dbc" }
 komapper-dialect-postgresql-jdbc = { module = "org.komapper:komapper-dialect-postgresql-jdbc", version.ref = "komapper" }

@@ -12,7 +12,7 @@ kotlin = "2.1.21"
 kotlinx-serialization = "1.8.1"
 quarkus = "3.21.4"
 spotless = "7.0.2"
-spring-boot = "3.4.4"
+spring-boot = "3.5.0"
 springdoc = "2.7.0"
 ksp = "2.1.21-2.0.2"
 

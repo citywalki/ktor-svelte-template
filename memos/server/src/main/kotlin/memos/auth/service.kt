@@ -1,13 +1,15 @@
 package memos.auth
 
 import domain.*
-import memos.com.github.walkin.memos.MemosExceptionFactory
+import memos.error.authMessages
+import memos.error.userMessages
 import memos.system.SystemSettingDAO
 import memos.user.UserDAO
 import memos.user.create
 import org.komapper.jdbc.JdbcDatabase
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import pro.walkin.logging.I18nMessages
 
 interface AuthService {
      fun signin(userName: UserName, password: HashedPassword, neverExpire: Boolean? = false): User
@@ -31,22 +33,22 @@ class SpringAuthService(
     ): User {
         val user = database.runQuery {
             UserDAO.findUser(userName)
-        } ?: throw MemosExceptionFactory.UserExceptions.userNotExist()
+        } ?: throw I18nMessages.userMessages.userNotExist()
 
         database.runQuery {
             SystemSettingDAO.findGeneralSystemSetting()
         }.apply {
             if (disallowPasswordAuth && user.role == UserRole.USER) {
-                throw IllegalStateException("password signin is not allowed")
+                throw I18nMessages.authMessages.passwordSigninNotAllowed()
             }
         }
 
         if (user.status == RowStatus.ARCHIVED) {
-            throw IllegalStateException("user has been archived with username ${user.username}")
+            throw I18nMessages.authMessages.userHasBeenArchived(user.username)
         }
 
         if (password != user.hashedPassword) {
-            throw MemosExceptionFactory.UserExceptions.userPasswordNotMatch()
+            throw I18nMessages.userMessages.userPasswordNotMatch()
         }
 
         return user

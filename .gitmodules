@@ -1,0 +1,3 @@
+[submodule "memos/logging-tools"]
+	path = memos/logging-tools
+	url = git@github.com:citywalki/logging-tools-kt.git
