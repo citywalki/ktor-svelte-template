@@ -8,14 +8,13 @@ import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.withType
 
 plugins {
-    // Apply the Kotlin JVM plugin to add support for Kotlin in JVM projects.
     kotlin("jvm")
     id("io.gitlab.arturbosch.detekt")
 }
 
 kotlin {
-    // Use a specific Java version to make it easier to work in different environments.
-    jvmToolchain(21)
+    // 使用特定的 Java 版本可以更轻松地在不同环境中工作。
+    jvmToolchain(22)
 }
 
 dependencies {
@@ -29,7 +28,7 @@ detekt {
     baseline = rootProject.file("config/detekt/baseline.xml")
 }
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "21"
+    jvmTarget = "22"
     reports {
         xml.required = true
         html.required = true

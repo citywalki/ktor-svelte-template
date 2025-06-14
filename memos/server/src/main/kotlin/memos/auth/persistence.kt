@@ -1,1 +1,0 @@
-package memos.auth

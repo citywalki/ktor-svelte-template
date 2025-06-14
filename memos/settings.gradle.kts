@@ -16,6 +16,5 @@ rootProject.name = "memos"
 includeBuild("../shared")
 includeBuild("../logging-tools")
 
-include("domain")
-include("server")
-include("application")
+include("memos-domain")
+include("memos-backend")
