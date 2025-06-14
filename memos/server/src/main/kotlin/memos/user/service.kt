@@ -5,4 +5,4 @@ import org.springframework.stereotype.Service
 interface UserService
 
 @Service
-class SpringUserService() : UserService
+class SpringUserService : UserService

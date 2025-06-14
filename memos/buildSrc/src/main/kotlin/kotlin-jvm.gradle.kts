@@ -31,12 +31,12 @@ detekt {
 tasks.withType<Detekt>().configureEach {
     jvmTarget = "21"
     reports {
-        xml.required = false
-        html.required = false
-        sarif.required = false
-        md.required = false
+        xml.required = true
+        html.required = true
+        sarif.required = true
+        md.required = true
     }
-    basePath = rootProject.rootDir.path
+    basePath = rootProject.path
 }
 
 tasks.withType<Test>().configureEach {
