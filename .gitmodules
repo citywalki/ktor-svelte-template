@@ -1,3 +1,6 @@
 [submodule "logging-tools"]
 	path = logging-tools
 	url = git@github.com:citywalki/logging-tools-kt.git
+[submodule "shared"]
+	path = shared
+	url = git@github.com:citywalki/shared-kt.git
