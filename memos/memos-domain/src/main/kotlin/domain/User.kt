@@ -41,7 +41,11 @@ value class HashedPassword(val value: String) {
 
 @JvmInline
 @Serializable
-value class Email(val value: String)
+value class Email(val value: String) {
+    companion object {
+        fun from(email: String): Email = Email(email)
+    }
+}
 
 @JvmInline
 @Serializable

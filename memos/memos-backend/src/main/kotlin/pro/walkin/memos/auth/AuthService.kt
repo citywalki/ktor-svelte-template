@@ -1,5 +1,6 @@
 package pro.walkin.memos.auth
 
+import domain.Email
 import domain.HashedPassword
 import domain.NickName
 import domain.RowStatus
@@ -18,6 +19,30 @@ import pro.walkin.memos.user.create
 class AuthService(
     private val database: JdbcDatabase
 ) {
+
+    fun signinForEmail(email: Email, password: HashedPassword, neverExpire: Boolean? = false): User {
+        val user = database.runQuery {
+            UserDAO.findUser(email)
+        } ?: throw I18nMessages.userMessages.userNotExist()
+
+        database.runQuery {
+            SystemSettingDAO.findGeneralSystemSetting()
+        }.apply {
+            if (disallowPasswordAuth && user.role == UserRole.USER) {
+                throw I18nMessages.authMessages.passwordSigninNotAllowed()
+            }
+        }
+
+        if (user.status == RowStatus.ARCHIVED) {
+            throw I18nMessages.authMessages.userHasBeenArchived(user.username)
+        }
+
+        if (password != user.hashedPassword) {
+            throw I18nMessages.userMessages.userPasswordNotMatch()
+        }
+
+        return user
+    }
 
     fun signin(userName: UserName, password: HashedPassword, neverExpire: Boolean? = false): User {
         val user = database.runQuery {

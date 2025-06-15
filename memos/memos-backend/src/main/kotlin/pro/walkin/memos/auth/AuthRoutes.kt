@@ -2,6 +2,7 @@ package pro.walkin.memos.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import domain.Email
 import domain.HashedPassword
 import domain.UserName
 import io.ktor.server.application.Application
@@ -26,12 +27,16 @@ import kotlin.toString
 data class SignIn(val username: String, val password: String, val neverExpire: Boolean? = false)
 
 @Serializable
+data class SignInForEmail(val email: String, val password: String, val neverExpire: Boolean? = false)
+
+@Serializable
 data class SignUp(val username: String, val password: String)
 
 suspend fun Application.authRoutes() {
     val authService: AuthService = dependencies.resolve()
     routing {
-        route("/auth") {
+        route("/api/auth") {
+
             post("/signin") {
                 val signIn = call.receive<SignIn>()
                 val signedUser =
@@ -54,6 +59,31 @@ suspend fun Application.authRoutes() {
                     .sign(Algorithm.HMAC256(jwtSecret))
 
                 call.respond(mapOf("token" to token))
+            }
+            post("/signin/email") {
+                val signIn = call.receive<SignInForEmail>()
+
+                val signedUser =
+                    authService.signinForEmail(Email.from(signIn.email), HashedPassword.from(signIn.password), signIn.neverExpire)
+
+                var expireTime = Clock.System.now().plus(10.minutes).toJavaInstant()
+                if (signIn.neverExpire == true) {
+                    @Suppress("MagicNumber")
+                    expireTime = Clock.System.now().plus((100 * 365 * 24).hours).toJavaInstant()
+                }
+
+                val jwtSecret = this@authRoutes.property<String>(PropertyKeys.Jwt.SECRET)
+                val jwtDomain = this@authRoutes.property<String>(PropertyKeys.Jwt.DOMAIN)
+
+                val token = JWT.create()
+                    .withSubject(signedUser.id.value.toString())
+                    .withIssuer(jwtDomain)
+                    .withClaim("username", signedUser.username.value)
+                    .withExpiresAt(Date.from(expireTime))
+                    .sign(Algorithm.HMAC256(jwtSecret))
+
+                call.respond(mapOf("token" to token))
+
             }
             post("/signup") {
                 val signUp = call.receive<SignUp>()

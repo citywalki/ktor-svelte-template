@@ -1,5 +1,6 @@
 package pro.walkin.memos.user
 
+import domain.Email
 import domain.User
 import domain.UserId
 import domain.UserName
@@ -92,6 +93,11 @@ object UserDAO {
     fun findUser(username: UserName) =
         QueryDsl.from(Meta.user).where {
             Meta.user.username eq username
+        }.singleOrNull()
+
+    fun findUser(email: Email) =
+        QueryDsl.from(Meta.user).where {
+            Meta.user.email eq email
         }.singleOrNull()
 
     fun countUser(role: UserRole) =

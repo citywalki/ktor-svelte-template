@@ -60,5 +60,6 @@ suspend fun Application.module() {
         swaggerUI(path = "openapi")
         openAPI(path = "openapi")
     }
+
     authRoutes()
 }
