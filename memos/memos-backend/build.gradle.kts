@@ -5,9 +5,9 @@ plugins {
     alias(libs.plugins.google.ksp)
 }
 
+val isDevelopment: Boolean = project.ext.has("development")
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
-    val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
@@ -35,12 +35,16 @@ dependencies {
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
 
+    if (isDevelopment) {
+        implementation(libs.testcontainers.postgres)
+    }
+
     testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)
 //    testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.komapper.dialect.h2.r2dbc)
     testImplementation(libs.ktor.client.content.negotiation)
-    testImplementation(libs.testcontainers.postgres)
+//    testImplementation(libs.testcontainers.postgres)
     testImplementation("org.testcontainers:junit-jupiter:1.21.1")
     testImplementation("io.mockk:mockk:1.14.2")
 }

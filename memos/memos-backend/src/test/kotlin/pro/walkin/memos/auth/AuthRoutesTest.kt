@@ -20,7 +20,6 @@ import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.confirmVerified
 import io.mockk.mockk
 import org.komapper.r2dbc.R2dbcDatabase
 import org.komapper.tx.core.CoroutineTransactionOperator
