@@ -9,13 +9,13 @@ komapper = "5.3.0"
 kotlin = "2.0.21"
 kotlinx-serialization = "1.8.1"
 spring-boot = "3.5.0"
-springdoc = "2.7.0"
 ksp = "2.0.21-1.0.28"
 ktor-version = "3.2.0"
 h2-version = "2.3.232"
 kotlin-version = "2.1.10"
 logback-version = "1.4.14"
 postgres-version = "42.7.7"
+detekt-version = "1.23.8"
 
 [plugins]
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -31,12 +31,14 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 
 [libraries]
 auth0-jwt = { module = "com.auth0:java-jwt", version = "4.5.0" }
-detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version = "1.23.8" }
+detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt-version" }
 komapper-dialect-postgresql-jdbc = { module = "org.komapper:komapper-dialect-postgresql-jdbc", version.ref = "komapper" }
+komapper-dialect-postgresql-r2dbc = { module = "org.komapper:komapper-dialect-postgresql-r2dbc", version.ref = "komapper" }
+komapper-dialect-h2-r2dbc = { module = "org.komapper:komapper-dialect-h2-r2dbc", version.ref = "komapper" }
 komapper-processor = { module = "org.komapper:komapper-processor", version.ref = "komapper" }
-komapper-spring-boot-starter-jdbc = { module = "org.komapper:komapper-spring-boot-starter-jdbc", version.ref = "komapper" }
-komapper-spring-boot-starter-test-jdbc = { module = "org.komapper:komapper-spring-boot-starter-test-jdbc" }
 komapper-starter-jdbc = { module = "org.komapper:komapper-starter-jdbc", version.ref = "komapper" }
+komapper-starter-r2dbc = { module = "org.komapper:komapper-starter-r2dbc", version.ref = "komapper" }
+
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlin-reactor-extensions = { module = "io.projectreactor.kotlin:reactor-kotlin-extensions", version = "1.2.3" }
@@ -52,27 +54,16 @@ log4j2-slf4j = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version 
 shared-api = { module = "com.github.walkin.shared:api" }
 shared-autoconfigure = { module = "com.github.walkin.shared:autoconfigure" }
 slf4k = { module = "ca.solo-studios:slf4k", version = "0.5.4" }
-spring-boot = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
-spring-boot-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
-spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor", version.ref = "spring-boot" }
-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
-spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }
-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "spring-boot" }
-spring-boot-graphql = { module = "org.springframework.boot:spring-boot-starter-graphql", version.ref = "spring-boot" }
-spring-boot-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
-spring-boot-log4j2 = { module = "org.springframework.boot:spring-boot-starter-log4j2" }
-spring-boot-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot" }
-spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-spring-boot-webmvc = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
-spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-boot" }
-springdoc-openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
-testcontainers = { module = "org.testcontainers:testcontainers", version = "1.20.3" }
-testcontainers-postgres = { module = "org.testcontainers:postgresql", version = "1.19.8" }
+testcontainers-postgres = { module = "org.testcontainers:postgresql", version = "1.21.1" }
+
+cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
+cryptography-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 
 ktor-server-di = { module = "io.ktor:ktor-server-di", version.ref = "ktor-version" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor-version" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-version" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres-version" }
 h2 = { module = "com.h2database:h2", version.ref = "h2-version" }
 ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor-version" }
@@ -82,6 +73,7 @@ ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = 
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor-version" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor-version" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor-version" }
+ktor-server-statusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor-version" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-version" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor-version" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor-version" }

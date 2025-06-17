@@ -15,8 +15,9 @@ dependencies {
     ksp(libs.komapper.processor)
     ksp("pro.walkin.logging:processor")
 
-    implementation(libs.komapper.starter.jdbc)
-    implementation(libs.komapper.dialect.postgresql.jdbc)
+    implementation(libs.komapper.starter.r2dbc)
+    implementation(libs.komapper.dialect.postgresql.r2dbc)
+    implementation(libs.cryptography.jdk)
 
     implementation("pro.walkin.logging:core")
     implementation(project(":memos-domain"))
@@ -29,12 +30,19 @@ dependencies {
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.statusPages)
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
-    implementation(libs.ktor.server.config.yaml)
+
+    testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)
-    testImplementation(libs.kotlin.test.junit)
+//    testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.komapper.dialect.h2.r2dbc)
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.testcontainers.postgres)
+    testImplementation("org.testcontainers:junit-jupiter:1.21.1")
+    testImplementation("io.mockk:mockk:1.14.2")
 }
 
 ksp {

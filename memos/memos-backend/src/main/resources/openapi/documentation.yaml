@@ -1,23 +1,98 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 info:
-  title: "Application API"
-  description: "Application API"
+  title: "memos API"
+  description: "memos API"
   version: "1.0.0"
 servers:
-  - url: "http://0.0.0.0:8080"
+  - url: "https://memos"
 paths:
-  /:
-    get:
-      description: "Hello World!"
+  /api/auth/signOut:
+    post:
+      description: ""
+  /api/auth/signin:
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/SignIn"
+        required: true
       responses:
         "200":
           description: "OK"
           content:
-            text/plain:
+            '*/*':
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Hello World!"
+                $ref: "#/components/schemas/Map_String"
+  /api/auth/signin/email:
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/SignInForEmail"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+  /api/auth/signup:
+    post:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/SignUp"
+        required: true
+  /api/user/info:
+    get:
+      description: ""
 components:
-  schemas: {}
+  schemas:
+    SignIn:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+        neverExpire:
+          type: "boolean"
+          nullable: true
+      required:
+        - "username"
+        - "password"
+    Map:
+      type: "object"
+      properties: { }
+    Map_String:
+      type: "string"
+    SignInForEmail:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+        neverExpire:
+          type: "boolean"
+          nullable: true
+      required:
+        - "email"
+        - "password"
+    SignUp:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - "username"
+        - "password"

@@ -6,4 +6,6 @@ plugins {
 dependencies {
     api(libs.kotlinx.datetime)
     api(libs.kotlinx.serialization.json)
+
+    implementation(libs.cryptography.core)
 }

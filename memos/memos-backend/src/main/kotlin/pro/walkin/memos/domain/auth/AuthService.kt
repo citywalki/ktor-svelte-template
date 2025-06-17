@@ -1,4 +1,4 @@
-package pro.walkin.memos.auth
+package pro.walkin.memos.domain.auth
 
 import domain.Email
 import domain.HashedPassword
@@ -8,26 +8,25 @@ import domain.User
 import domain.UserId
 import domain.UserName
 import domain.UserRole
-import org.komapper.jdbc.JdbcDatabase
+import org.komapper.r2dbc.R2dbcDatabase
 import pro.walkin.logging.I18nMessages
+import pro.walkin.memos.domain.system.persistence.SystemSettingDAOFacade
+import pro.walkin.memos.domain.user.UserDAO
+import pro.walkin.memos.domain.user.create
+import pro.walkin.memos.domain.user.persistence.UserDAOFacade
 import pro.walkin.memos.error.authMessages
 import pro.walkin.memos.error.userMessages
-import pro.walkin.memos.system.SystemSettingDAO
-import pro.walkin.memos.user.UserDAO
-import pro.walkin.memos.user.create
 
 class AuthService(
-    private val database: JdbcDatabase
+    private val database: R2dbcDatabase,
+    private val userDAOFacade: UserDAOFacade,
+    private val systemSettingDAOFacade: SystemSettingDAOFacade
 ) {
 
-    fun signinForEmail(email: Email, password: HashedPassword, neverExpire: Boolean? = false): User {
-        val user = database.runQuery {
-            UserDAO.findUser(email)
-        } ?: throw I18nMessages.userMessages.userNotExist()
+    suspend fun signinForEmail(email: Email, password: HashedPassword): User {
+        val user = userDAOFacade.findUser(email) ?: throw I18nMessages.userMessages.userNotExist()
 
-        database.runQuery {
-            SystemSettingDAO.findGeneralSystemSetting()
-        }.apply {
+        systemSettingDAOFacade.findGeneralSystemSetting().apply {
             if (disallowPasswordAuth && user.role == UserRole.USER) {
                 throw I18nMessages.authMessages.passwordSigninNotAllowed()
             }
@@ -44,14 +43,12 @@ class AuthService(
         return user
     }
 
-    fun signin(userName: UserName, password: HashedPassword, neverExpire: Boolean? = false): User {
+    suspend fun signin(userName: UserName, password: HashedPassword): User {
         val user = database.runQuery {
             UserDAO.findUser(userName)
         } ?: throw I18nMessages.userMessages.userNotExist()
 
-        database.runQuery {
-            SystemSettingDAO.findGeneralSystemSetting()
-        }.apply {
+        systemSettingDAOFacade.findGeneralSystemSetting().apply {
             if (disallowPasswordAuth && user.role == UserRole.USER) {
                 throw I18nMessages.authMessages.passwordSigninNotAllowed()
             }
@@ -68,38 +65,31 @@ class AuthService(
         return user
     }
 
-    fun signup(
+    suspend fun signup(
         userName: UserName,
         password: HashedPassword
     ): User {
-        database.runQuery {
-            SystemSettingDAO.findGeneralSystemSetting()
-        }.apply {
+        systemSettingDAOFacade.findGeneralSystemSetting().apply {
             check(!disallowUserRegistration) {
                 "SignUpNotAllowed"
             }
         }
 
-        val role = if (database.runQuery {
-                UserDAO.countUser(UserRole.HOST)
-            } > 0
-        ) {
+        val role = if (userDAOFacade.countUser(UserRole.HOST) > 0) {
             UserRole.USER
         } else {
             UserRole.HOST
         }
 
-        val user = database.runQuery {
-            UserDAO.insertUser(
-                User(
-                    id = UserId.create(),
-                    username = userName,
-                    hashedPassword = password,
-                    role = role,
-                    nickname = NickName(userName.value),
-                )
+        val user = userDAOFacade.insertUser(
+            User(
+                id = UserId.create(),
+                username = userName,
+                hashedPassword = password,
+                role = role,
+                nickname = NickName(userName.value),
             )
-        }
+        )
 
         return user
     }

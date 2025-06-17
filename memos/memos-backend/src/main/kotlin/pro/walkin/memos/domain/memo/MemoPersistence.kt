@@ -1,4 +1,4 @@
-package pro.walkin.memos.memo
+package pro.walkin.memos.domain.memo
 
 import domain.MemosVisibility
 import domain.RowStatus

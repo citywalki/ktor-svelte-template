@@ -1,162 +1,76 @@
-import { userData } from '$lib/stores/user';
-import { browser } from '$app/environment';
-import { get } from 'svelte/store';
 import { PUBLIC_BASE_URL } from '$env/static/public';
+import axios, {AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import {applyAuthTokenInterceptor, getBrowserLocalStorage, type IAuthTokens, type TokenRefreshRequest } from 'axios-jwt';
+import type { Result } from '@/types/api';
 
-/**
- * Error handling is done inside this function, so it will never throw.
- */
-// TODO: Switch to object instead of params
-export const sendUnauthorizedRequest = async (
-    method: 'GET' | 'POST' = 'GET',
-    url: string,
-    data: object,
-    fetchImplementation?: typeof fetch,
-    timeout = 10000,
-    headers = {}
-) => {
-    if (!browser) {
-        console.error('💥 Error: sendUnauthorizedRequest called outside browser!');
-        return {};
-    }
+// 创建 axios 实例
+const axiosInstance = axios.create({
+    baseURL: PUBLIC_BASE_URL,
+    timeout: 50000,
+    headers: { "Content-Type": "application/json;charset=utf-8" },
+});
 
-    const selectedFetchImplementation = fetchImplementation ? fetchImplementation : fetch; // If this function is called from inside a Svelte component, the fetch will actually automatically be the Svelte version
+const requestRefresh: TokenRefreshRequest = async (
+    refreshToken: string,
+): Promise<IAuthTokens | string> => {
+    // Important! Do NOT use the axios instance that you supplied to applyAuthTokenInterceptor (in our case 'axiosInstance')
+    // because this will result in an infinite loop when trying to refresh the token.
+    // Use the global axios client or a different instance
+    const response = await axios.post(`${PUBLIC_BASE_URL}/auth/refresh_token`, {
+        token: refreshToken,
+    });
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/AbortController
-    const controller = new AbortController();
-    const signal = controller.signal;
+    // If your backend supports rotating refresh tokens, you may also choose to return an object containing both tokens:
+    // return {
+    //  accessToken: response.data.access_token,
+    //  refreshToken: response.data.refresh_token
+    //}
 
-    const timeoutPromise = setTimeout(() => {
-        // TODO: At some point it'd be nice to have a $lib/errors that could
-        // Send this to Sentry
-        console.error('💣 Request timed out, aborting!');
-        if (controller) {
-            controller.abort('The request timed out.');
-        }
-    }, timeout);
-
-    let response;
-    try {
-        response = await selectedFetchImplementation(`${PUBLIC_BASE_URL}${url}`, {
-            signal,
-            method,
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                ...headers
-            }
-        });
-
-        // Clean up the timeout after we received the data
-        clearTimeout(timeoutPromise);
-
-        const responseData = await response.json();
-
-        // TODO: Should type this as Response | ErrorResponse
-        return {
-            status: response?.status,
-            ok: response.ok ? true : false,
-            ...responseData
-        };
-    } catch (e) {
-        console.log('Error when fetching data', e);
-
-        // Clear timeout as there was an error
-        clearTimeout(timeoutPromise);
-
-        return {
-            status: response?.status,
-            ok: false,
-            message: `${e}`
-        };
-    }
+    return response.data.access_token;
 };
 
-/**
- * Error handling is done inside this function, so it will never throw.
- */
-// TODO: Switch to object instead of params
-export const sendAuthorizedRequest = async (
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' = 'GET',
-    url: string,
-    data: object = {},
-    fetchImplementation?: typeof fetch,
-    timeout = 10000,
-    throwOnError = false,
-    overrideCredentials: {
-        userId: number;
-        userSecret: string;
-    } | null = null,
-    headers = {}
-) => {
-    if (!browser) {
-        console.error('💥 Error: sendAuthorizedRequest called outside browser!');
-        return {};
+// 3. Add interceptor to your axios instance
+applyAuthTokenInterceptor(axiosInstance, {
+    requestRefresh,
+    header: "Authorization",
+    headerPrefix: "Bearer ",
+});
+
+// New to 2.2.0+: initialize with storage: localStorage/sessionStorage/nativeStorage. Helpers: getBrowserLocalStorage, getBrowserSessionStorage
+const getStorage = getBrowserLocalStorage;
+
+// You can create you own storage, it has to comply with type StorageType
+applyAuthTokenInterceptor(axiosInstance, { requestRefresh, getStorage });
+
+class APIClient {
+    get<T = any>(config: AxiosRequestConfig): Promise<T> {
+        return this.request({ ...config, method: "GET" });
     }
 
-    const selectedFetchImplementation = fetchImplementation ? fetchImplementation : fetch; // If this function is called from inside a Svelte component, the fetch will actually automatically be the Svelte version
+    post<T = any>(config: AxiosRequestConfig): Promise<T> {
+        return this.request({ ...config, method: "POST" });
+    }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/AbortController
-    const controller = new AbortController();
-    const signal = controller.signal;
+    put<T = any>(config: AxiosRequestConfig): Promise<T> {
+        return this.request({ ...config, method: "PUT" });
+    }
 
-    const timeoutPromise = setTimeout(() => {
-        // TODO: At some point it'd be nice to have a $lib/errors that could
-        // Send this to Sentry
-        console.error('💣 Request timed out, aborting!');
-        if (controller) {
-            controller.abort('The request timed out.');
-        }
-    }, timeout);
+    delete<T = any>(config: AxiosRequestConfig): Promise<T> {
+        return this.request({ ...config, method: "DELETE" });
+    }
 
-    const { userId = 0, userSecret = '' } = get(userData);
-
-    let response;
-    try {
-        response = await selectedFetchImplementation(`${PUBLIC_BASE_URL}${url}`, {
-            signal,
-            method,
-            body:
-                method === 'POST' || method === 'PATCH' || method === 'PUT'
-                    ? JSON.stringify(data)
-                    : undefined,
-            headers: {
-                'content-type': 'application/json',
-                ...headers
-            }
+    request<T = any>(config: AxiosRequestConfig): Promise<T> {
+        return new Promise((resolve, reject) => {
+            axiosInstance
+                .request<any, AxiosResponse<Result>>(config)
+                .then((res: AxiosResponse<Result>) => {
+                    resolve(res as unknown as Promise<T>);
+                })
+                .catch((e: Error | AxiosError) => {
+                    reject(e);
+                });
         });
-
-        // Clean up the timeout after we received the data
-        clearTimeout(timeoutPromise);
-
-        const responseData = await response.json();
-
-        // Even if we don't throw, response.ok = false indicates the request went wrong
-        if (!response.ok && throwOnError) {
-            throw new Error(responseData.message);
-        }
-
-        // TODO: Should type this as Response | ErrorResponse
-        return {
-            status: response?.status,
-            ok: response.ok ? true : false,
-            ...responseData
-        };
-    } catch (e) {
-        console.log('Error when fetching data', e);
-
-        // Clear timeout as there was an error
-        clearTimeout(timeoutPromise);
-
-        // TODO: See if there is a nicer way to handle this, as it's kind of janky
-        if (throwOnError) {
-            throw e;
-        }
-
-        return {
-            status: response?.status,
-            ok: false,
-            message: `${e}`
-        };
     }
-};
+}
+
+export default new APIClient();

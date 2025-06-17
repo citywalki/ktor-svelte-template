@@ -1,9 +1,7 @@
 package domain
 
-import kotlinx.datetime.Clock
+import dev.whyoleg.cryptography.CryptographyProvider
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -33,9 +31,13 @@ value class UserName(val value: String) {
 @JvmInline
 value class HashedPassword(val value: String) {
     companion object {
-        fun from(password: String): HashedPassword =
-            // todo hash
-            HashedPassword(password)
+        fun from(password: String): HashedPassword {
+            val hashed = CryptographyProvider.Default
+                .get(dev.whyoleg.cryptography.algorithms.SHA512)
+                .hasher()
+                .hashBlocking(password.encodeToByteArray())
+            return HashedPassword(hashed.decodeToString())
+        }
     }
 }
 
@@ -55,11 +57,11 @@ value class NickName(val value: String)
 data class User(
     val id: UserId,
     val version: Int = 0,
-    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-    val updatedAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val createdAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTime? = null,
     val username: UserName,
     @Transient
-    val hashedPassword: HashedPassword = HashedPassword.from(""),
+    val hashedPassword: HashedPassword? = null,
     val status: RowStatus = RowStatus.NORMAL,
     val role: UserRole = UserRole.USER,
     val email: Email? = null,

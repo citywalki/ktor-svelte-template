@@ -10,7 +10,7 @@
         defaults
     } from "sveltekit-superforms";
     import {valibot} from "sveltekit-superforms/adapters";
-    import {sendUnauthorizedRequest} from "$lib/frontend-api";
+    import frontendApi from "$lib/frontend-api";
     import * as v from "valibot";
 
     const schema = v.object({
@@ -26,7 +26,10 @@
         async onUpdate({form}) {
             if (!form.valid) return;
 
-            await sendUnauthorizedRequest('POST', "/auth/signin", form.data)
+            await frontendApi.post({
+                url: 'api/auth/signin',
+                data: form.data
+            })
         }
     });
 

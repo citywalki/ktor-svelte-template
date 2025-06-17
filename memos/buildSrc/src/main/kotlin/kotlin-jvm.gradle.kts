@@ -17,8 +17,11 @@ kotlin {
     jvmToolchain(22)
 }
 
+val versionCatalog = versionCatalogs.named("libs")
+val detektVersion = versionCatalog.findVersion("detekt-version").get().requiredVersion
+
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detektVersion}")
 }
 
 detekt {
@@ -27,6 +30,7 @@ detekt {
     config.setFrom(rootProject.file("config/detekt/detekt.yml"))
     baseline = rootProject.file("config/detekt/baseline.xml")
 }
+
 tasks.withType<Detekt>().configureEach {
     jvmTarget = "22"
     reports {
@@ -38,16 +42,17 @@ tasks.withType<Detekt>().configureEach {
     basePath = rootProject.path
 }
 
-tasks.withType<Test>().configureEach {
-    // Configure all test Gradle tasks to use JUnitPlatform.
-    useJUnitPlatform()
 
-    // Log information about all test results, not only the failed ones.
-    testLogging {
-        events(
-            TestLogEvent.FAILED,
-            TestLogEvent.PASSED,
-            TestLogEvent.SKIPPED
-        )
-    }
+tasks.test {
+    useJUnitPlatform()
 }
+//tasks.withType<Test>().configureEach {
+//    // Log information about all test results, not only the failed ones.
+//    testLogging {
+//        events(
+//            TestLogEvent.FAILED,
+//            TestLogEvent.PASSED,
+//            TestLogEvent.SKIPPED
+//        )
+//    }
+//}

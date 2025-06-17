@@ -1,4 +1,4 @@
-package pro.walkin.memos.inbox
+package pro.walkin.memos.domain.inbox
 
 import domain.InboxMessage
 import domain.InboxStatus
@@ -16,3 +16,5 @@ data class Inbox(
     val status: InboxStatus,
     val message: InboxMessage? = null,
 )
+
+object InboxDAO

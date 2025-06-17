@@ -50,6 +50,7 @@
 	"dependencies": {
 		"@valibot/i18n": "^1.0.0",
 		"axios": "^1.10.0",
+		"axios-jwt": "^4.0.3",
 		"valibot": "^1.1.0"
 	}
 }

@@ -1,12 +1,3 @@
-comments:
-  UndocumentedPublicClass:
-    active: true
-    excludes: ['**/*.kt']
-    includes: ['**/detekt-api/src/main/**/api/*.kt']
-  UndocumentedPublicFunction:
-    active: true
-    excludes: ['**/*.kt']
-    includes: ['**/detekt-api/src/main/**/api/*.kt']
 style:
   MagicNumber:
     ignoreNumbers:
@@ -23,3 +14,9 @@ style:
       - '1024'
     ignoreEnums: true
     ignorePropertyDeclaration: true
+  ThrowsCount:
+    active: false
+
+complexity:
+  LongMethod:
+    excludes: '**/*Routes.kt'

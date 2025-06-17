@@ -1,4 +1,4 @@
-package pro.walkin.memos.user
+package pro.walkin.memos.domain.user
 
 import domain.Email
 import domain.User
