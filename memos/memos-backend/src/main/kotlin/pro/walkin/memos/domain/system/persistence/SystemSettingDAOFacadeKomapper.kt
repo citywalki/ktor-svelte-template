@@ -22,6 +22,6 @@ class SystemSettingDAOFacadeKomapper(
             } ?: GeneralSystemSettingDetail()
         }
 
-        return db.runQuery { query }
+        return db.runQuery(query)
     }
 }

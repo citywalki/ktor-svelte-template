@@ -13,7 +13,6 @@ plugins {
 
 rootProject.name = "memos"
 
-includeBuild("../shared")
 includeBuild("../logging-tools")
 
 include("memos-domain")

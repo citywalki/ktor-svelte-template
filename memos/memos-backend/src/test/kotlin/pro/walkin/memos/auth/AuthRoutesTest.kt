@@ -1,12 +1,12 @@
 package pro.walkin.memos.auth
 
 import domain.GeneralSystemSettingDetail
-import domain.HashedPassword
-import domain.NickName
-import domain.User
-import domain.UserId
-import domain.UserName
-import domain.UserRole
+import domain.user.HashedPassword
+import domain.user.NickName
+import domain.user.User
+import domain.user.UserId
+import domain.user.UserName
+import domain.user.UserRole
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -31,8 +31,8 @@ import pro.walkin.memos.domain.auth.SignIn
 import pro.walkin.memos.domain.auth.SignUp
 import pro.walkin.memos.domain.auth.authRoutes
 import pro.walkin.memos.domain.system.persistence.SystemSettingDAOFacade
+import pro.walkin.memos.domain.user.UserDAO
 import pro.walkin.memos.domain.user.create
-import pro.walkin.memos.domain.user.persistence.UserDAOFacade
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,7 +51,7 @@ class AuthRoutesTest {
 
     private val systemSettingDAOFacade = mockk<SystemSettingDAOFacade>(relaxed = true)
 
-    private val userDAOFacade = mockk<UserDAOFacade>(relaxed = true)
+    private val userDAO = mockk<UserDAO>(relaxed = true)
 
     fun ApplicationTestBuilder.client() = createClient {
         install(ContentNegotiation) {
@@ -82,7 +82,7 @@ class AuthRoutesTest {
         setupApp()
 
         coEvery { systemSettingDAOFacade.findGeneralSystemSetting() } returns GeneralSystemSettingDetail()
-        coEvery { userDAOFacade.countUser(UserRole.HOST) } returns 0
+        coEvery { userDAO.countUser(UserRole.HOST) } returns 0
 
         val client = client()
         client.post("/api/auth/signup") {
@@ -95,7 +95,7 @@ class AuthRoutesTest {
             )
         }.apply {
             coVerify {
-                userDAOFacade.insertUser(
+                userDAO.insertUser(
                     User(
                         id = UserId.create(),
                         username = UserName.from("username"),
@@ -118,7 +118,7 @@ class AuthRoutesTest {
                 provide { db }
             }
             authRoutes(
-                authService = AuthService(db, userDAOFacade, systemSettingDAOFacade),
+                authService = AuthService(db, userDAO, systemSettingDAOFacade),
                 database = db
             )
         }

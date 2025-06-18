@@ -1,6 +1,6 @@
 package pro.walkin.memos.error
 
-import domain.UserName
+import domain.user.UserName
 import pro.walkin.logging.annotations.Message
 import pro.walkin.logging.annotations.MessageBundle
 

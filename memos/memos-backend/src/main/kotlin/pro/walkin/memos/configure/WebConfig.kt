@@ -2,6 +2,8 @@ package pro.walkin.memos.configure
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import domain.ArgumentErrorMessage
+import domain.ErrorResponse
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
@@ -20,9 +22,11 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.openapi.openAPI
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.plugins.swagger.swaggerUI
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.routing
 import pro.walkin.memos.PropertyKeys
+import pro.walkin.memos.error.ArgumentVerificationException
 
 fun Application.configureWeb() {
     install(ContentNegotiation) {
@@ -67,7 +71,14 @@ fun Application.configureWeb() {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             call.application.log.error(cause.message, cause)
-            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
+            if (cause is ArgumentVerificationException) {
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    ErrorResponse(1000, fields = listOf(ArgumentErrorMessage(cause.field, cause.message)))
+                )
+            } else {
+                call.respondText(text = cause.message ?: "system error", status = HttpStatusCode.InternalServerError)
+            }
         }
     }
 }

@@ -12,13 +12,15 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-kotlin {
-    // 使用特定的 Java 版本可以更轻松地在不同环境中工作。
-    jvmToolchain(22)
-}
-
 val versionCatalog = versionCatalogs.named("libs")
 val detektVersion = versionCatalog.findVersion("detekt-version").get().requiredVersion
+val javaToolchain = versionCatalog.findVersion("java-compile-toolchain").get().requiredVersion
+val jvmVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+
+kotlin {
+    // 使用特定的 Java 版本可以更轻松地在不同环境中工作。
+    jvmToolchain(javaToolchain.toInt())
+}
 
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detektVersion}")
@@ -32,7 +34,7 @@ detekt {
 }
 
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "22"
+    jvmTarget = jvmVersion
     reports {
         xml.required = true
         html.required = true

@@ -7,7 +7,7 @@ plugins {
 
 val isDevelopment: Boolean = project.ext.has("development")
 application {
-    mainClass = "io.ktor.server.netty.EngineMain"
+    mainClass = "io.ktor.server.cio.EngineMain"
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
@@ -32,11 +32,12 @@ dependencies {
     implementation(libs.ktor.server.swagger)
     implementation(libs.ktor.server.statusPages)
     implementation(libs.ktor.server.openapi)
-    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.cio)
     implementation(libs.logback.classic)
 
     if (isDevelopment) {
         implementation(libs.testcontainers.postgres)
+        implementation(libs.testcontainers.r2dbc)
     }
 
     testImplementation(kotlin("test"))

@@ -1,19 +1,22 @@
 package pro.walkin.memos.configure
 
-import io.ktor.events.EventDefinition
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationStarted
 import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.config.property
 import io.ktor.server.config.propertyOrNull
 import io.ktor.server.plugins.di.dependencies
 import io.r2dbc.spi.ConnectionFactoryOptions
+import org.komapper.core.dsl.Meta
+import org.komapper.core.dsl.QueryDsl
 import org.komapper.r2dbc.R2dbcDatabase
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT
+import org.testcontainers.containers.PostgreSQLR2DBCDatabaseContainer
 import org.testcontainers.utility.DockerImageName
+import pro.walkin.memos.domain.system.persistence.systemSetting
+import pro.walkin.memos.domain.user.persistence.user
 
-fun Application.configureDatabase() {
+suspend fun Application.configureDatabase() {
     val options = if (developmentMode) {
         val pgsql = PostgreSQLContainer(
             DockerImageName.parse("mjquinlan2000/postgis:16-3.4-alpine")
@@ -21,7 +24,7 @@ fun Application.configureDatabase() {
         )
         pgsql.start()
 
-        monitor.subscribe(ApplicationStopped){
+        monitor.subscribe(ApplicationStopped) {
             pgsql.stop()
         }
 
@@ -29,13 +32,7 @@ fun Application.configureDatabase() {
         val password = pgsql.password
         val url = "r2dbc:postgresql://${pgsql.host}:${pgsql.getMappedPort(POSTGRESQL_PORT)}/${pgsql.databaseName}"
 
-        ConnectionFactoryOptions.builder()
-            .from(ConnectionFactoryOptions.parse(url))
-            .apply {
-                option(ConnectionFactoryOptions.USER, user)
-                option(ConnectionFactoryOptions.PASSWORD, password)
-            }
-            .build()
+        PostgreSQLR2DBCDatabaseContainer.getOptions(pgsql)
     } else {
         val url = property<String>("database.url")
         val dbUser = propertyOrNull<String>("database.user")
@@ -49,7 +46,16 @@ fun Application.configureDatabase() {
             .build()
     }
 
+    val db = R2dbcDatabase(options)
+    db.withTransaction {
+        db.runQuery {
+            QueryDsl.create(Meta.systemSetting)
+        }
+        db.runQuery {
+            QueryDsl.create(Meta.user)
+        }
+    }
     dependencies {
-        provide { R2dbcDatabase(options) }
+        provide { db }
     }
 }

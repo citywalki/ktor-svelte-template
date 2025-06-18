@@ -1,6 +1,8 @@
-package domain
+package domain.user
 
 import dev.whyoleg.cryptography.CryptographyProvider
+import dev.whyoleg.cryptography.algorithms.SHA512
+import domain.RowStatus
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -29,14 +31,14 @@ value class UserName(val value: String) {
 
 @Serializable
 @JvmInline
-value class HashedPassword(val value: String) {
+value class HashedPassword(val value: ByteArray) {
     companion object {
-        fun from(password: String): HashedPassword {
+        suspend fun from(password: String): HashedPassword {
             val hashed = CryptographyProvider.Default
-                .get(dev.whyoleg.cryptography.algorithms.SHA512)
+                .get(SHA512)
                 .hasher()
-                .hashBlocking(password.encodeToByteArray())
-            return HashedPassword(hashed.decodeToString())
+                .hash(password.encodeToByteArray())
+            return HashedPassword(hashed)
         }
     }
 }
@@ -67,17 +69,4 @@ data class User(
     val email: Email? = null,
     val nickname: NickName,
     val avatarUrl: String? = null,
-)
-
-@Serializable
-enum class Locale {
-    EN,
-    CN,
-}
-
-@Serializable
-data class UserSetting(
-    val id: TableId,
-    var locale: Locale = Locale.CN,
-    var appearance: String = "system",
 )

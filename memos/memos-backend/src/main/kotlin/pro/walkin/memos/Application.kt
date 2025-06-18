@@ -7,7 +7,7 @@ import pro.walkin.memos.configure.configureDevWeb
 import pro.walkin.memos.configure.configureWeb
 
 fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
+    io.ktor.server.cio.EngineMain.main(args)
 }
 
 suspend fun Application.module() {

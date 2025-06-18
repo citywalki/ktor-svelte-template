@@ -36,16 +36,16 @@
     const {form: formData, enhance} = form;
 </script>
 
-<Card.Root class="w-full mt-2">
+<Card.Root class="w-full">
     <Card.Header>
-        <Card.Title class="text-2xl">{m["login.login"]()}</Card.Title>
+        <Card.Title class="text-2xl">{m["auth.login"]()}</Card.Title>
     </Card.Header>
     <Card.Content>
         <form method="POST" use:enhance>
             <Form.Field {form} name="username">
                 <Form.Control>
                     {#snippet children({props})}
-                        <Form.Label>{m["login.username"]()}</Form.Label>
+                        <Form.Label>{m["auth.username"]()}</Form.Label>
                         <Input {...props} bind:value={$formData.username} />
                     {/snippet}
                 </Form.Control>
@@ -54,17 +54,17 @@
             <Form.Field {form} name="password">
                 <Form.Control>
                     {#snippet children({props})}
-                        <Form.Label>{m["login.password"]()}</Form.Label>
+                        <Form.Label>{m["auth.password"]()}</Form.Label>
                         <Input {...props} type="password" bind:value={$formData.password}/>
                     {/snippet}
                 </Form.Control>
                 <Form.FieldErrors/>
             </Form.Field>
-            <Form.Button class="w-full active:scale-[0.98] active:transition-all">{m["login.login"]()}</Form.Button>
+            <Form.Button class="w-full active:scale-[0.98] active:transition-all">{m["auth.login"]()}</Form.Button>
         </form>
         <div class="mt-4 text-center text-sm">
-            {m["login.no_have_account"]()}
-            <a href="##" class="underline"> {m["login.signup"]()} </a>
+            {m["auth.no_have_account"]()}
+            <a href="##" class="underline"> {m["auth.signup"]()} </a>
         </div>
     </Card.Content>
 </Card.Root>

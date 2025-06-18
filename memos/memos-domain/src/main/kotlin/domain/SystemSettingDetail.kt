@@ -1,5 +1,6 @@
 package domain
 
+import domain.user.UserId
 import kotlinx.serialization.Serializable
 
 @Serializable

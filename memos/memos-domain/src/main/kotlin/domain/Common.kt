@@ -30,3 +30,12 @@ data class PageTokenPayload(val limit: Int, val offset: Int) {
         return Base64.encode(json.toByteArray())
     }
 }
+
+@Serializable
+data class ArgumentErrorMessage(
+    private val field: String,
+    private val message: String?,
+)
+
+@Serializable
+data class ErrorResponse(val code: Int, val message: String? = null, val fields: List<ArgumentErrorMessage>? = null)

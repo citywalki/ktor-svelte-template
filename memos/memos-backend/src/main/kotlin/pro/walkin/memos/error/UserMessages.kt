@@ -9,7 +9,7 @@ interface UserMessages {
     fun userPasswordNotMatch(): IllegalStateException
 
     @Message("已经存在相同用户")
-    fun userSameExist(): String?
+    fun userSameExist(): String
 
     @Message("用户不存在")
     fun userNotExist(): IllegalStateException
