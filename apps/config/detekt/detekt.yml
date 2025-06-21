@@ -1,0 +1,9 @@
+style:
+  MagicNumber:
+    active: false
+  ThrowsCount:
+    active: false
+
+complexity:
+  LongMethod:
+    excludes: '**/*Routes.kt'
