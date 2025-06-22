@@ -1,12 +1,12 @@
 package pro.walkin.memos.auth
 
-import domain.GeneralSystemSettingDetail
-import domain.user.HashedPassword
-import domain.user.NickName
-import domain.user.User
-import domain.user.UserId
-import domain.user.UserName
-import domain.user.UserRole
+import model.GeneralSystemSettingDetail
+import model.user.HashedPassword
+import model.user.NickName
+import model.user.User
+import model.user.UserId
+import model.user.UserName
+import model.user.UserRole
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -25,15 +25,15 @@ import org.komapper.r2dbc.R2dbcDatabase
 import org.komapper.tx.core.CoroutineTransactionOperator
 import org.komapper.tx.core.TransactionAttribute
 import org.komapper.tx.core.TransactionProperty
-import pro.walkin.memos.configure.configureWeb
-import pro.walkin.memos.domain.auth.AuthService
-import pro.walkin.memos.domain.auth.SignIn
-import pro.walkin.memos.domain.auth.SignUp
-import pro.walkin.memos.domain.auth.authRoutes
-import pro.walkin.memos.domain.system.persistence.SystemSettingDAOFacade
-import pro.walkin.memos.domain.user.UserDAO
-import pro.walkin.memos.domain.user.UserQuery
-import pro.walkin.memos.domain.user.persistence.create
+import app.backend.configure.configureWeb
+import app.backend.domain.auth.AuthService
+import app.backend.domain.auth.SignIn
+import app.backend.domain.auth.SignUp
+import app.backend.domain.auth.authRoutes
+import app.backend.domain.system.persistence.SystemSettingDAOFacade
+import app.backend.domain.user.UserDAO
+import app.backend.domain.user.UserQuery
+import app.backend.domain.user.persistence.create
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
