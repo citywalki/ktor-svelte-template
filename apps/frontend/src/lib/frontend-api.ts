@@ -1,11 +1,5 @@
 import { PUBLIC_BASE_URL } from '$env/static/public';
 import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
-import {
-	applyAuthTokenInterceptor,
-	getBrowserLocalStorage,
-	type IAuthTokens,
-	type TokenRefreshRequest
-} from 'axios-jwt';
 
 // 创建 axios 实例
 const axiosInstance = axios.create({
@@ -13,25 +7,6 @@ const axiosInstance = axios.create({
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json;charset=utf-8' }
 });
-
-const requestRefresh: TokenRefreshRequest = async (
-	refreshToken: string
-): Promise<IAuthTokens | string> => {
-	// Important! Do NOT use the axios instance that you supplied to applyAuthTokenInterceptor (in our case 'axiosInstance')
-	// because this will result in an infinite loop when trying to refresh the token.
-	// Use the global axios client or a different instance
-	const response = await axios.post(`${PUBLIC_BASE_URL}/auth/refresh_token`, {
-		token: refreshToken
-	});
-
-	// If your backend supports rotating refresh tokens, you may also choose to return an object containing both tokens:
-	// return {
-	//  accessToken: response.data.access_token,
-	//  refreshToken: response.data.refresh_token
-	//}
-
-	return response.data.access_token;
-};
 
 // 添加响应拦截器
 axiosInstance.interceptors.response.use(
@@ -83,19 +58,6 @@ axiosInstance.interceptors.response.use(
 		return Promise.reject(err.response);
 	}
 );
-
-// 3. Add interceptor to your axios instance
-applyAuthTokenInterceptor(axiosInstance, {
-	requestRefresh,
-	header: 'Authorization',
-	headerPrefix: 'Bearer '
-});
-
-// New to 2.2.0+: initialize with storage: localStorage/sessionStorage/nativeStorage. Helpers: getBrowserLocalStorage, getBrowserSessionStorage
-const getStorage = getBrowserLocalStorage;
-
-// You can create you own storage, it has to comply with type StorageType
-applyAuthTokenInterceptor(axiosInstance, { requestRefresh, getStorage });
 
 class APIClient {
 	get<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {

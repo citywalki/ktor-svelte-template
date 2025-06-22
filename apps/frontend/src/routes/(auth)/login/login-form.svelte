@@ -11,16 +11,15 @@
 	import * as v from 'valibot';
 	import { createMutation } from '@tanstack/svelte-query';
 	import { LoaderCircleIcon } from 'lucide-svelte';
-	import { type IAuthTokens, setAuthTokens } from 'axios-jwt';
 
 	export let onSuccess: () => Promise<void> = async () => {};
 
 	const LoginSchema = v.object({
 		username: v.pipe(v.string(), v.nonEmpty()),
-		password: v.pipe(v.string(), v.minLength(8))
+		password: v.pipe(v.string(), v.nonEmpty())
 	});
 
-	type LoginOutput = v.InferOutput<typeof LoginSchema>; // { email: string; password: string }
+	type LoginOutput = v.InferInput<typeof LoginSchema>; // { email: string; password: string }
 
 	const loginMutation = createMutation({
 		mutationFn: async (input: LoginOutput) => {
@@ -29,8 +28,7 @@
 				data: JSON.stringify(input)
 			});
 		},
-		async onSuccess(data: IAuthTokens, variables, context) {
-			await setAuthTokens(data);
+		async onSuccess(data, variables, context) {
 			await onSuccess();
 		}
 	});
@@ -96,7 +94,7 @@
 		</form>
 		<div class="mt-4 text-center text-sm">
 			{m['auth.no_have_account']()}
-			<a href="##" class="underline"> {m['auth.signup']()} </a>
+			<a href="/signup" class="underline"> {m['auth.signup']()} </a>
 		</div>
 	</Card.Content>
 </Card.Root>

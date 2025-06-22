@@ -84,7 +84,7 @@ fun Application.configureWeb() {
                     ErrorResponse(FIELD_ERROR, fields = listOf(ArgumentErrorMessage(cause.field, cause.message)))
                 )
             } else {
-                call.respondText(text = cause.message ?: "system error", status = HttpStatusCode.InternalServerError)
+                call.respond(HttpStatusCode.InternalServerError, ErrorResponse(1, cause.message ?: "system error"))
             }
         }
     }

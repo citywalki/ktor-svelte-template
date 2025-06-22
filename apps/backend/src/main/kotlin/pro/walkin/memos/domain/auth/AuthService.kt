@@ -22,7 +22,7 @@ class AuthService(
 ) {
 
     suspend fun signin(userName: UserName, password: HashedPassword): User {
-        val user = userQuery.findUser(userName) ?: throw I18nMessages.userMessages.userNotExist()
+        val user = userQuery.findUser(userName) ?: throw IllegalStateException(I18nMessages.userMessages.userNotExist())
 
         systemSettingDAOFacade.findGeneralSystemSetting().apply {
             if (disallowPasswordAuth && user.role == UserRole.USER) {
@@ -34,7 +34,7 @@ class AuthService(
             throw I18nMessages.authMessages.userHasBeenArchived(user.username)
         }
 
-        if (password != user.hashedPassword) {
+        if (!password.value.contentEquals(user.hashedPassword?.value)) {
             throw I18nMessages.userMessages.userPasswordNotMatch()
         }
 

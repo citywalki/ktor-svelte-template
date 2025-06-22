@@ -1,15 +1,15 @@
 import type { LayoutLoad } from './$types';
-import frontendApi from '$lib/frontend-api';
 import { redirect } from '@sveltejs/kit';
 
 export const ssr = false;
 
-export const load: LayoutLoad = async () => {
-	const me = await frontendApi.get<any>('api/user/me');
-	if (me.status == 301) {
+export const load: LayoutLoad = async (event) => {
+	const me = await event.fetch('/api/me');
+	if (me.redirected) {
 		throw redirect(301, me.url);
 	}
+
 	return {
-		me: await me.data
+		me: await me.json()
 	};
 };

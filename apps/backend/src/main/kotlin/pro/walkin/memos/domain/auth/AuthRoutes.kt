@@ -39,11 +39,15 @@ suspend fun Application.authRoutes(
             post("/signin") {
                 database.withTransaction {
                     val signIn = call.receive<SignIn>()
-                    val signedUser =
-                        authService.signin(
-                            UserName.from(signIn.username),
-                            HashedPassword.from(signIn.password)
-                        )
+
+                    val username = UserName.from(signIn.username)
+                    val password = HashedPassword.from(signIn.password)
+
+                    if (userQuery.findUser(username) == null) {
+                        throw ArgumentVerificationException("username", I18nMessages.userMessages.userNotExist())
+                    }
+
+                    val signedUser = authService.signin(username, password)
                     call.sessions.set(UserSession.create(signedUser.id))
                     call.respond(HttpStatusCode.OK)
                 }

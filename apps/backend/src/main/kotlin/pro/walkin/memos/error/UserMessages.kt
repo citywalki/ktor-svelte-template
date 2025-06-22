@@ -12,5 +12,5 @@ interface UserMessages {
     fun userSameExist(): String
 
     @Message("用户不存在")
-    fun userNotExist(): IllegalStateException
+    fun userNotExist(): String
 }
